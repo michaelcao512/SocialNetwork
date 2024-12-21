@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-SocialmediaApplication<socialmedia>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.michaelcao512.socialmedia.SocialmediaApplication",
+      "projectName": "socialmedia",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
