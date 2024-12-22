@@ -9,23 +9,36 @@ import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
+import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
-    public PostService(PostRepository postRepository, AccountRepository accountRepository) {
+    public PostService(PostRepository postRepository, AccountRepository accountRepository,
+            AccountService accountService) {
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
+        this.accountService = accountService;
     }
 
-    public Post createPost(Post post) {
+    public Post createPost(CreatePostRequest createPostRequest) {
+        Post post = createPostRequest.post();
+        Long accountId = createPostRequest.accountId();
         if (post == null) {
             throw new IllegalArgumentException("Post cannot be null");
         }
+        Account account = accountRepository.findById(accountId).get();
 
-        return postRepository.save(post);
+        post.setAccount(account);
+
+        Post p = postRepository.save(post);
+
+        accountService.addPost(account, p);
+
+        return p;
     }
 
     public Post updatePost(Post post) {
@@ -42,11 +55,12 @@ public class PostService {
     }
 
     public void deletePost(Long postId) {
-        if (!postRepository.existsById(postId)) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()) {
             throw new IllegalArgumentException("Post does not exist");
         }
-
-        postRepository.deleteById(postId);
+        accountService.removePost(post.get().getAccount(), post.get());
+        postRepository.delete(post.get());
     }
 
     public Post getPostById(Long postId) {

@@ -20,18 +20,7 @@ function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
-        {/* 
-        - inside your profile page
-            - load your posts
-                - edit post
-                - delete post
-                - load your comments
-            - edit your profile)
-        - alls posts (not include yours))
-        - followers posts
-        - profile of another user
-        - logout button
-        */}
+
       </Routes>
     </Router>
 

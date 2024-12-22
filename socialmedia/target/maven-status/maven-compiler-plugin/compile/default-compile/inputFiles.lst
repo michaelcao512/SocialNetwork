@@ -35,6 +35,7 @@
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/Services/UserInfoService.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/SocialmediaApplication.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/AuthenticationResponse.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/CreatePostRequest.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/FriendshipRequest.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/JwtResponse.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/LoginRequest.java

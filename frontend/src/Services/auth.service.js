@@ -12,9 +12,7 @@ class AuthService {
                 if (response.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(response.data));
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken;
-
                 }
-                console.log("login response: ", response);
                 return response.data;
             })
             .catch(error => {
@@ -30,7 +28,6 @@ class AuthService {
         console.log("registration request: ", registerRequest)
         const data = axios.post(api_url + "/register", registerRequest)
             .then(response => {
-                console.log("registration response: ", response);
                 return response.data;
             })
             .catch(error => {

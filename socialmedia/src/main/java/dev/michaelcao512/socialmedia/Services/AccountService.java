@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
+import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Exceptions.EmailAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException;
@@ -149,6 +150,20 @@ public class AccountService implements UserDetailsService {
         }
         return account.get();
 
+    }
+
+    public Account addPost(Account account, Post post) {
+        List<Post> posts = account.getPosts();
+        posts.add(post);
+        account.setPosts(posts);
+        return accountRepository.save(account);
+    }
+
+    public void removePost(Account account, Post post) {
+        List<Post> posts = account.getPosts();
+        posts.remove(post);
+        account.setPosts(posts);
+        accountRepository.save(account);
     }
 
 }

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Services.PostService;
+import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
 
 @RestController
 @RequestMapping("/api/post")
@@ -46,13 +46,10 @@ public class PostController {
      * @throws IllegalArgumentException if the post is null
      */
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        try {
-            Post newPost = postService.createPost(post);
-            return ResponseEntity.ok(newPost);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest createPostRequest) {
+        Post newPost = postService.createPost(createPostRequest);
+        return ResponseEntity.ok(newPost);
+
     }
 
     /**
@@ -107,8 +104,8 @@ public class PostController {
      * @throws IllegalArgumentException if the given account id does not exist
      */
     @GetMapping("/getPostsByAccountId/{accountId}")
-    public ResponseEntity<Post> getPostsByAccountId(@RequestParam Long accountId) {
-        Post post = postService.getPostById(accountId);
+    public ResponseEntity<List<Post>> getPostsByAccountId(@PathVariable Long accountId) {
+        List<Post> post = postService.getPostsByAccountId(accountId);
         return ResponseEntity.ok(post);
     }
 }

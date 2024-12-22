@@ -41,8 +41,8 @@ public class SecurityConfig {
                 registry
                         .addMapping("/**")
                         .allowedMethods("*")
-                        .allowedHeaders("*");
-
+                        .allowedHeaders("*")
+                        .allowedOrigins("*");
             }
         };
     }
@@ -72,7 +72,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated());
-        // .anyRequest().permitAll());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

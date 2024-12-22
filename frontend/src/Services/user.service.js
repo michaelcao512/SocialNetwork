@@ -7,7 +7,6 @@ class UserService {
 
     getAllUsers() {
         return axios.get(api_url).then(response => {
-            console.log("response: ", response);
             return response.data;
         }).catch(error => {
             console.log("error: ", error);
@@ -16,7 +15,6 @@ class UserService {
 
     getUserById(id) {
         return axios.get(api_url + "/" + id).then(response => {
-            console.log("response: ", response);
             return response.data;
         }).catch(error => {
             console.log("error: ", error);

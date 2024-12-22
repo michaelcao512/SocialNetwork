@@ -20,6 +20,7 @@ import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.Services.PostService;
+import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
 
 public class PostTest {
 
@@ -48,15 +49,18 @@ public class PostTest {
     public void testCreatePost() {
         Post post = new Post();
         post.setPostId(1L);
-        post.setAccount(account);
         post.setContent("Test Post Content");
+
+        CreatePostRequest createPostRequest = new CreatePostRequest(post, 1L);
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
 
         when(postRepository.save(post)).thenReturn(post);
 
         // checking for illegal argument exception when post is null
         assertThrows(IllegalArgumentException.class, () -> postService.createPost(null));
 
-        Post savedPost = postService.createPost(post);
+        Post savedPost = postService.createPost(createPostRequest);
 
         assertNotNull(savedPost);
         assert (savedPost.getPostId() == 1L);

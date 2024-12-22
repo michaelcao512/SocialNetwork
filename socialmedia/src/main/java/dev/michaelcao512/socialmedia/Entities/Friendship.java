@@ -1,5 +1,7 @@
 package dev.michaelcao512.socialmedia.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,10 +20,12 @@ public class Friendship {
 
     @ManyToOne
     @JoinColumn(name = "accountId")
+    @JsonBackReference (value = "following")
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "friendId")
+    @JsonBackReference (value = "followers")
     private Account friend;
 
 }
