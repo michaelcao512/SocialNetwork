@@ -10,16 +10,10 @@ function CreatePost(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const createPostRequest = {
-        post: {
-            content: content
-        },
-            accountId: accountId
-        }
         setContent("");
         
         try {
-            const response = await postService.createPost(createPostRequest);
+            const response = await postService.createPost(content, accountId);
             onPostCreated();
         } catch (error) {
             console.log("createPost error: ", error);

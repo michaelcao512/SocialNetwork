@@ -20,7 +20,7 @@ import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.Services.PostService;
-import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
 
 public class PostTest {
 

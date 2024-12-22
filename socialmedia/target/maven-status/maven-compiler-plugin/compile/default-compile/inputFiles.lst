@@ -34,9 +34,10 @@
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/Services/ReactionService.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/Services/UserInfoService.java
 /Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/SocialmediaApplication.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/AuthenticationResponse.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/CreatePostRequest.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/FriendshipRequest.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/JwtResponse.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/LoginRequest.java
-/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/RegistrationRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Requests/CreatePostRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Requests/CreateReactionRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Requests/FriendshipRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Requests/LoginRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Requests/RegistrationRequest.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Responses/AuthenticationResponse.java
+/Users/michaelcao/Code/Revature-Training/project1/socialmedia/src/main/java/dev/michaelcao512/socialmedia/dto/Responses/JwtResponse.java

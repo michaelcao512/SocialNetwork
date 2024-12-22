@@ -1,7 +1,9 @@
 package dev.michaelcao512.socialmedia.Services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,17 +15,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
+import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Entities.Post;
+import dev.michaelcao512.socialmedia.Entities.Reaction;
+import dev.michaelcao512.socialmedia.Entities.Reaction.ReactionType;
 import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Exceptions.EmailAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException;
 import dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
+import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
+import dev.michaelcao512.socialmedia.Repositories.ReactionRepository;
 import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
-import dev.michaelcao512.socialmedia.dto.RegistrationRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 
 @Service
 public class AccountService implements UserDetailsService {
+    Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserInfoRepository userInfoRepository;
     private final ApplicationContext applicationContext;
@@ -162,8 +170,62 @@ public class AccountService implements UserDetailsService {
     public void removePost(Account account, Post post) {
         List<Post> posts = account.getPosts();
         posts.remove(post);
-        account.setPosts(posts);
+
+        // List<Reaction> reactions = post.getReactions();
+        // List<Comment> comments = post.getComments();
+
+        // logger.info("Removing post");
+
+        // Iterator<Reaction> reactionIterator = reactions.iterator();
+        // while (reactionIterator.hasNext()) {
+        //     Reaction reaction = reactionIterator.next();
+        //     reactionIterator.remove();
+        // }
+
+        // Iterator<Comment> commentIterator = comments.iterator();
+        // while (commentIterator.hasNext()) {
+        //     Comment comment = commentIterator.next();
+        //     commentIterator.remove();
+        // }
+
+        // account.setReactions(account.getReactions());
+        // account.setComments(account.getComments());
+        // account.setPosts(posts);
+
         accountRepository.save(account);
     }
+
+    // public Account addComment(Account account, Comment comment) {
+    //     List<Comment> comments = account.getComments();
+    //     comments.add(comment);
+    //     account.setComments(comments);
+    //     return accountRepository.save(account);
+    // }
+
+    // public void removeComment(Account account, Comment comment) {
+    //     List<Comment> comments = account.getComments();
+    //     comments.remove(comment);
+    //     account.setComments(comments);
+    //     accountRepository.save(account);
+    // }
+
+    // public Account addReaction(Account account, Reaction reaction) {
+    //     List<Reaction> reactions = account.getReactions();
+    //     reactions.add(reaction);
+    //     account.setReactions(reactions);
+    //     return accountRepository.save(account);
+    // }
+
+    // public Account updateReaction(Account account, Reaction reaction, ReactionType updatedReactionType) {
+    //     reaction.setReactionType(updatedReactionType);
+    //     return accountRepository.save(account);
+    // }
+
+    // public void removeReaction(Account account, Reaction reaction) {
+    //     List<Reaction> reactions = account.getReactions();
+    //     reactions.remove(reaction);
+    //     account.setReactions(reactions);
+    //     accountRepository.save(account);
+    // }
 
 }

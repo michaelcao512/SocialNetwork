@@ -57,13 +57,7 @@ public class Account implements UserDetails {
     @JsonManagedReference(value = "posts")
     private List<Post> posts;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "comments")
-    private List<Comment> comments;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "reactions")
-    private List<Reaction> reactions;
 
     @PreUpdate
     public void onUpdate() {

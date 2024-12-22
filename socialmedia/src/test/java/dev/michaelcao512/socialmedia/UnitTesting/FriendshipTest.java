@@ -24,7 +24,7 @@ import dev.michaelcao512.socialmedia.Entities.Friendship;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.FriendshipRepository;
 import dev.michaelcao512.socialmedia.Services.FriendshipService;
-import dev.michaelcao512.socialmedia.dto.FriendshipRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
 
 public class FriendshipTest {
     @Mock

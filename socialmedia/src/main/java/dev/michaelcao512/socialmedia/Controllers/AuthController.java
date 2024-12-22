@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.michaelcao512.socialmedia.Configurations.JwtUtils;
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Services.AccountService;
-import dev.michaelcao512.socialmedia.dto.JwtResponse;
-import dev.michaelcao512.socialmedia.dto.LoginRequest;
-import dev.michaelcao512.socialmedia.dto.RegistrationRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.LoginRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
+import dev.michaelcao512.socialmedia.dto.Responses.JwtResponse;
 
 
 @RestController

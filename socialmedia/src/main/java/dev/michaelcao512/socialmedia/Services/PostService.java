@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
+import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Entities.Post;
+import dev.michaelcao512.socialmedia.Entities.Reaction;
+import dev.michaelcao512.socialmedia.Entities.Reaction.ReactionType;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
-import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
 
 @Service
 public class PostService {
@@ -86,4 +89,38 @@ public class PostService {
         return postRepository.findByAccount(account.get());
 
     }
+
+    public Post addReaction(Post post, Reaction reaction) {
+        List<Reaction> reactions = post.getReactions();
+        reactions.add(reaction);
+        post.setReactions(reactions);
+        return postRepository.save(post);
+    }
+
+    public Post updateReaction(Post post, Reaction reaction, ReactionType updatedReactionType) {
+        reaction.setReactionType(updatedReactionType);
+        return postRepository.save(post);
+    }
+
+    public void removeReaction(Post post, Reaction reaction) {
+        List<Reaction> reactions = post.getReactions();
+        reactions.remove(reaction);
+        post.setReactions(reactions);
+        postRepository.save(post);
+    }
+
+    public Post addComment(Post post, Comment comment) {
+        List<Comment> comments = post.getComments();
+        comments.add(comment);
+        post.setComments(comments);
+        return postRepository.save(post);
+    }
+
+    public void removeComment(Post post, Comment comment) {
+        List<Comment> comments = post.getComments();
+        comments.remove(comment);
+        post.setComments(comments);
+        postRepository.save(post);
+    }
+
 }

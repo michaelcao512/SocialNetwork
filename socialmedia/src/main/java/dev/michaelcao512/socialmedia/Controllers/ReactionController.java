@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.michaelcao512.socialmedia.Entities.Reaction;
 import dev.michaelcao512.socialmedia.Services.ReactionService;
+import dev.michaelcao512.socialmedia.dto.Requests.CreateReactionRequest;
 
 @RestController
 @RequestMapping("/api/reactions")
@@ -36,8 +37,8 @@ public class ReactionController {
      *                                  exist, or the account does not exist
      */
     @PostMapping
-    public ResponseEntity<Reaction> createReaction(@RequestBody Reaction reaction) {
-        Reaction newReaction = reactionService.createReaction(reaction);
+    public ResponseEntity<Reaction> createReaction(@RequestBody CreateReactionRequest createReactionRequest) {
+        Reaction newReaction = reactionService.createReaction(createReactionRequest);
         return ResponseEntity.ok(newReaction);
     }
 
@@ -52,19 +53,6 @@ public class ReactionController {
     public ResponseEntity<Reaction> getReactionById(@PathVariable Long reactionId) {
         Reaction reaction = reactionService.getReactionById(reactionId);
         return ResponseEntity.ok(reaction);
-    }
-
-    /**
-     * Updates a reaction with the given ID.
-     * 
-     * @param reaction the reaction to be updated
-     * @return the updated reaction if the update is successful
-     * @throws IllegalArgumentException if the reaction is null or does not exist
-     */
-    @PatchMapping("/{reactionId}")
-    public ResponseEntity<Reaction> updateReaction(@RequestBody Reaction reaction) {
-        Reaction updatedReaction = reactionService.updateReaction(reaction);
-        return ResponseEntity.ok(updatedReaction);
     }
 
     /**
@@ -91,5 +79,27 @@ public class ReactionController {
     public ResponseEntity<List<Reaction>> getReactionsByPostId(@PathVariable Long postId) {
         List<Reaction> reactions = reactionService.getReactionsByPostId(postId);
         return ResponseEntity.ok(reactions);
+    }
+
+    // get total count of likes for a post
+    @GetMapping("/getLikeCountByPostId/{postId}")
+    public ResponseEntity<Integer> getLikeCount(@PathVariable Long postId) {
+        int likeCount = reactionService.getLikeCount(postId);
+        return ResponseEntity.ok(likeCount);
+    }
+
+    // get total count of dislikes for a post
+    @GetMapping("/getDislikeCountByPostId/{postId}")
+    public ResponseEntity<Integer> getDislikeCount(@PathVariable Long postId) {
+        int dislikeCount = reactionService.getDislikeCount(postId);
+        return ResponseEntity.ok(dislikeCount);
+    }
+
+    // gets a user reaction by post and account
+    @GetMapping("/getUserReactionByPostIdAndAccountId/{postId}/{accountId}")
+    public ResponseEntity<Reaction> getUserReactionByPostId(@PathVariable Long postId,
+            @PathVariable Long accountId) {
+        Reaction reaction = reactionService.getUserReactionByPostId(postId, accountId);
+        return ResponseEntity.ok(reaction);
     }
 }

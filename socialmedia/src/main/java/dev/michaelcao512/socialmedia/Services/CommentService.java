@@ -21,7 +21,7 @@ public class CommentService {
     }
 
     public Comment createComment(Comment comment) {
-        if (comment == null || comment.getAccount() == null || comment.getPost() == null) {
+        if (comment == null || /* comment.getAccount() == null || */ comment.getPost() == null) {
             throw new IllegalArgumentException("Comment cannot be null");
         }
 

@@ -1,4 +1,4 @@
-package dev.michaelcao512.socialmedia.dto;
+package dev.michaelcao512.socialmedia.dto.Responses;
 
 public record JwtResponse(String accessToken, Long id, String username, String email) {
 }

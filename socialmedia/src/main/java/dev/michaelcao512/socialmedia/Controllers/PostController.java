@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Services.PostService;
-import dev.michaelcao512.socialmedia.dto.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
 
 @RestController
 @RequestMapping("/api/post")

@@ -9,7 +9,7 @@ import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Friendship;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.FriendshipRepository;
-import dev.michaelcao512.socialmedia.dto.FriendshipRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
 
 @Service
 public class FriendshipService {

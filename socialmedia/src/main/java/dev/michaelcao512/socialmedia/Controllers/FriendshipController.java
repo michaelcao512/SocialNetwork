@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.michaelcao512.socialmedia.Entities.Friendship;
 import dev.michaelcao512.socialmedia.Services.FriendshipService;
-import dev.michaelcao512.socialmedia.dto.FriendshipRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
 
 @RestController
 @RequestMapping("/api/friendships")

@@ -1,4 +1,4 @@
-package dev.michaelcao512.socialmedia.dto;
+package dev.michaelcao512.socialmedia.dto.Requests;
 
 public class RegistrationRequest {
     private String username;

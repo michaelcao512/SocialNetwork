@@ -7,6 +7,7 @@ dev/michaelcao512/socialmedia/Repositories/FriendshipRepository.class
 dev/michaelcao512/socialmedia/Entities/Friendship.class
 dev/michaelcao512/socialmedia/Entities/Reaction.class
 dev/michaelcao512/socialmedia/Services/UserInfoService.class
+dev/michaelcao512/socialmedia/dto/Requests/FriendshipRequest.class
 dev/michaelcao512/socialmedia/Exceptions/InvalidCredentialsException.class
 dev/michaelcao512/socialmedia/Services/CommentService.class
 dev/michaelcao512/socialmedia/Entities/Post.class
@@ -16,9 +17,7 @@ dev/michaelcao512/socialmedia/Entities/Account.class
 dev/michaelcao512/socialmedia/Repositories/ReactionRepository.class
 dev/michaelcao512/socialmedia/Services/AccountService.class
 dev/michaelcao512/socialmedia/Configurations/AuthTokenFilter.class
-dev/michaelcao512/socialmedia/dto/RegistrationRequest.class
 dev/michaelcao512/socialmedia/Entities/UserInfo.class
 dev/michaelcao512/socialmedia/Entities/Comment.class
 dev/michaelcao512/socialmedia/Services/ReactionService.class
 dev/michaelcao512/socialmedia/SocialmediaApplication.class
-dev/michaelcao512/socialmedia/dto/FriendshipRequest.class

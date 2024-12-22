@@ -48,7 +48,7 @@ function ProfilePage() {
             {userInfo && <UserInfoComponent user={user} userInfo={userInfo} />
             }
             <CreatePost accountId={user.id} onPostCreated={refreshPostsHandler}/>
-            <DisplayPosts posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler}/>
+            <DisplayPosts accountId={user.id} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler}/>
         </>
      );
 }

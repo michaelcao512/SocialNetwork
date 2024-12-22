@@ -19,10 +19,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
-    @JsonBackReference (value = "comments")
-    private Account account;
+    // @ManyToOne
+    // @JoinColumn(name = "accountId", nullable = false)
+    // @JsonBackReference (value = "comments")
+    // private Account account;
 
     @ManyToOne
     @JoinColumn(name = "postId", nullable = false)

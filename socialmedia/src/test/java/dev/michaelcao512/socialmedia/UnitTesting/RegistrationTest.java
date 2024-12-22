@@ -13,7 +13,7 @@ import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.Services.AccountService;
-import dev.michaelcao512.socialmedia.dto.RegistrationRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 
 public class RegistrationTest {
 
