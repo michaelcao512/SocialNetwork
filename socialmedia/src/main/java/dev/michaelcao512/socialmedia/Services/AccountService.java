@@ -176,32 +176,15 @@ public class AccountService implements UserDetailsService {
 
     }
 
-    // public Account addPost(Account account, Post post) {
-    // List<Post> posts = account.getPosts();
-    // posts.add(post);
-    // account.setPosts(posts);
-    // return accountRepository.save(account);
-    // }
+    public List<Account> getFollowing(Long accountId) {
+        List<Account> following = accountRepository.findFollowing(accountId);
+        return following;
+    }
 
-    // public void removePost(Account account, Post post) {
-    // List<Post> posts = account.getPosts();
-    // posts.remove(post);
+    public List<Account> getFollowers(Long accountId) {
+        List<Account> followers = accountRepository.findFollowers(accountId);
+        return followers;
+    }
 
-    // accountRepository.save(account);
-    // }
-
-    // public Account addComment(Account account, Comment comment) {
-    // List<Comment> comments = account.getComments();
-    // comments.add(comment);
-    // account.setComments(comments);
-    // return accountRepository.save(account);
-    // }
-
-    // public Object removeComment(Account commentAccount, Comment comment) {
-    // List<Comment> comments = commentAccount.getComments();
-    // comments.remove(comment);
-    // commentAccount.setComments(comments);
-    // return accountRepository.save(commentAccount);
-    // }
 
 }

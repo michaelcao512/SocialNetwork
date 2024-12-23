@@ -1,5 +1,4 @@
 import axios from "axios";
-import authService from "./auth.service";
 
 const api_url = "api/reactions";
 
@@ -56,4 +55,5 @@ class ReactionsService {
 
 }
 
-export default new ReactionsService();
+const reactionsService = new ReactionsService();
+export default reactionsService;

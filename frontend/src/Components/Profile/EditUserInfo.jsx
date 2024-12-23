@@ -1,19 +1,23 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import userInfoService from "../../Services/userinfo.service";
 
 function EditUserInfo(props) {
     const { userInfo, onUserInfoUpdate } = props;
     const [isEditOpen, setIsEditOpen] = useState(false);
 
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+    const [gender, setGender] = useState();
 
-    const [firstName, setFirstName] = useState(userInfo.firstName);
-    const [lastName, setLastName] = useState(userInfo.lastName);
-    const [gender, setGender] = useState(userInfo.gender);
-
-
+    useEffect(() => {
+        setFirstName(userInfo.firstName);
+        setLastName(userInfo.lastName);
+        setGender(userInfo.gender);
+    }, [userInfo]);
 
     const handleSave = async () => {
+
         try {
             const updatedUserInfo = { ...userInfo, firstName, lastName, gender };
             await userInfoService.updateUserInfo(updatedUserInfo);
@@ -71,10 +75,6 @@ function EditUserInfo(props) {
                         onChange={(event) => setGender(event.target.value)}
                     />
                 </DialogContent>
-                
-
-
-
 
                 <DialogActions>
                     <Button onClick={() => setIsEditOpen(false)}>Cancel</Button>

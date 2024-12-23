@@ -45,15 +45,15 @@ public class Account implements UserDetails {
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
 
-    // @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    // true)
-    // @JsonManagedReference(value = "following")
-    // private List<Friendship> following;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
+    true)
+    @JsonManagedReference(value = "following")
+    private List<Friendship> following;
 
-    // @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    // true)
-    // @JsonManagedReference(value = "followers")
-    // private List<Friendship> followers;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
+    true)
+    @JsonManagedReference(value = "followers")
+    private List<Friendship> followers;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference (value = "account-posts")

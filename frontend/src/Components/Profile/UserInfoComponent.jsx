@@ -1,5 +1,8 @@
+import Friendship from "./Friendship/Friendship";
+
 function UserInfoComponent(props) {
-    const { user, userInfo } = props;
+    const { user, userInfo, profileId } = props;
+    
     return ( 
         <>
             <p>Username: {user.username}</p>
@@ -7,6 +10,7 @@ function UserInfoComponent(props) {
             <p>First Name: {userInfo.firstName}</p>
             <p>Last Name: {userInfo.lastName}</p>
             <p>Gender: {userInfo.gender}</p>
+            <Friendship user={user} profileId={profileId}/>
 
         </>
      );

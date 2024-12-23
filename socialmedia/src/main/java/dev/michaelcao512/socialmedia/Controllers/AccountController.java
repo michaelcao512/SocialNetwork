@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/account")
@@ -69,5 +72,16 @@ public class AccountController {
     public ResponseEntity<Account> getAccountByPostId(@PathVariable Long postId) {
         return ResponseEntity.ok(accountService.getAccountOfPost(postId));
     }
+
+    @GetMapping("/getFollowing/{accountId}")
+    public ResponseEntity<List<Account>> getMethodName(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountService.getFollowing(accountId));
+    }
+
+    @GetMapping("/getFollowers/{accountId}")
+    public ResponseEntity<List<Account>> getFollowers(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountService.getFollowers(accountId));
+    }
+    
 
 }

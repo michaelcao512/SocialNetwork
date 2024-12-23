@@ -22,38 +22,34 @@ public class FriendshipService {
     }
 
     public Friendship addFriend(FriendshipRequest friendshipRequest) {
-        Account account = friendshipRequest.getAccount();
-        Account friend = friendshipRequest.getFriend();
+        Long accountId = friendshipRequest.accountId();
+        Long friendId = friendshipRequest.friendId();
+
+        Account account = accountRepository.findById(accountId).orElse(null);
+        Account friend = accountRepository.findById(friendId).orElse(null);
         if (account == null || friend == null) {
-            throw new IllegalArgumentException("Account and friend cannot be null");
+            throw new IllegalArgumentException("Account or friend cannot be null");
         }
         if (friendshipRepository.existsByAccountAndFriend(account, friend)) {
             throw new IllegalArgumentException("Friendship already exists");
         }
-        if (account.equals(friend)) {
+        if (accountId == friendId) {
             throw new IllegalArgumentException("Cannot be friends with yourself");
         }
         Friendship friendship = new Friendship();
         friendship.setAccount(account);
         friendship.setFriend(friend);
 
-        // updates account's following list
-        // List<Friendship> accountFollowing = account.getFollowing();
-        // accountFollowing.add(friendship);
-        // account.setFollowing(accountFollowing);
-        // updates friend's follower list
-        // List<Friendship> friendFollowers = friend.getFollowers();
-        // friendFollowers.add(friendship);
-        // friend.setFollowers(friendFollowers);
-        // accountRepository.save(account);
-        // accountRepository.save(friend);
-
         return friendshipRepository.save(friendship);
     }
 
     public void removeFriend(FriendshipRequest friendshipRequest) {
-        Account account = friendshipRequest.getAccount();
-        Account friend = friendshipRequest.getFriend();
+        Long accountId = friendshipRequest.accountId();
+        Long friendId = friendshipRequest.friendId();
+
+        Account account = accountRepository.findById(accountId).orElse(null);
+        Account friend = accountRepository.findById(friendId).orElse(null);
+
         if (account == null || friend == null) {
             throw new IllegalArgumentException("Account and friend cannot be null");
         }
@@ -61,17 +57,6 @@ public class FriendshipService {
         if (friendship.isEmpty()) {
             throw new IllegalArgumentException("Friendship does not exist");
         }
-
-        // // updates account's following list
-        // List<Friendship> accountFollowing = account.getFollowing();
-        // accountFollowing.remove(friendship.get());
-        // account.setFollowing(accountFollowing);
-        // // updates friend's follower list
-        // List<Friendship> friendFollowers = friend.getFollowers();
-        // friendFollowers.remove(friendship.get());
-        // friend.setFollowers(friendFollowers);
-        // accountRepository.save(account);
-        // accountRepository.save(friend);
 
         friendshipRepository.delete(friendship.get());
     }
@@ -82,5 +67,23 @@ public class FriendshipService {
             throw new IllegalArgumentException("Account cannot be null");
         }
         return friendshipRepository.findAllByAccount(account);
+    }
+
+    public Boolean isFollowing(Long accountId, Long friendId) {
+        return friendshipRepository.existsByAccountAccountIdAndFriendAccountId(accountId, friendId);
+
+    }
+
+    public void deleteFriendshipByAccountIdAndFriendId(Long accountId, Long friendId) {
+        Optional<Account> account = accountRepository.findById(accountId);
+        Optional<Account> friend = accountRepository.findById(friendId);
+        if (account.isEmpty() || friend.isEmpty()) {
+            throw new IllegalArgumentException("Account or friend cannot be null");
+        }
+        Optional<Friendship> friendship = friendshipRepository.findByAccountAndFriend(account.get(), friend.get());
+        if (friendship.isEmpty()) {
+            throw new IllegalArgumentException("Friendship does not exist");
+        }
+        friendshipRepository.delete(friendship.get());
     }
 }

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import authHeader from './auth-header';
 
 const api_url = "api/userinfo";
 
@@ -24,4 +23,5 @@ class UserInfoService {
 
 }
 
-export default new UserInfoService();
+const userInfoService = new UserInfoService();
+export default userInfoService;

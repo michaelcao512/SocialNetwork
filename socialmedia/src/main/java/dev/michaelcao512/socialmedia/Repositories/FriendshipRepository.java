@@ -18,4 +18,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     List<Friendship> findAllByAccount(Account account);
 
+    Boolean existsByAccountAccountIdAndFriendAccountId(Long accountId, Long friendId);
+
 }

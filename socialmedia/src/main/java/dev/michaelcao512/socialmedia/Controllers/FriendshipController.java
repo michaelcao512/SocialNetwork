@@ -16,7 +16,7 @@ import dev.michaelcao512.socialmedia.Services.FriendshipService;
 import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
 
 @RestController
-@RequestMapping("/api/friendships")
+@RequestMapping("/api/friendship")
 public class FriendshipController {
     private final FriendshipService friendshipService;
 
@@ -56,6 +56,11 @@ public class FriendshipController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/deleteFriendshipByAccountIdAndFriendId/{accountId}/{friendId}")
+    public ResponseEntity<Void> deleteFriendshipByAccountIdAndFriendId(@PathVariable Long accountId, @PathVariable Long friendId) {
+        friendshipService.deleteFriendshipByAccountIdAndFriendId(accountId, friendId);
+        return ResponseEntity.ok().build();
+    }
     /**
      * Retrieves all friendships associated with the given account id.
      * 
@@ -67,5 +72,11 @@ public class FriendshipController {
     public ResponseEntity<List<Friendship>> getFriendshipByAccountId(@PathVariable Long accountId) {
         List<Friendship> friendship = friendshipService.getAllFriends(accountId);
         return ResponseEntity.ok(friendship);
+    }
+
+    @GetMapping("/isFollowing/{accountId}/{friendId}")
+    public ResponseEntity<Boolean> isFollowing(@PathVariable Long accountId, @PathVariable Long friendId) {
+        Boolean isFollowing = friendshipService.isFollowing(accountId, friendId);
+        return ResponseEntity.ok(isFollowing);
     }
 }

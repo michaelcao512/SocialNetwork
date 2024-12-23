@@ -1,5 +1,4 @@
 import axios from "axios";
-import authService from "./auth.service";
 
 const api_url = "api/comment";
 
@@ -46,4 +45,6 @@ class CommentService {
     }
 
 }
-export default new CommentService();
+
+const commentService = new CommentService();
+export default commentService;
