@@ -1,12 +1,14 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import NavBar from './Components/Navigation/NavBar';
-import HomePage from './Components/Home/HomePage';
-import RegistrationPage from './Components/Registration/RegistrationPage';
-import LoginPage from './Components/Login/LoginPage';
-import ProfilePage from './Components/Profile/ProfilePage';
 import ProtectedRoutes from './Components/Navigation/ProtectedRoutes';
+
+import RegistrationPage from './Pages/RegistrationPage';
+import HomePage from './Pages/HomePage';
+import LoginPage from './Pages/LoginPage';
+import ProfilePage from './Pages/ProfilePage';
+import AllPostsPage from './Pages/AllPostsPage';
+import AllUsersPage from './Pages/AllUsersPage';
+
 import authService from './Services/auth.service';
-import AllPostsPage from './Components/AllPostsPage/AllPostsPage';
 
 function App() {
   const user = authService
@@ -21,6 +23,7 @@ function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="/profile/:profileUserId" element={<ProfilePage />} />
           <Route path="/allposts" element={<AllPostsPage />} />
+          <Route path="/allusers" element={<AllUsersPage />} />
         </Route>
 
       </Routes>

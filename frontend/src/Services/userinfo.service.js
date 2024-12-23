@@ -13,6 +13,14 @@ class UserInfoService {
         });
     }
 
+    updateUserInfo(userInfo) {
+        return axios.patch(`${api_url}/${userInfo.userId}`, userInfo).then(response => {
+            return response.data;
+        }).catch(error => {
+            console.log("error: ", error);
+        });
+    }
+
 
 }
 

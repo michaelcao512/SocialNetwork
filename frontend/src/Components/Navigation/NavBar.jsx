@@ -7,7 +7,8 @@ function NavBar() {
     return (
         <>
             <StyledLink destination="/allposts" text="All Posts"/>
-            <StyledLink destination={ownProfile} text="Profile"/>
+            <StyledLink destination={ownProfile} text="My Profile" />
+            <StyledLink destination="/allusers" text="All Users" />
             <LogoutButton/>
         </>
     );

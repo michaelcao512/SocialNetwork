@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import postService from "../../Services/post.service";
-import DisplayPosts from "../Posts/Post/DisplayPosts";
+import postService from "../Services/post.service";
+import DisplayPosts from "../Components/Posts/Post/DisplayPosts";
 
 function AllPostsPage() {
     const [posts, setPosts] = useState([]);
@@ -20,8 +20,12 @@ function AllPostsPage() {
         }
     }
     
+    if (posts.length === 0) {
+        return <p>No posts from other users to display</p>;
+    }
     return ( 
 
+      
         <DisplayPosts posts={posts} user={user} />
      );
 }

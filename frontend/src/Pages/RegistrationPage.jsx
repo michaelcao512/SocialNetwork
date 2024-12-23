@@ -1,4 +1,4 @@
-import RegistrationContainer from "./RegistrationContainer";
+import RegistrationContainer from "../Components/Registration/RegistrationContainer";
 function RegistrationPage() {
     return ( 
             <RegistrationContainer/>

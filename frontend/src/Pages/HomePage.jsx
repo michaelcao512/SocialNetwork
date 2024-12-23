@@ -1,5 +1,5 @@
-import AuthService from "../../Services/auth.service";
-import { StyledLink } from "../../StyledComponents/StyledComponents";
+import AuthService from "../Services/auth.service";
+import { StyledLink } from "../StyledComponents/StyledComponents";
 import axios from "axios";
 function HomePage() {
 

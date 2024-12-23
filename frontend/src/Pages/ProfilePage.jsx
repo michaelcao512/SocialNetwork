@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
-import userInfoService from "../../Services/userinfo.service";
-import authService from "../../Services/auth.service";
-import postService from "../../Services/post.service";
-import userService from "../../Services/user.service";
+import userInfoService from "../Services/userinfo.service";
+import authService from "../Services/auth.service";
+import postService from "../Services/post.service";
+import userService from "../Services/user.service";
 
-import UserInfoComponent from "./UserInfoComponent";
-import CreatePost from "../Posts/Post/CreatePost";
-import DisplayPosts from "../Posts/Post/DisplayPosts";
+import UserInfoComponent from "../Components/Profile/UserInfoComponent";
+import CreatePost from "../Components/Posts/Post/CreatePost";
+import DisplayPosts from "../Components/Posts/Post/DisplayPosts";
 import { useParams } from "react-router-dom";
-import EditUserInfo from "./EditUserInfo";
+import EditUserInfo from "../Components/Profile/EditUserInfo";
 
 function ProfilePage() {
     const { profileUserId } = useParams();

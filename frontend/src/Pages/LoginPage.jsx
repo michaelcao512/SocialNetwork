@@ -1,5 +1,5 @@
-import { StyledLink } from "../../StyledComponents/StyledComponents";
-import LoginForm from "./LoginForm";
+import { StyledLink } from "../StyledComponents/StyledComponents";
+import LoginForm from "../Components/Login/LoginForm";
 
 function LoginPage() {
     return (

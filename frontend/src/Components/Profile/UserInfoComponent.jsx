@@ -7,6 +7,7 @@ function UserInfoComponent(props) {
             <p>First Name: {userInfo.firstName}</p>
             <p>Last Name: {userInfo.lastName}</p>
             <p>Gender: {userInfo.gender}</p>
+
         </>
      );
 }
