@@ -32,7 +32,7 @@ public class UserInfoController {
      * @return the updated user information if the update is successful
      * @throws IllegalArgumentException if the user information is not found
      */
-    @PatchMapping("/{accountId}")
+    @PatchMapping("/{userInfoId}")
     public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) {
         UserInfo newUserInfo = userInfoService.updateUserInfo(userInfo);
         return ResponseEntity.ok(newUserInfo);
@@ -45,9 +45,15 @@ public class UserInfoController {
      * @return the user information associated with the given account id
      * @throws IllegalArgumentException if the given account id does not exist
      */
-    @GetMapping("{accountId}")
+    @GetMapping("/{userInfoId}")
     public ResponseEntity<UserInfo> getUserInfo(@PathVariable Long accountId) {
         UserInfo userInfo = userInfoService.getUserInfo(accountId);
+        return ResponseEntity.ok(userInfo);
+    }
+
+    @GetMapping("/getByAccountId/{accountId}")
+    public ResponseEntity<UserInfo> getUserInfoByAccountId(@PathVariable Long accountId) {
+        UserInfo userInfo = userInfoService.getUserInfoByAccountId(accountId);
         return ResponseEntity.ok(userInfo);
     }
 }

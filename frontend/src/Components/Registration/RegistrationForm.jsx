@@ -31,7 +31,7 @@ function RegistrationForm() {
                 authService.login({ username: username, password: password })
                     .then(response => {
                         console.log("login response: ", response);
-                        navigate("/profile");
+                        navigate(`/profile/${response.id}`);
                     })
                     .catch(error => {
                         console.log("login error: ", error);

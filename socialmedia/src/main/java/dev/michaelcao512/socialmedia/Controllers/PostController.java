@@ -108,4 +108,10 @@ public class PostController {
         List<Post> post = postService.getPostsByAccountId(accountId);
         return ResponseEntity.ok(post);
     }
+
+    @GetMapping("/getPostsBesidesOwn/{accountId}")
+    public ResponseEntity<List<Post>> getPostsBesidesOwn(@PathVariable Long accountId) {
+        List<Post> post = postService.getAllPostsBesidesOwn(accountId);
+        return ResponseEntity.ok(post);
+    }
 }

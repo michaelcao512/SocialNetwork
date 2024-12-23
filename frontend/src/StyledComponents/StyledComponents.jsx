@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link as BrowserLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, CardContent, Stack } from "@mui/material";
 
 
@@ -29,7 +29,7 @@ export const StyledCard = styled(CardContent)({
 export function StyledLink(props) {
     const { destination, text } = props;
     return ( 
-        <Button component={BrowserLink} to={destination}
+        <Button component={Link} to={destination} 
             color="secondary" variant="contained"
             sx={
                 {

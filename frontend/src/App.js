@@ -6,6 +6,7 @@ import LoginPage from './Components/Login/LoginPage';
 import ProfilePage from './Components/Profile/ProfilePage';
 import ProtectedRoutes from './Components/Navigation/ProtectedRoutes';
 import authService from './Services/auth.service';
+import AllPostsPage from './Components/AllPostsPage/AllPostsPage';
 
 function App() {
   const user = authService
@@ -18,7 +19,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         <Route element={<ProtectedRoutes />}>
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:profileUserId" element={<ProfilePage />} />
+          <Route path="/allposts" element={<AllPostsPage />} />
         </Route>
 
       </Routes>

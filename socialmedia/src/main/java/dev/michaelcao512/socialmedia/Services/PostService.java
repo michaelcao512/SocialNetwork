@@ -87,16 +87,16 @@ public class PostService {
         if (!postRepository.existsByAccount(account.get())) {
             return List.of();
         }
-        
+
         return postRepository.findByAccount(account.get());
 
     }
 
     // public Post addReaction(Post post, Reaction reaction) {
-    //     List<Reaction> reactions = post.getReactions();
-    //     reactions.add(reaction);
-    //     post.setReactions(reactions);
-    //     return postRepository.save(post);
+    // List<Reaction> reactions = post.getReactions();
+    // reactions.add(reaction);
+    // post.setReactions(reactions);
+    // return postRepository.save(post);
     // }
 
     public Post updateReaction(Post post, Reaction reaction, ReactionType updatedReactionType) {
@@ -104,25 +104,30 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public List<Post> getAllPostsBesidesOwn(Long accountId) {
+        List<Post> posts = postRepository.findAllPostsBesidesOwn(accountId);
+        return posts;
+    }
+
     // public void removeReaction(Post post, Reaction reaction) {
-    //     List<Reaction> reactions = post.getReactions();
-    //     reactions.remove(reaction);
-    //     post.setReactions(reactions);
-    //     postRepository.save(post);
+    // List<Reaction> reactions = post.getReactions();
+    // reactions.remove(reaction);
+    // post.setReactions(reactions);
+    // postRepository.save(post);
     // }
 
     // public Post addComment(Post post, Comment comment) {
-    //     List<Comment> comments = post.getComments();
-    //     comments.add(comment);
-    //     post.setComments(comments);
-    //     return postRepository.save(post);
+    // List<Comment> comments = post.getComments();
+    // comments.add(comment);
+    // post.setComments(comments);
+    // return postRepository.save(post);
     // }
 
     // public void removeComment(Post post, Comment comment) {
-    //     List<Comment> comments = post.getComments();
-    //     comments.remove(comment);
-    //     post.setComments(comments);
-    //     postRepository.save(post);
+    // List<Comment> comments = post.getComments();
+    // comments.remove(comment);
+    // post.setComments(comments);
+    // postRepository.save(post);
     // }
 
 }

@@ -33,7 +33,15 @@ public class UserInfoService {
         return existingUserInfo;
     }
 
-    public UserInfo getUserInfo(Long accountId) {
+    public UserInfo getUserInfo(Long userInfoId) {
+        Optional<UserInfo> userInfo = userInfoRepository.findById(userInfoId);
+        if (userInfo.isEmpty()) {
+            throw new IllegalArgumentException("User info not found");
+        }
+        return userInfo.get();
+    }
+
+    public UserInfo getUserInfoByAccountId(Long accountId) {
         Optional<UserInfo> userInfo = userInfoRepository.findByAccountId(accountId);
         if (userInfo.isEmpty()) {
             throw new IllegalArgumentException("User info not found");

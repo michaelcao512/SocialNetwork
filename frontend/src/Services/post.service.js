@@ -26,9 +26,8 @@ class PostService {
         });
     }
 
-    getOwnPosts() {
-        const user = authService.getCurrentUser();
-        return axios.get(`${api_url}/getPostsByAccountId/${user.id}`, user.id).then(response => {
+    getPostsByAccountId(id) {
+        return axios.get(`${api_url}/getPostsByAccountId/${id}`, id).then(response => {
             return response.data;
         }).catch(error => {
             console.log("error: ", error);
@@ -53,6 +52,15 @@ class PostService {
 
     updatePost(post) {
         return axios.patch(`${api_url}/${post.postId}`, post).then(response => {
+            return response.data;
+        }).catch(error => {
+            console.log("error: ", error);
+        });
+    }
+
+    getAllPostsBesidesOwn() {
+        const user = authService.getCurrentUser();
+        return axios.get(`${api_url}/getPostsBesidesOwn/${user.id}`).then(response => {
             return response.data;
         }).catch(error => {
             console.log("error: ", error);
