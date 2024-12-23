@@ -3,19 +3,31 @@ import DeletePost from "./DeletePost";
 import EditPost from "./EditPost";
 import DisplayComments from "../Comments/DisplayComments";
 import { useEffect, useState } from "react";
+
+import userService from "../../../Services/user.service";
 function Post(props) {
     const { post, user, onPostDelete, onPostUpdate } = props;
-    const [canManagePost, setCanManagePost] = useState(false);
+    const [ postOwner, setPostOwner ] = useState("");
+    const [ canManagePost, setCanManagePost] = useState(false);
+
     useEffect(() => {
-        if (user && post) {
-            setCanManagePost(user.userId === post.userId);
+        try {
+            userService.getAccountOfPost(post.postId)
+                .then(response => {
+                setPostOwner(response);
+                if (response.username === user.username) {
+                    setCanManagePost(true);
+                }
+            });
+        } catch (error) {
+            console.log("error: ", error);
         }
-    }, [user, post]);
+    }, []);
 
 
     return ( 
         <div>
-            <h2>{user.username}: {post.content}</h2>
+            <h2>{postOwner.username}: {post.content}</h2>
             <DisplayReactions post={post} user={user} />
             {canManagePost &&
                 <>

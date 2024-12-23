@@ -3,6 +3,7 @@ package dev.michaelcao512.socialmedia.Services;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
@@ -19,16 +20,15 @@ public class ReactionService {
     private final ReactionRepository reactionRepository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-    private final PostService postService;
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(ReactionService.class);
 
     public ReactionService(ReactionRepository reactionRepository, PostRepository postRepository,
-            AccountRepository accountRepository, AccountService accountService, PostService postService) {
+            AccountRepository accountRepository) {
         this.reactionRepository = reactionRepository;
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
-        this.accountService = accountService;
-        this.postService = postService;
+
     }
 
     // creates a new reaction or updates an existing one
@@ -41,19 +41,20 @@ public class ReactionService {
         }
 
         // in case users already liked a post
-        Reaction existingReaction = reactionRepository.getUserReactionByPostId(post.getPostId(),
+        Optional<Reaction> existingReaction = reactionRepository.findByPostIdAndAccountId(post.getPostId(),
                 account.getAccountId());
-        if (existingReaction != null) {
+
+        if (existingReaction.isPresent()) {
 
             // DELETE REACTION if the reaction type is the same
-            if (existingReaction.getReactionType() == reactionType) {
-                deleteReaction(existingReaction.getReactionId());
+            if (existingReaction.get().getReactionType() == reactionType) {
+                deleteReaction(existingReaction.get().getReactionId());
                 return null;
             }
             // UPDATE REACTION if the reaction type is different
-            existingReaction.setReactionType(reactionType);
+            existingReaction.get().setReactionType(reactionType);
             // postService.updateReaction(post, existingReaction, reactionType);
-            return reactionRepository.save(existingReaction);
+            return reactionRepository.save(existingReaction.get());
         }
         Reaction reaction = new Reaction();
         reaction.setPost(post);
@@ -106,7 +107,11 @@ public class ReactionService {
         return reactionRepository.getDislikeCount(postId);
     }
 
-    public Reaction getUserReactionByPostId(long postId, long accountId) {
-        return reactionRepository.getUserReactionByPostId(postId, accountId);
+    public Reaction getReactionByPostIdAndAccountId(long postId, long accountId) {
+        Optional<Reaction> reaction = reactionRepository.findByPostIdAndAccountId(postId, accountId);
+        if (reaction.isEmpty()) {
+            return null;
+        }
+        return reaction.get();
     }
 }

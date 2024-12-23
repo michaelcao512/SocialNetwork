@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Services.CommentService;
 import dev.michaelcao512.socialmedia.dto.Requests.CreateCommentRequest;
@@ -97,9 +96,5 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/getAccountOfComment/{commentId}")
-    public ResponseEntity<Account> getAccountOfComment(@PathVariable Long commentId) {
-        Account account = commentService.getAccountOfComment(commentId);
-        return ResponseEntity.ok(account);
-    }
+
 }

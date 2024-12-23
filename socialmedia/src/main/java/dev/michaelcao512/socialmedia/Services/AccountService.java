@@ -159,32 +159,49 @@ public class AccountService implements UserDetailsService {
 
     }
 
+    public Account getAccountOfComment(Long commentId) {
+        Optional<Account> account = accountRepository.findByCommentsCommentId(commentId);
+        if (account.isEmpty()) {
+            throw new IllegalArgumentException("Account does not exist");
+        }
+        return account.get();
+    }
+
+    public Account getAccountOfPost(Long postId) {
+        Optional<Account> account = accountRepository.findAccountOfPost(postId);
+        if (account.isEmpty()) {
+            throw new IllegalArgumentException("Account doesn't exist");
+        }
+        return account.get();
+
+    }
+
     // public Account addPost(Account account, Post post) {
-    //     List<Post> posts = account.getPosts();
-    //     posts.add(post);
-    //     account.setPosts(posts);
-    //     return accountRepository.save(account);
+    // List<Post> posts = account.getPosts();
+    // posts.add(post);
+    // account.setPosts(posts);
+    // return accountRepository.save(account);
     // }
 
     // public void removePost(Account account, Post post) {
-    //     List<Post> posts = account.getPosts();
-    //     posts.remove(post);
+    // List<Post> posts = account.getPosts();
+    // posts.remove(post);
 
-    //     accountRepository.save(account);
+    // accountRepository.save(account);
     // }
 
     // public Account addComment(Account account, Comment comment) {
-    //     List<Comment> comments = account.getComments();
-    //     comments.add(comment);
-    //     account.setComments(comments);
-    //     return accountRepository.save(account);
+    // List<Comment> comments = account.getComments();
+    // comments.add(comment);
+    // account.setComments(comments);
+    // return accountRepository.save(account);
     // }
 
     // public Object removeComment(Account commentAccount, Comment comment) {
-    //     List<Comment> comments = commentAccount.getComments();
-    //     comments.remove(comment);
-    //     commentAccount.setComments(comments);
-    //     return accountRepository.save(commentAccount);
+    // List<Comment> comments = commentAccount.getComments();
+    // comments.remove(comment);
+    // commentAccount.setComments(comments);
+    // return accountRepository.save(commentAccount);
     // }
 
 }

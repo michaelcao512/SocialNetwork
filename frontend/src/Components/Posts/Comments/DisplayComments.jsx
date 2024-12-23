@@ -5,7 +5,6 @@ import CreateComment from "./CreateComment";
 
 function DisplayComments(props) {
     const { post, user } = props;
-    const postId = post.postId;
     const [comments, setComments] = useState([]);
 
     useEffect(() => {
@@ -13,7 +12,7 @@ function DisplayComments(props) {
     }, []);
 
     function fetchComments() {
-        commentService.getCommentsByPostId(postId)
+        commentService.getCommentsByPostId(post.postId)
         .then(response => {
             setComments(response);
         });

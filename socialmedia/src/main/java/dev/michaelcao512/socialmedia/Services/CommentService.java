@@ -21,14 +21,12 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
 
     public CommentService(CommentRepository commentRepository, PostRepository postRepository,
-            AccountRepository accountRepository, AccountService accountService) {
+            AccountRepository accountRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
-        this.accountService = accountService;
     }
 
     public Comment createComment(CreateCommentRequest createCommentRequest) {
@@ -93,12 +91,5 @@ public class CommentService {
         return commentRepository.findByPost(post.get());
     }
 
-    public Account getAccountOfComment(Long commentId) {
-        Optional<Account> account = accountRepository.findAccountOfComment(commentId);
-        if (account.isEmpty()) {
-            throw new IllegalArgumentException("Account does not exist");
-        }
-        return account.get();
-    }
 
 }

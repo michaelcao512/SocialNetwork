@@ -21,12 +21,12 @@ public class Reaction {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    @JsonBackReference (value = "account-reactions")
+    @JsonBackReference(value = "account-reactions")
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "postId", nullable = false)
-    @JsonBackReference (value = "post-reactions")
+    @JsonBackReference(value = "post-reactions")
     private Post post;
 
     @Enumerated(EnumType.STRING)
@@ -34,5 +34,14 @@ public class Reaction {
 
     public enum ReactionType {
         LIKE, DISLIKE
+    }
+
+    public String toString() {
+        return "Reaction{" +
+                "reactionId=" + reactionId +
+                ", account=" + account +
+                ", post=" + post +
+                ", reactionType=" + reactionType +
+                '}';
     }
 }

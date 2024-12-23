@@ -96,10 +96,10 @@ public class ReactionController {
     }
 
     // gets a user reaction by post and account
-    @GetMapping("/getUserReactionByPostIdAndAccountId/{postId}/{accountId}")
-    public ResponseEntity<Reaction> getUserReactionByPostId(@PathVariable Long postId,
+    @GetMapping("/getReactionByPostIdAndAccountId/{postId}/{accountId}")
+    public ResponseEntity<Reaction> getReactionByPostIdAndAccountId(@PathVariable Long postId,
             @PathVariable Long accountId) {
-        Reaction reaction = reactionService.getUserReactionByPostId(postId, accountId);
+        Reaction reaction = reactionService.getReactionByPostIdAndAccountId(postId, accountId);
         return ResponseEntity.ok(reaction);
     }
 }

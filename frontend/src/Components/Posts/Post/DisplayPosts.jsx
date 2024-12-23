@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Post from "./Post";
 function DisplayPosts(props) {
     const { posts, user, onPostDelete, onPostUpdate } = props;

@@ -12,13 +12,7 @@ class CommentService {
         });
     }
 
-    getAccountOfComment(commentId) {
-        return axios.get(`${api_url}/getAccountOfComment/${commentId}`).then(response => {
-            return response.data;
-        }).catch(error => {
-            console.log("error: ", error);
-        });
-    }
+
 
     // 
     createComment(content, accountId, postId) {

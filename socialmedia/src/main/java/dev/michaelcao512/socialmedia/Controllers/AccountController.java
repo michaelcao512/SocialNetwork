@@ -59,4 +59,15 @@ public class AccountController {
     // return ResponseEntity.ok(updatedAccount);
     // }
 
+    @GetMapping("/getAccountOfComment/{commentId}")
+    public ResponseEntity<Account> getAccountOfComment(@PathVariable Long commentId) {
+        Account account = accountService.getAccountOfComment(commentId);
+        return ResponseEntity.ok(account);
+    }
+
+    @GetMapping("/getAccountOfPost/{postId}")
+    public ResponseEntity<Account> getAccountByPostId(@PathVariable Long postId) {
+        return ResponseEntity.ok(accountService.getAccountOfPost(postId));
+    }
+
 }

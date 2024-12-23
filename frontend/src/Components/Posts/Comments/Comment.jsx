@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
+import accountService from "../../../Services/user.service";
 import commentService from "../../../Services/comment.service";
 import EditComment from "./EditComment";
 
 function Comment(props) {
     const { comment, user, fetchComments} = props
-    const [content, setContent] = useState(comment.content);
-    const [username, setUsername] = useState("");
-    const [isSelf, setIsSelf] = useState(false);
+    const [ content, setContent] = useState(comment.content);
+    const [ commentOwner, setCommentOwner] = useState("");
+    const [ canManageComment, setCanManageComment] = useState(false);
     
     useEffect(() => {
         fetchAccount();
     }, []);
 
     function fetchAccount() {
-        commentService.getAccountOfComment(comment.commentId)
+        accountService.getAccountOfComment(comment.commentId)
             .then(response => {
-                setUsername(response.username);
+                setCommentOwner(response);
                 if (response.username === user.username) {
-                    setIsSelf(true);
+                    setCanManageComment(true);
                 }
             });
     }
@@ -40,13 +41,12 @@ function Comment(props) {
 
     return ( 
         <div>
-            <p>{username}: {content}
-                {isSelf && 
+            <p>{commentOwner.username}: {content}
+                {canManageComment && 
                     <>
                         <EditComment comment={comment} onCommentUpdate={handleUpdate} >Edit Comment</EditComment>
                         <button onClick={handleDelete}>Delete</button>     
                     </>
-
                 }
             </p>
             

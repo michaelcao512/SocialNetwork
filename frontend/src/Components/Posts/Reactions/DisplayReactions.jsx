@@ -25,25 +25,21 @@ function DisplayReactions(props) {
         .then(response => {
             setNumDislikes(response);
         });
-        reactionsService.getReactionsByPostId(postId, user.id)
+        reactionsService.getReactionByPostIdAndAccountId(postId, user.id)
         .then(response => {
             setReaction(response);
         })
     }
 
     function handleLikeClick() {
-        console.log("reaction: ", reaction);
-        console.log("reactionType: ", reaction.reactionType);
         if (reaction != null && reaction.reactionType == "LIKE") {
-            console.log("deleting like");
             reactionsService.deleteReaction(reaction.reactionId)
-            .then(response => {
+                .then(response => {
                 fetchData()
             });
         } else {
             reactionsService.createReaction("LIKE", postId, user.id)
                 .then(response => {
-                    console.log("creating like");
                 fetchData()
             });
         }
