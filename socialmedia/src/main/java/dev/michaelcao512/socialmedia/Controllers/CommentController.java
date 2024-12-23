@@ -5,14 +5,17 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Services.CommentService;
+import dev.michaelcao512.socialmedia.dto.Requests.CreateCommentRequest;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -30,7 +33,7 @@ public class CommentController {
      * @return the comment with the given comment id
      * @throws IllegalArgumentException if the comment does not exist
      */
-    @GetMapping("/comments/{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<Comment> getCommentById(@PathVariable Long commentId) {
         Comment comment = commentService.getCommentById(commentId);
         return ResponseEntity.ok(comment);
@@ -47,9 +50,9 @@ public class CommentController {
      * @throws IllegalArgumentException if the comment is null, the post does not
      *                                  exist, or the account does not exist
      */
-    @PostMapping("/comments/create")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
-        Comment newComment = commentService.createComment(comment);
+    @PostMapping
+    public ResponseEntity<Comment> createComment(@RequestBody CreateCommentRequest createCommentRequest) {
+        Comment newComment = commentService.createComment(createCommentRequest);
         return ResponseEntity.ok(newComment);
     }
 
@@ -60,7 +63,7 @@ public class CommentController {
      * @return the updated comment if the update is successful
      * @throws IllegalArgumentException if the comment is null or does not exist
      */
-    @PostMapping("/comments/update")
+    @PatchMapping("/{commentId}")
     public ResponseEntity<Comment> updateComment(@RequestBody Comment comment) {
         Comment updatedComment = commentService.updateComment(comment);
         return ResponseEntity.ok(updatedComment);
@@ -74,7 +77,7 @@ public class CommentController {
      * @return 200 OK if the comment was deleted, 400 Bad Request if the comment
      *         does not exist
      */
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok().build();
@@ -88,9 +91,15 @@ public class CommentController {
      * @throws IllegalArgumentException if the post does not exist
      */
 
-    @GetMapping("/{postId}/comments")
+    @GetMapping("/getCommentsByPostId/{postId}")
     public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
         return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/getAccountOfComment/{commentId}")
+    public ResponseEntity<Account> getAccountOfComment(@PathVariable Long commentId) {
+        Account account = commentService.getAccountOfComment(commentId);
+        return ResponseEntity.ok(account);
     }
 }

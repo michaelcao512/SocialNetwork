@@ -4,8 +4,6 @@ package dev.michaelcao512.socialmedia.Configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,11 +23,9 @@ import dev.michaelcao512.socialmedia.Services.AccountService;
 @EnableMethodSecurity(prePostEnabled = true)
 @CrossOrigin
 public class SecurityConfig {
-    private AccountService accountService;
     private AuthEntryPointJwt unauthorizedHandler;
 
-    public SecurityConfig(AccountService accountService, AuthEntryPointJwt unauthorizedHandler) {
-        this.accountService = accountService;
+    public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
         this.unauthorizedHandler = unauthorizedHandler;
     }
 

@@ -28,6 +28,9 @@ class ReactionsService {
         });
     }
 
+    // handles creating a new reaction
+    // also handles updating a reaction if reaction type is different
+    // or deleting a reaction if reaction type is the same
     createReaction(reactionType, postId, accountId) {
         const reactionRequest = {
             reactionType: reactionType,

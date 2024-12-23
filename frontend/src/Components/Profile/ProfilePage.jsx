@@ -32,6 +32,7 @@ function ProfilePage() {
     async function fetchPosts() {
         try {
             const response = await postService.getOwnPosts();
+            console.log("fetch own posts response: ", response);
             setPosts(response);
         } catch (error) {
             console.log("error: ", error);
@@ -47,8 +48,8 @@ function ProfilePage() {
             <h1>Profile Page</h1>
             {userInfo && <UserInfoComponent user={user} userInfo={userInfo} />
             }
-            <CreatePost accountId={user.id} onPostCreated={refreshPostsHandler}/>
-            <DisplayPosts accountId={user.id} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler}/>
+            <CreatePost user={user}  onPostCreated={refreshPostsHandler}/>
+            <DisplayPosts user={user} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler}/>
         </>
      );
 }

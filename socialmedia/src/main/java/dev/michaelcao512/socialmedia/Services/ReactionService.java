@@ -40,25 +40,29 @@ public class ReactionService {
             throw new IllegalArgumentException("Request body contents cannot be null");
         }
 
-        Reaction existingReaction = reactionRepository.getUserReactionByPostId(post.getPostId(), account.getAccountId());
+        // in case users already liked a post
+        Reaction existingReaction = reactionRepository.getUserReactionByPostId(post.getPostId(),
+                account.getAccountId());
         if (existingReaction != null) {
-            // reaction already exists so update reaction type
 
+            // DELETE REACTION if the reaction type is the same
+            if (existingReaction.getReactionType() == reactionType) {
+                deleteReaction(existingReaction.getReactionId());
+                return null;
+            }
+            // UPDATE REACTION if the reaction type is different
             existingReaction.setReactionType(reactionType);
-            // accountService.updateReaction(account, existingReaction, reactionType);
-            postService.updateReaction(post, existingReaction, reactionType);
-
+            // postService.updateReaction(post, existingReaction, reactionType);
             return reactionRepository.save(existingReaction);
         }
         Reaction reaction = new Reaction();
-        // reaction.setAccount(account);
         reaction.setPost(post);
         reaction.setReactionType(reactionType);
+        reaction.setAccount(account);
 
         Reaction r = reactionRepository.save(reaction);
 
-        // accountService.addReaction(account, r);
-        postService.addReaction(post, r);
+        // postService.addReaction(post, r);
 
         return r;
     }
@@ -68,12 +72,9 @@ public class ReactionService {
         if (reaction.isEmpty()) {
             throw new IllegalArgumentException("Reaction does not exist");
         }
-        // Account account = reaction.get().getAccount();
         Post post = reaction.get().getPost();
 
-        // accountService.removeReaction(account, reaction.get());
-        postService.removeReaction(post, reaction.get());
-
+        // postService.removeReaction(post, reaction.get());
         reactionRepository.deleteById(reactionId);
     }
 

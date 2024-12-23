@@ -39,7 +39,7 @@ public class PostService {
 
         Post p = postRepository.save(post);
 
-        accountService.addPost(account, p);
+        // accountService.addPost(account, p);
 
         return p;
     }
@@ -62,7 +62,8 @@ public class PostService {
         if (post.isEmpty()) {
             throw new IllegalArgumentException("Post does not exist");
         }
-        accountService.removePost(post.get().getAccount(), post.get());
+        // accountService.removePost(post.get().getAccount(), post.get());
+
         postRepository.delete(post.get());
     }
 
@@ -86,41 +87,42 @@ public class PostService {
         if (!postRepository.existsByAccount(account.get())) {
             return List.of();
         }
+        
         return postRepository.findByAccount(account.get());
 
     }
 
-    public Post addReaction(Post post, Reaction reaction) {
-        List<Reaction> reactions = post.getReactions();
-        reactions.add(reaction);
-        post.setReactions(reactions);
-        return postRepository.save(post);
-    }
+    // public Post addReaction(Post post, Reaction reaction) {
+    //     List<Reaction> reactions = post.getReactions();
+    //     reactions.add(reaction);
+    //     post.setReactions(reactions);
+    //     return postRepository.save(post);
+    // }
 
     public Post updateReaction(Post post, Reaction reaction, ReactionType updatedReactionType) {
         reaction.setReactionType(updatedReactionType);
         return postRepository.save(post);
     }
 
-    public void removeReaction(Post post, Reaction reaction) {
-        List<Reaction> reactions = post.getReactions();
-        reactions.remove(reaction);
-        post.setReactions(reactions);
-        postRepository.save(post);
-    }
+    // public void removeReaction(Post post, Reaction reaction) {
+    //     List<Reaction> reactions = post.getReactions();
+    //     reactions.remove(reaction);
+    //     post.setReactions(reactions);
+    //     postRepository.save(post);
+    // }
 
-    public Post addComment(Post post, Comment comment) {
-        List<Comment> comments = post.getComments();
-        comments.add(comment);
-        post.setComments(comments);
-        return postRepository.save(post);
-    }
+    // public Post addComment(Post post, Comment comment) {
+    //     List<Comment> comments = post.getComments();
+    //     comments.add(comment);
+    //     post.setComments(comments);
+    //     return postRepository.save(post);
+    // }
 
-    public void removeComment(Post post, Comment comment) {
-        List<Comment> comments = post.getComments();
-        comments.remove(comment);
-        post.setComments(comments);
-        postRepository.save(post);
-    }
+    // public void removeComment(Post post, Comment comment) {
+    //     List<Comment> comments = post.getComments();
+    //     comments.remove(comment);
+    //     post.setComments(comments);
+    //     postRepository.save(post);
+    // }
 
 }

@@ -1,16 +1,17 @@
 import DisplayReactions from "../Reactions/DisplayReactions";
 import DeletePost from "./DeletePost";
 import EditPost from "./EditPost";
-
+import DisplayComments from "../Comments/DisplayComments";
 function Post(props) {
-    const { post, accountId, onPostDelete, onPostUpdate } = props;
+    const { post, user, onPostDelete, onPostUpdate } = props;
 
     return ( 
         <div>
-            <p>{post.content}</p>
-            <DisplayReactions post={post} accountId={accountId}/>
+            <h2>{user.username}: {post.content}</h2>
+            <DisplayReactions post={post} user={user}/>
             <EditPost post={post} onPostUpdate={onPostUpdate} />
             <DeletePost id={post.postId} onPostDelete={onPostDelete} />
+            <DisplayComments post={post} user={user} />
         </div>
      );
     

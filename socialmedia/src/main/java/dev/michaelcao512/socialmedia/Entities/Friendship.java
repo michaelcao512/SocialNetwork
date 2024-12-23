@@ -20,12 +20,12 @@ public class Friendship {
 
     @ManyToOne
     @JoinColumn(name = "accountId")
-    @JsonBackReference (value = "following")
+    // @JsonBackReference (value = "following")
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "friendId")
-    @JsonBackReference (value = "followers")
+    // @JsonBackReference (value = "followers")
     private Account friend;
 
 }

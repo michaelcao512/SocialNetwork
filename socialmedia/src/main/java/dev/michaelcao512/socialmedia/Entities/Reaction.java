@@ -19,14 +19,14 @@ public class Reaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reactionId;
 
-    // @ManyToOne
-    // @JoinColumn(name = "accountId", nullable = false)
-    // @JsonBackReference(value = "reactions")
-    // private Account account;
+    @ManyToOne
+    @JoinColumn(name = "accountId", nullable = false)
+    @JsonBackReference (value = "account-reactions")
+    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "postId", nullable = false)
-    @JsonBackReference(value = "post-reactions")
+    @JsonBackReference (value = "post-reactions")
     private Post post;
 
     @Enumerated(EnumType.STRING)

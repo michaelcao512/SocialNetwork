@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -160,40 +159,19 @@ public class AccountService implements UserDetailsService {
 
     }
 
-    public Account addPost(Account account, Post post) {
-        List<Post> posts = account.getPosts();
-        posts.add(post);
-        account.setPosts(posts);
-        return accountRepository.save(account);
-    }
+    // public Account addPost(Account account, Post post) {
+    //     List<Post> posts = account.getPosts();
+    //     posts.add(post);
+    //     account.setPosts(posts);
+    //     return accountRepository.save(account);
+    // }
 
-    public void removePost(Account account, Post post) {
-        List<Post> posts = account.getPosts();
-        posts.remove(post);
+    // public void removePost(Account account, Post post) {
+    //     List<Post> posts = account.getPosts();
+    //     posts.remove(post);
 
-        // List<Reaction> reactions = post.getReactions();
-        // List<Comment> comments = post.getComments();
-
-        // logger.info("Removing post");
-
-        // Iterator<Reaction> reactionIterator = reactions.iterator();
-        // while (reactionIterator.hasNext()) {
-        //     Reaction reaction = reactionIterator.next();
-        //     reactionIterator.remove();
-        // }
-
-        // Iterator<Comment> commentIterator = comments.iterator();
-        // while (commentIterator.hasNext()) {
-        //     Comment comment = commentIterator.next();
-        //     commentIterator.remove();
-        // }
-
-        // account.setReactions(account.getReactions());
-        // account.setComments(account.getComments());
-        // account.setPosts(posts);
-
-        accountRepository.save(account);
-    }
+    //     accountRepository.save(account);
+    // }
 
     // public Account addComment(Account account, Comment comment) {
     //     List<Comment> comments = account.getComments();
@@ -202,30 +180,11 @@ public class AccountService implements UserDetailsService {
     //     return accountRepository.save(account);
     // }
 
-    // public void removeComment(Account account, Comment comment) {
-    //     List<Comment> comments = account.getComments();
+    // public Object removeComment(Account commentAccount, Comment comment) {
+    //     List<Comment> comments = commentAccount.getComments();
     //     comments.remove(comment);
-    //     account.setComments(comments);
-    //     accountRepository.save(account);
-    // }
-
-    // public Account addReaction(Account account, Reaction reaction) {
-    //     List<Reaction> reactions = account.getReactions();
-    //     reactions.add(reaction);
-    //     account.setReactions(reactions);
-    //     return accountRepository.save(account);
-    // }
-
-    // public Account updateReaction(Account account, Reaction reaction, ReactionType updatedReactionType) {
-    //     reaction.setReactionType(updatedReactionType);
-    //     return accountRepository.save(account);
-    // }
-
-    // public void removeReaction(Account account, Reaction reaction) {
-    //     List<Reaction> reactions = account.getReactions();
-    //     reactions.remove(reaction);
-    //     account.setReactions(reactions);
-    //     accountRepository.save(account);
+    //     commentAccount.setComments(comments);
+    //     return accountRepository.save(commentAccount);
     // }
 
 }

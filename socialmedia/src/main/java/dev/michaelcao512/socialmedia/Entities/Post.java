@@ -25,7 +25,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
-    @JsonBackReference(value = "posts")
+    @JsonBackReference(value = "account-posts")
     private Account account;
 
     private String content;

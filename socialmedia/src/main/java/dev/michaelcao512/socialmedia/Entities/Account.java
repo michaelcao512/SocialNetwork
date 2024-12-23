@@ -45,19 +45,27 @@ public class Account implements UserDetails {
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "following")
-    private List<Friendship> following;
+    // @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
+    // true)
+    // @JsonManagedReference(value = "following")
+    // private List<Friendship> following;
+
+    // @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
+    // true)
+    // @JsonManagedReference(value = "followers")
+    // private List<Friendship> followers;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "followers")
-    private List<Friendship> followers;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "posts")
+    @JsonManagedReference (value = "account-posts")
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference (value = "account-comments")
+    private List<Comment> comments;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference (value = "account-reactions")
+    private List<Reaction> reactions;
 
     @PreUpdate
     public void onUpdate() {
@@ -68,8 +76,10 @@ public class Account implements UserDetails {
     public String toString() {
         return "Account [accountId=" + accountId + ", username=" + username + ", email=" + email + ", dateCreated="
                 + dateCreated + ", dateUpdated=" + dateUpdated + ", authorities="
-                + authorities + ", following=" + following + ", followers=" + followers
-                + ", posts=" + posts + "]";
+                + authorities
+        // + ", following=" + following + ", followers=" + followers
+        // + ", posts=" + posts + "]"
+        ;
     }
 
     // ===== Implementing UserDetails Methods =====

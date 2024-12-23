@@ -4,7 +4,7 @@ import { useState } from "react";
 import postService from "../../../Services/post.service";
 
 function CreatePost(props) {
-    const { accountId, onPostCreated } = props;
+    const { user, onPostCreated } = props;
     const navigate = useNavigate();
     const [content, setContent] = useState("");
 
@@ -13,7 +13,7 @@ function CreatePost(props) {
         setContent("");
         
         try {
-            const response = await postService.createPost(content, accountId);
+            const response = await postService.createPost(content, user.id);
             onPostCreated();
         } catch (error) {
             console.log("createPost error: ", error);

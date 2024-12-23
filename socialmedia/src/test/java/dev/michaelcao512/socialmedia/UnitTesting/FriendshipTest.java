@@ -48,8 +48,8 @@ public class FriendshipTest {
 
         when(friendshipRepository.existsByAccountAndFriend(account, friend)).thenReturn(false);
         when(friendshipRepository.save(any(Friendship.class))).thenAnswer(i -> i.getArguments()[0]);
-        when(account.getFollowing()).thenReturn(new ArrayList<>());
-        when(friend.getFollowers()).thenReturn(new ArrayList<>());
+        // when(account.getFollowing()).thenReturn(new ArrayList<>());
+        // when(friend.getFollowers()).thenReturn(new ArrayList<>());
 
         FriendshipRequest friendshipRequest = new FriendshipRequest();
         friendshipRequest.setAccount(account);

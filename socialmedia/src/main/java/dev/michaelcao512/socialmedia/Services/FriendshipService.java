@@ -38,15 +38,15 @@ public class FriendshipService {
         friendship.setFriend(friend);
 
         // updates account's following list
-        List<Friendship> accountFollowing = account.getFollowing();
-        accountFollowing.add(friendship);
-        account.setFollowing(accountFollowing);
+        // List<Friendship> accountFollowing = account.getFollowing();
+        // accountFollowing.add(friendship);
+        // account.setFollowing(accountFollowing);
         // updates friend's follower list
-        List<Friendship> friendFollowers = friend.getFollowers();
-        friendFollowers.add(friendship);
-        friend.setFollowers(friendFollowers);
-        accountRepository.save(account);
-        accountRepository.save(friend);
+        // List<Friendship> friendFollowers = friend.getFollowers();
+        // friendFollowers.add(friendship);
+        // friend.setFollowers(friendFollowers);
+        // accountRepository.save(account);
+        // accountRepository.save(friend);
 
         return friendshipRepository.save(friendship);
     }
@@ -62,16 +62,16 @@ public class FriendshipService {
             throw new IllegalArgumentException("Friendship does not exist");
         }
 
-        // updates account's following list
-        List<Friendship> accountFollowing = account.getFollowing();
-        accountFollowing.remove(friendship.get());
-        account.setFollowing(accountFollowing);
-        // updates friend's follower list
-        List<Friendship> friendFollowers = friend.getFollowers();
-        friendFollowers.remove(friendship.get());
-        friend.setFollowers(friendFollowers);
-        accountRepository.save(account);
-        accountRepository.save(friend);
+        // // updates account's following list
+        // List<Friendship> accountFollowing = account.getFollowing();
+        // accountFollowing.remove(friendship.get());
+        // account.setFollowing(accountFollowing);
+        // // updates friend's follower list
+        // List<Friendship> friendFollowers = friend.getFollowers();
+        // friendFollowers.remove(friendship.get());
+        // friend.setFollowers(friendFollowers);
+        // accountRepository.save(account);
+        // accountRepository.save(friend);
 
         friendshipRepository.delete(friendship.get());
     }
