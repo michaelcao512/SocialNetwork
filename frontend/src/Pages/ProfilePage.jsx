@@ -1,4 +1,7 @@
-import { useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
+
+import { StyledStack, StyledCard } from "../StyledComponents/StyledComponents";
+import { Typography, Divider } from "@mui/material";
 
 import userInfoService from "../Services/userinfo.service";
 import authService from "../Services/auth.service";
@@ -56,24 +59,28 @@ function ProfilePage() {
     async function refreshPostsHandler() {
         await fetchPosts();
     }
-
-    return ( 
-        <>
-            <h1>Profile Page</h1>
-            <UserInfoComponent user={user} userInfo={userInfo} profileId={profileId} />
-
-            {isOwnProfile &&
-                <>
-                <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />
-                <hr />
-                    <CreatePost user={user} onPostCreated={refreshPostsHandler} />
-                </>
-            }
-        
-    
-            <DisplayPosts user={user} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler}/>
-        </>
-     );
+    return (
+        <StyledStack>
+            <Typography variant="h4" gutterBottom>
+                Profile
+            </Typography>
+            <StyledCard>
+                <UserInfoComponent user={user} userInfo={userInfo} profileId={profileId} />
+                {isOwnProfile && (
+                    <>
+                        <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />
+                        <Divider sx={{ my: 2 }} />
+                        <CreatePost user={user} onPostCreated={refreshPostsHandler} />
+                    </>
+                )}
+                <Divider sx={{ my: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                    Posts
+                </Typography>
+                <DisplayPosts user={user} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler} />
+            </StyledCard>
+        </StyledStack>
+    );
 }
 
 export default ProfilePage;

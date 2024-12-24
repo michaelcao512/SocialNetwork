@@ -1,16 +1,16 @@
-import { useEffect } from "react";
 import Post from "./Post";
+import { StandardContainer } from "../../../StyledComponents/StyledComponents";
 function DisplayPosts(props) {
     const { posts, user, onPostDelete, onPostUpdate } = props;
-    if (!posts) {
+    if (posts.length === 0) {
         return <p>No posts to display</p>;
     }
     return (  
-        <>
+        <StandardContainer>
             {posts.map(post => (
                 <Post key={post.postId} post={post} user={user} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate}/>
             ))}
-        </>
+        </StandardContainer>
     );
 }
 

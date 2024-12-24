@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
-import dev.michaelcao512.socialmedia.Entities.Post;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {

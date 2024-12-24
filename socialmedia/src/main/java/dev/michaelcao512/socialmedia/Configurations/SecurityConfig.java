@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import dev.michaelcao512.socialmedia.Services.AccountService;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)

@@ -1,16 +1,13 @@
-import AuthService from "../Services/auth.service";
-import { StyledLink } from "../StyledComponents/StyledComponents";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function HomePage() {
-
+    const navigate = useNavigate();
 
     return ( 
-        <main className="home-page">
+        <div>
             <h1>Home Page</h1>
-            <StyledLink destination="/register" text="Register" />
-            <StyledLink destination="/login" text="Login" />
-
-        </main>
+            <button onClick={() => navigate("/register")}>Register</button>
+            <button onClick={() => navigate("/login")}>Login</button>
+        </div>
      );
 }
 

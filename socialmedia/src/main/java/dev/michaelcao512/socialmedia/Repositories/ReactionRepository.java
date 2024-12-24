@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.Reaction;
 

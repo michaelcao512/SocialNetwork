@@ -1,11 +1,11 @@
-import { Box, Button, FormControl, TextField} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { FormControl, TextField} from "@mui/material";
 import { useState } from "react";
 import postService from "../../../Services/post.service";
+import { StyledButton, StandardContainer } from "../../../StyledComponents/StyledComponents";
+
 
 function CreatePost(props) {
     const { user, onPostCreated } = props;
-    const navigate = useNavigate();
     const [content, setContent] = useState("");
 
     const handleSubmit = async (event) => {
@@ -13,7 +13,7 @@ function CreatePost(props) {
         setContent("");
         
         try {
-            const response = await postService.createPost(content, user.id);
+            await postService.createPost(content, user.id);
             onPostCreated();
         } catch (error) {
             console.log("createPost error: ", error);
@@ -21,21 +21,19 @@ function CreatePost(props) {
     };
 
     return ( 
-        <Box component="form" onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: '400px', margin: 'auto' }}>
-
-            <FormControl>
+        <StandardContainer component="form" onSubmit={handleSubmit} >
+            <FormControl fullWidth>
                 <TextField
                     label="Content"
                     multiline
-                    rows={4}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                 />
             </FormControl>
 
-            <Button type="submit" variant="contained" color="primary">Create Post</Button>
-        </Box>
+            <StyledButton
+                type="submit" variant="contained" color="primary">Create Post</StyledButton>
+        </StandardContainer>
      );
 }
 

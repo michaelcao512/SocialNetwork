@@ -19,11 +19,12 @@ public class UserInfo {
 
     @OneToOne
     @JoinColumn(name = "accountId", nullable = false)
-    @JsonBackReference (value = "userinfo")
+    @JsonBackReference(value = "userinfo")
     private Account account;
 
     private String firstName;
     private String lastName;
+    private String biography;
     private String gender;
 
 }

@@ -2,20 +2,18 @@
 import { Box, Button, FormControl, FormLabel, MenuItem, Select, TextField } from '@mui/material';
 import authService from '../../Services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 function RegistrationForm() {
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [gender, setGender] = useState('');
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        const formData = new FormData(event.currentTarget);
-
-        const email = formData.get('email');
-        const password = formData.get('password');
-        const username = formData.get('username');
-        const firstName = formData.get('firstName');
-        const lastName = formData.get('lastName');
-        const gender = formData.get('gender');
-
         const registrationRequest = {
             email: email,
             password: password,
@@ -58,6 +56,8 @@ function RegistrationForm() {
                     fullWidth
                     placeholder="your@email.com"
                     size="small"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                 />
             </FormControl>
 
@@ -72,6 +72,8 @@ function RegistrationForm() {
                     fullWidth
                     placeholder="password"
                     size="small"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                 />
             </FormControl>
 
@@ -85,6 +87,8 @@ function RegistrationForm() {
                     fullWidth
                     placeholder="username"
                     size="small"
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value)}
                 />  
             </FormControl>
 
@@ -98,6 +102,8 @@ function RegistrationForm() {
                     fullWidth
                     placeholder="First Name"
                     size="small"
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
                 />  
             </FormControl>
 
@@ -111,6 +117,8 @@ function RegistrationForm() {
                     fullWidth
                     placeholder="Last Name"
                     size="small"
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
                 />
             </FormControl>
 
@@ -122,6 +130,8 @@ function RegistrationForm() {
                     required
                     fullWidth
                     size="small"
+                    value={gender}
+                    onChange={(event) => setGender(event.target.value)}
                 >
                     <MenuItem value="male">Male</MenuItem>
                     <MenuItem value="female">Female</MenuItem>

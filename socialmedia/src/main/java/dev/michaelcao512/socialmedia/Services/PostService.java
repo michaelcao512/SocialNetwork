@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
-import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.Reaction;
 import dev.michaelcao512.socialmedia.Entities.Reaction.ReactionType;
@@ -18,13 +17,10 @@ import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
 
-    public PostService(PostRepository postRepository, AccountRepository accountRepository,
-            AccountService accountService) {
+    public PostService(PostRepository postRepository, AccountRepository accountRepository) {
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
-        this.accountService = accountService;
     }
 
     public Post createPost(CreatePostRequest createPostRequest) {

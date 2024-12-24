@@ -44,6 +44,14 @@ class CommentService {
         });
     }
 
+    getCommentsCountByPostId(postId) {
+        return axios.get(`${api_url}/getCommentsCountByPostId/${postId}`).then(response => {
+            return response.data;
+        }).catch(error => {
+            console.log("error: ", error);
+        });
+    }
+
 }
 
 const commentService = new CommentService();

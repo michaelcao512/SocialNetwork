@@ -1,6 +1,5 @@
 package dev.michaelcao512.socialmedia.Services;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,17 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
-import dev.michaelcao512.socialmedia.Entities.Comment;
-import dev.michaelcao512.socialmedia.Entities.Post;
-import dev.michaelcao512.socialmedia.Entities.Reaction;
-import dev.michaelcao512.socialmedia.Entities.Reaction.ReactionType;
 import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Exceptions.EmailAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException;
 import dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
-import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
-import dev.michaelcao512.socialmedia.Repositories.ReactionRepository;
 import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 
@@ -106,7 +99,6 @@ public class AccountService implements UserDetailsService {
      * @throws IllegalArgumentException    If the account is null.
      */
     public Account loginAccount(Account account) {
-        String email = account.getEmail();
         String password = account.getPassword();
         String username = account.getUsername();
         // checking for non null required fields

@@ -1,26 +1,22 @@
-import Typography  from "@mui/material/Typography";
-import { StyledCard, StyledLink, StyledStack} from "../../StyledComponents/StyledComponents";
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+import { StyledCard, StyledLink, StyledStack } from "../../StyledComponents/StyledComponents";
 import RegistrationForm from "./RegistrationForm";
-import { Box } from "@mui/material";
-import UserService from "../../Services/user.service";
 
 function RegistrationContainer() {
-
-    return ( 
+    return (
         <StyledStack>
             <StyledCard>
-                <Typography variant="h3">Registration Page</Typography>
+                <Typography variant="h3" gutterBottom>
+                    Registration Page
+                </Typography>
                 <RegistrationForm />
-                
-                <Box sx={{}} >
-                    <StyledLink destination="/" text="Home"/>
+                <Box sx={{ marginTop: '1rem' }}>
                     <StyledLink destination="/login" text="Login" />
-                </Box>         
-                
+                </Box>
             </StyledCard>
-
         </StyledStack>
-     );
+    );
 }
 
 export default RegistrationContainer;

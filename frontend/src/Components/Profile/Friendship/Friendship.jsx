@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import userService from "../../../Services/user.service";
 import friendshipService from "../../../Services/friendship.service";
+import { StyledButton } from "../../../StyledComponents/StyledComponents";
+import { Typography, Box } from "@mui/material";
 function Friendship(props) {
     const { user, profileId } = props
     const [following, setFollowing] = useState([]);
@@ -58,28 +60,24 @@ function Friendship(props) {
     }, [user.id, profileId, fetchFriendship]);
 
 
-    return ( 
-        <>
-            
-            <div>
-                 <h3>Following {following.length}</h3>
-                {following.map(following => (
-                    <p key={following.accountId}>{following.username} </p>
+    return (
+        <Box>
+            <Box>
+                <Typography variant="body1">Followers {followers.length}</Typography>
+                {followers.map(follower => (
+                    <Typography key={follower.accountId}>{follower.username}</Typography>
                 ))}
-            </div>
-          
-
-            <div>
-                <h3>Followers {followers.length}</h3>
-                {followers.map(followers => (
-                    <p key={followers.accountId}>{followers.username} </p>
+                <Typography variant="body1">Following {following.length}</Typography>
+                {following.map(follow => (
+                    <Typography key={follow.accountId}>{follow.username}</Typography>
                 ))}
-            </div>
-                    
-            {canFollow && <button onClick={followHandler}>Follow</button>}
-            {canUnfollow && <button onClick={unfollowHandler}>Unfollow</button>}
-        </>
-     );
+            </Box>
+            <Box>
+                {canFollow && <StyledButton variant="contained" color="primary" onClick={followHandler}>Follow</StyledButton>}
+                {canUnfollow && <StyledButton variant="contained" color="secondary" onClick={unfollowHandler}>Unfollow</StyledButton>}
+            </Box>
+        </Box>
+    );
 }
 
 export default Friendship;

@@ -29,6 +29,10 @@ public class UserInfoService {
         if (userInfo.getGender() != null && !userInfo.getGender().isEmpty()) {
             existingUserInfo.setGender(userInfo.getGender());
         }
+
+        if (userInfo.getBiography() != null && !userInfo.getBiography().isEmpty()) {
+            existingUserInfo.setBiography(userInfo.getBiography());
+        }
         userInfoRepository.save(existingUserInfo);
         return existingUserInfo;
     }

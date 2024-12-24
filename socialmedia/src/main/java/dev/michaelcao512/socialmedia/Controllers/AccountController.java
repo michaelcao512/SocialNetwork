@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -43,7 +42,7 @@ public class AccountController {
     }
 
     /**
-     * TODO
+     * 
      * Updates the account information associated with the given account id.
      *
      * The object in the request body should contain the fields to be updated.

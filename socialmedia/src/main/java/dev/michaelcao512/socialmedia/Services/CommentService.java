@@ -91,5 +91,13 @@ public class CommentService {
         return commentRepository.findByPost(post.get());
     }
 
+    public int getCommentsCountByPostId(Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()) {
+            return 0;
+        }
+        return commentRepository.countByPost(post.get());
+    }
+
 
 }

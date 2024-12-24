@@ -73,7 +73,7 @@ public class ReactionService {
         if (reaction.isEmpty()) {
             throw new IllegalArgumentException("Reaction does not exist");
         }
-        Post post = reaction.get().getPost();
+        // Post post = reaction.get().getPost();
 
         // postService.removeReaction(post, reaction.get());
         reactionRepository.deleteById(reactionId);
