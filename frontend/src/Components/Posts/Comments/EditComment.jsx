@@ -1,5 +1,4 @@
 import { useState } from "react";
-import commentService from "../../../Services/comment.service";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 
 function EditComment(props) {  

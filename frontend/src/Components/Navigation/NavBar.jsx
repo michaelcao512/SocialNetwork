@@ -43,14 +43,14 @@ function NavBar() {
         </Typography>
       </Box>
       <List>
-        <ListItem button component={StyledNavLink} to={ownProfile} className={location.pathname === ownProfile ? 'active' : ''}>
+        <ListItem  component={StyledNavLink} to={ownProfile} className={location.pathname === ownProfile ? 'active' : ''}>
           <ListItemText primary="My Profile" />
         </ListItem>
-        <ListItem button component={StyledNavLink} to="/allposts" className={location.pathname === '/allposts' ? 'active' : ''}>
+        <ListItem  component={StyledNavLink} to="/allposts" className={location.pathname === '/allposts' ? 'active' : ''}>
           <ListItemText primary="All Posts" />
         </ListItem>
 
-        <ListItem button component={StyledNavLink} to="/allusers" className={location.pathname === '/allusers' ? 'active' : ''}>
+        <ListItem  component={StyledNavLink} to="/allusers" className={location.pathname === '/allusers' ? 'active' : ''}>
           <ListItemText primary="All Users" />
         </ListItem>
         <ListItem>
@@ -87,7 +87,7 @@ function NavBar() {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true, 
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },

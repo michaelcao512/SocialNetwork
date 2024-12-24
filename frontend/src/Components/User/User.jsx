@@ -3,7 +3,6 @@ import { StyledLink } from "../../StyledComponents/StyledComponents";
 
 function User(props) {
     const { user } = props;
-    console.log("user"  , user);
     return ( 
         <>
             <StyledLink destination={`/profile/${user.accountId}`} text={user.username}/>

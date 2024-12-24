@@ -11,11 +11,16 @@ const ReactionsContainer = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     width: '100%',
 }));
-
-const ReactionIconButton = styled(IconButton)(({ theme, active }) => ({
-    color: active ? theme.palette.primary.main : theme.palette.grey[500],
+const ReactionIconButton = styled(IconButton)(({ theme }) => ({
+    color: theme.palette.grey[500],
+    '&.active': {
+        color: theme.palette.primary.main,
+    },
     '&:hover': {
-        color: active ? theme.palette.primary.dark : theme.palette.grey[700],
+        color: theme.palette.grey[700],
+        '&.active': {
+            color: theme.palette.primary.dark,
+        },
     },
 }));
 
@@ -24,12 +29,12 @@ const IndentedTypography = styled(Typography)(({ theme }) => ({
 }));
 
 function DisplayReactions(props) {
-    const { post, user, onAddCommentClick } = props;
+    const { post, user, onAddCommentClick, comments} = props;
     const postId = post.postId;
-    const [numLikes, setNumLikes] = useState(0);
-    const [numDislikes, setNumDislikes] = useState(0);
+    const [ numLikes, setNumLikes] = useState(0);
+    const [ numDislikes, setNumDislikes] = useState(0);
     const [ numComments, setNumComments ] = useState(0);
-    const [reaction, setReaction] = useState(null);
+    const [ reaction, setReaction] = useState(null);
 
     const fetchData = useCallback(() => {
         reactionsService.getLikeCountByPostId(postId)
@@ -49,7 +54,7 @@ function DisplayReactions(props) {
             .then(response => {
                 setNumComments(response);
         })
-    }, [postId, user.id]);
+    }, [postId, user.id, comments]);
 
     useEffect(() => {
         fetchData();
@@ -87,7 +92,7 @@ function DisplayReactions(props) {
         <ReactionsContainer>
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
-                    active={reaction?.reactionType === "LIKE"}
+                    className={reaction?.reactionType === "LIKE" ? 'active' : ''}
                     onClick={handleLikeClick}
                 >
                     {reaction?.reactionType === "LIKE" ? <Favorite /> : <FavoriteBorder />}
@@ -96,7 +101,7 @@ function DisplayReactions(props) {
             </Box>
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
-                    active={reaction?.reactionType === "DISLIKE"}
+                    className={reaction?.reactionType === "DISLIKE" ? 'active' : ''}
                     onClick={handleDislikeClick}
                 >
                     {reaction?.reactionType === "DISLIKE" ? <ThumbDown /> : <ThumbDownOffAlt />}

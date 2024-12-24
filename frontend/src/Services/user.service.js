@@ -24,7 +24,6 @@ class UserService {
 
     getAccountOfComment(commentId) {
         return axios.get(`${api_url}/getAccountOfComment/${commentId}`).then(response => {
-        console.log(`account of commenet id ${commentId}: `, response.data);
         return response.data;
     }).catch(error => {
         console.log("error: ", error);

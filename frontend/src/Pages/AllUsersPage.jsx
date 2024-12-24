@@ -1,21 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Box, Typography, List, ListItem } from '@mui/material';
-import styled from '@emotion/styled';
+import {  Typography, List, ListItem } from '@mui/material';
 import authService from '../Services/auth.service';
 import userService from '../Services/user.service';
 import User from '../Components/User/User';
-import { StandardContainer } from '../StyledComponents/StyledComponents';
-
-
-const UsersContainer = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    maxWidth: '800px',
-    margin: 'auto',
-}));
+import { StandardContainer, StyledStack } from '../StyledComponents/StyledComponents';
 
 function AllUsersPage() {
     const [users, setUsers] = useState([]);
@@ -35,29 +23,33 @@ function AllUsersPage() {
 
     if (users.length === 0) {
         return (
-            <StandardContainer>
+            <StyledStack>
+                <Typography variant="h4" gutterBottom>
+                    All Users
+                </Typography>
                 <Typography variant="body1" align="center">
                     No users to display
                 </Typography>
-            </StandardContainer>
+            </StyledStack>
         );
     }
 
     return (
-        <StandardContainer>
+        <StyledStack>
             <Typography variant="h4" gutterBottom>
                 All Users
             </Typography>
-            <UsersContainer>
-                <List>
-                    {users.map(user => (
-                        <ListItem key={user.accountId}>
-                            <User user={user} />
-                        </ListItem>
-                    ))}
-                </List>
-            </UsersContainer>
-        </StandardContainer>
+            <StandardContainer>
+                    <List>
+                        {users.map(user => (
+                            <ListItem key={user.accountId}>
+                                <User user={user} />
+                            </ListItem>
+                        ))}
+                    </List>
+            </StandardContainer>
+        </StyledStack>
+
     );
 }
 

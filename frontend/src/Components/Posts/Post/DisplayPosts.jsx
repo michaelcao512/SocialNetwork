@@ -6,7 +6,9 @@ function DisplayPosts(props) {
         return <p>No posts to display</p>;
     }
     return (  
-        <StandardContainer>
+        <StandardContainer style={{
+            padding: "0 0.2rem",
+        }}>
             {posts.map(post => (
                 <Post key={post.postId} post={post} user={user} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate}/>
             ))}

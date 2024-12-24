@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import EditComment from './EditComment';
+import { NavLink } from 'react-router-dom';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -44,8 +45,8 @@ function Comment({ user, comment, fetchComments }) {
             });
     }, [comment.commentId, user.username]);
 
-    const handleUpdate = (updatedContent) => {
-        setContent(updatedContent);
+    const handleUpdate = (updatedComment) => {
+        setContent(updatedComment.content);
         fetchComments();
     };
 
@@ -58,9 +59,11 @@ function Comment({ user, comment, fetchComments }) {
 
     return (
         <CommentContainer>
-            <Typography variant="body2">
-                {commentOwner.username}: {content}
-            </Typography>
+                <NavLink to={`/profile/${commentOwner.accountId}`}>
+                    <Typography variant="h6">{commentOwner.username}</Typography>
+                </NavLink>
+                    <Typography variant="body2">{content}</Typography>
+            
             {canManageComment && (
                 <CommentActions>
                     <EditComment comment={comment} onCommentUpdate={handleUpdate}>

@@ -27,7 +27,6 @@ function AllPostsPage() {
     async function fetchPosts() {
         try {
             const response = await postService.getAllPostsBesidesOwn();
-            console.log("response: ", response);
             setPosts(response);
         } catch (error) {
             console.log("error: ", error);

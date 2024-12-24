@@ -69,14 +69,14 @@ function ProfilePage() {
                 {isOwnProfile && (
                     <>
                         <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />
-                        <Divider sx={{ my: 2 }} />
-                        <CreatePost user={user} onPostCreated={refreshPostsHandler} />
                     </>
                 )}
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="h5" gutterBottom>
                     Posts
                 </Typography>
+                { isOwnProfile && <CreatePost user={user} onPostCreated={refreshPostsHandler} />
+                }
                 <DisplayPosts user={user} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler} />
             </StyledCard>
         </StyledStack>

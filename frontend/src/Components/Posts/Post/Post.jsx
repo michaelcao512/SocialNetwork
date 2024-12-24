@@ -9,6 +9,9 @@ import commentService from '../../../Services/comment.service';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { StandardContainer } from '../../../StyledComponents/StyledComponents';
+import { NavLink } from 'react-router-dom';
+
+
 
 const PostHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -74,18 +77,27 @@ function Post(props) {
     };
 
     return (
-        <StandardContainer>
+        <StandardContainer
+            style={
+                {
+                    margin: "0.5rem 0",
+                }
+            }
+        >
             <PostHeader>
-                <Typography variant="h6">@{postOwner.username}</Typography>
+                <NavLink to={`/profile/${postOwner.accountId}`}>
+                    <Typography variant="h6">{postOwner.username}</Typography>
+                    <Typography variant="body2">{postOwner.firstName} {postOwner.lastName}</Typography>
+                </NavLink>
                 {canManagePost && (
                     <PostActions>
                         <EditPost post={post} onPostUpdate={onPostUpdate} />
-                        <DeletePost postId={post.postId} onPostDelete={onPostDelete} />
+                        <DeletePost post={post} onPostDelete={onPostDelete} />
                     </PostActions>
                 )}
             </PostHeader>
             <PostContent variant="body1">{post.content}</PostContent>
-            <DisplayReactions post={post} user={user} onAddCommentClick={handleAddCommentClick} />
+            <DisplayReactions  post={post} user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment
                     post={post}
@@ -94,7 +106,7 @@ function Post(props) {
                     onCancel={handleCancelComment}
                 />
             )}
-            <DisplayComments post={post} user={user} comments={comments} fetchComments={fetchComments}/>
+            <DisplayComments user={user} comments={comments} fetchComments={fetchComments}/>
         </StandardContainer>
     );
 }

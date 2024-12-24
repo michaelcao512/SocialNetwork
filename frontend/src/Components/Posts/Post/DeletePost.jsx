@@ -3,11 +3,11 @@ import postService from "../../../Services/post.service";
 
 
 function DeletePost(props) {
-    const { id, onPostDelete } = props;
+    const { post, onPostDelete } = props;
     
 
     function hadnleClick() {
-        postService.deletePost(id)
+        postService.deletePost(post.postId)
             .then(() => onPostDelete())
             .catch((error) => console.log("Delete post error: ", error));
     }

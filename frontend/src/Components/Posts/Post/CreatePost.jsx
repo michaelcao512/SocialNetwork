@@ -21,7 +21,11 @@ function CreatePost(props) {
     };
 
     return ( 
-        <StandardContainer component="form" onSubmit={handleSubmit} >
+        <StandardContainer component="form" onSubmit={handleSubmit}
+            style={{
+                marginBottom: "1rem",
+            }}
+        >
             <FormControl fullWidth>
                 <TextField
                     label="Content"
