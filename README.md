@@ -27,10 +27,11 @@ The **Social Networking** project is an online platform designed to make social 
 * Search functionality for users, posts, and content
 
 ### To-Do List:
+* Media
+* Optimize search with filters and sorting
+* reactions and replies to comments
 * Add real-time notifications for user interactions
 * Enable post-sharing functionality
-* Optimize search with filters and sorting
-* Integrate analytics for user activity insights
 
 ## Getting Started
 
@@ -46,13 +47,24 @@ git clone https://github.com/michaelcao512/SocialNetwork.git
 2. Install and set up a SQL database
 3. Configure database settings in `application properties` in the socialmedia folder under the src folder
 4. Navigate to the backend directory and build the project
+   mac
    ```bash
    cd  backend
    ./mvnw clean install
    ```
-5. Run the backend server:
+   windows
+   ```bash
+   cd  backend
+   .\mvnw clean install
+   ```
+6. Run the backend server:
+   mac
    ```bash
    ./mvnw spring-boot:run
+   ```
+   windows
+   ```bash
+   .\mvnw spring-boot:run
    ```
 ##### Frontend Setup:
 1. Install Node.js (version 16 or higher).
