@@ -39,7 +39,7 @@ function Friendship(props) {
                     setCanUnfollow(!response);
                 });
         }
-    }, [user.id, profileId, openDialog, tabIndex, fetchFollowing, fetchFollowers]);
+    }, [user.id, profileId, fetchFollowing, fetchFollowers]);
 
     useEffect(() => {
         setCanFollow(false);
@@ -69,7 +69,8 @@ function Friendship(props) {
 
     const handleNavLinkClick = useCallback(() => {
         setOpenDialog(false);
-    }, []);
+        fetchFriendship();
+    }, [fetchFriendship]);
 
     return (
         <Box>

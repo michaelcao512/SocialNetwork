@@ -7,11 +7,11 @@ import userInfoService from "../Services/userinfo.service";
 import authService from "../Services/auth.service";
 import postService from "../Services/post.service";
 
-import UserInfoComponent from "../Components/Profile/UserInfoComponent";
+import UserInfoComponent from "../Components/Profile/UserInfo/UserInfoComponent";
 import CreatePost from "../Components/Posts/Post/CreatePost";
 import DisplayPosts from "../Components/Posts/Post/DisplayPosts";
 import { useParams } from "react-router-dom";
-import EditUserInfo from "../Components/Profile/EditUserInfo";
+import EditUserInfo from "../Components/Profile/UserInfo/EditUserInfo";
 
 function ProfilePage() {
     const { profileUserId } = useParams();

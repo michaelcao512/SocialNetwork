@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { StyledLink } from "../../StyledComponents/StyledComponents";
+import { StyledLink } from "../../../StyledComponents/StyledComponents";
 
 function User(props) {
     const { user } = props;

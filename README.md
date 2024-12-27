@@ -75,7 +75,7 @@ git clone https://github.com/michaelcao512/SocialNetwork.git
    ```
 3. Start the React development server:
    ```bash
-   npm run start
+   npm run dev
    ```
 
 ## Usage
