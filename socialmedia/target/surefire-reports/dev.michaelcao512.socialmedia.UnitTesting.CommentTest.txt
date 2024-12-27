@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: dev.michaelcao512.socialmedia.UnitTesting.CommentTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in dev.michaelcao512.socialmedia.UnitTesting.CommentTest
