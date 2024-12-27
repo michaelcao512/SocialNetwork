@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@mui/material';
-import Friendship from './Friendship/Friendship';
-import { StandardContainer } from '../../StyledComponents/StyledComponents';
+import Friendship from '../Friendship/Friendship';
+import { StandardContainer } from '../../../StyledComponents/StyledComponents';
 
 
 

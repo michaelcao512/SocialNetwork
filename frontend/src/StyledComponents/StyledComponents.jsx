@@ -7,10 +7,10 @@ export const StyledStack = styled(Stack)({
     justifyContent: "center",
     flexDirection: "column",
     width: "100%",
-    maxWidth: "100vw", // Ensure it does not exceed the viewport width
+    maxWidth: "100vw", 
     margin: "auto",
     padding: "1rem",
-    boxSizing: "border-box", // Include padding and border in the element's total width and height
+    boxSizing: "border-box",
 });
 
 export const StyledCard = styled(CardContent)(({ theme }) => ({
@@ -26,7 +26,7 @@ export const StyledCard = styled(CardContent)(({ theme }) => ({
     boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
-    boxSizing: "border-box", // Include padding and border in the element's total width and height
+    boxSizing: "border-box",
     "&:hover": {
         boxShadow: "0 8px 16px 0 rgba(0,0,0,0.2)"
     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import {  Typography, List, ListItem } from '@mui/material';
 import authService from '../Services/auth.service';
 import userService from '../Services/user.service';
-import User from '../Components/User/User';
+import User from '../Components/Profile/User/User';
 import { StandardContainer, StyledStack } from '../StyledComponents/StyledComponents';
 
 function AllUsersPage() {

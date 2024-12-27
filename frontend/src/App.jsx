@@ -13,6 +13,8 @@ import AllUsersPage from './Pages/AllUsersPage';
 
 import { ThemeProvider } from '@emotion/react';
 
+import { Navigate } from 'react-router-dom';
+
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
+            <Route path="*" element={<Navigate to={`/`} />} />
+            
               <Route path="/allposts" element={<AllPostsPage />} />
               <Route path="/allusers" element={<AllUsersPage />} />
               <Route path="/profile/:profileUserId" element={<ProfilePage />} />

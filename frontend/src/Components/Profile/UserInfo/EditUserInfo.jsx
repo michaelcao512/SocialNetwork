@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
-import userInfoService from '../../Services/userinfo.service';
-import { StyledButton } from '../../StyledComponents/StyledComponents';
+import userInfoService from '../../../Services/userinfo.service';
+import { StyledButton } from '../../../StyledComponents/StyledComponents';
 
 
 const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
