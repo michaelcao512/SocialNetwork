@@ -1,4 +1,44 @@
 -------------------------------------------------------------------------------
 Test set: dev.michaelcao512.socialmedia.UnitTesting.LoginTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s -- in dev.michaelcao512.socialmedia.UnitTesting.LoginTest
+Tests run: 5, Failures: 2, Errors: 1, Skipped: 0, Time elapsed: 0.983 s <<< FAILURE! -- in dev.michaelcao512.socialmedia.UnitTesting.LoginTest
+dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Failure_WrongPassword -- Time elapsed: 0.086 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException> but was: <java.lang.IllegalArgumentException>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Failure_WrongPassword(LoginTest.java:127)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: java.lang.IllegalArgumentException: Email and password must be provided.
+	at dev.michaelcao512.socialmedia.Services.AccountService.loginAccount(AccountService.java:106)
+	at dev.michaelcao512.socialmedia.UnitTesting.LoginTest.lambda$testLoginAccount_Failure_WrongPassword$3(LoginTest.java:127)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	... 6 more
+
+dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Failure_EmailNotFound -- Time elapsed: 0.026 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException> but was: <java.lang.IllegalArgumentException>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Failure_EmailNotFound(LoginTest.java:73)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: java.lang.IllegalArgumentException: Email and password must be provided.
+	at dev.michaelcao512.socialmedia.Services.AccountService.loginAccount(AccountService.java:106)
+	at dev.michaelcao512.socialmedia.UnitTesting.LoginTest.lambda$testLoginAccount_Failure_EmailNotFound$0(LoginTest.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	... 6 more
+
+dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Success -- Time elapsed: 0.012 s <<< ERROR!
+java.lang.IllegalArgumentException: Email and password must be provided.
+	at dev.michaelcao512.socialmedia.Services.AccountService.loginAccount(AccountService.java:106)
+	at dev.michaelcao512.socialmedia.UnitTesting.LoginTest.testLoginAccount_Success(LoginTest.java:50)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

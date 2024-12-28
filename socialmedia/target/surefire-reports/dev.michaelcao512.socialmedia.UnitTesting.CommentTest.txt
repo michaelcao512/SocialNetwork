@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: dev.michaelcao512.socialmedia.UnitTesting.CommentTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in dev.michaelcao512.socialmedia.UnitTesting.CommentTest
+Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 4.083 s <<< FAILURE! -- in dev.michaelcao512.socialmedia.UnitTesting.CommentTest
+dev.michaelcao512.socialmedia.UnitTesting.CommentTest.testCreateComment -- Time elapsed: 0.027 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "dev.michaelcao512.socialmedia.Repositories.AccountRepository.findById(Object)" because "this.accountRepository" is null
+	at dev.michaelcao512.socialmedia.Services.CommentService.createComment(CommentService.java:33)
+	at dev.michaelcao512.socialmedia.UnitTesting.CommentTest.testCreateComment(CommentTest.java:54)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

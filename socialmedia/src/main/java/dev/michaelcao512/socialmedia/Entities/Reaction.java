@@ -15,6 +15,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Reaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reactionId;
@@ -25,9 +26,14 @@ public class Reaction {
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "postId", nullable = false)
+    @JoinColumn(name = "postId", nullable = true) // Nullable if reaction relates to a comment instead
     @JsonBackReference(value = "post-reactions")
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "commentId", nullable = true) // Nullable if reaction relates to a post instead
+    @JsonBackReference(value = "comment-reactions")
+    private Comment comment;
 
     @Enumerated(EnumType.STRING)
     private ReactionType reactionType;
@@ -36,11 +42,13 @@ public class Reaction {
         LIKE, DISLIKE
     }
 
+    @Override
     public String toString() {
         return "Reaction{" +
                 "reactionId=" + reactionId +
-                ", account=" + account +
-                ", post=" + post +
+                ", accountId=" + (account != null ? account.getAccountId() : "null") +
+                ", postId=" + (post != null ? post.getPostId() : "null") +
+                ", commentId=" + (comment != null ? comment.getCommentId() : "null") +
                 ", reactionType=" + reactionType +
                 '}';
     }

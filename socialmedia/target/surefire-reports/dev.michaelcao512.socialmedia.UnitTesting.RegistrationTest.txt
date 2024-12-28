@@ -1,4 +1,38 @@
 -------------------------------------------------------------------------------
 Test set: dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.644 s -- in dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest
+Tests run: 10, Failures: 1, Errors: 2, Skipped: 0, Time elapsed: 0.480 s <<< FAILURE! -- in dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest
+dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_LogsUserInfo -- Time elapsed: 0.017 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "org.springframework.context.ApplicationContext.getBean(java.lang.Class)" because "this.applicationContext" is null
+	at dev.michaelcao512.socialmedia.Services.AccountService.getPasswordEncoder(AccountService.java:40)
+	at dev.michaelcao512.socialmedia.Services.AccountService.registerAccount(AccountService.java:70)
+	at dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_LogsUserInfo(RegistrationTest.java:206)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_UsernameExists -- Time elapsed: 0.020 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <java.lang.IllegalArgumentException> but was: <dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_UsernameExists(RegistrationTest.java:114)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException: Username already exists
+	at dev.michaelcao512.socialmedia.Services.AccountService.registerAccount(AccountService.java:64)
+	at dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.lambda$testRegisterAccount_UsernameExists$1(RegistrationTest.java:115)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	... 6 more
+
+dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_Success -- Time elapsed: 0.014 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "org.springframework.context.ApplicationContext.getBean(java.lang.Class)" because "this.applicationContext" is null
+	at dev.michaelcao512.socialmedia.Services.AccountService.getPasswordEncoder(AccountService.java:40)
+	at dev.michaelcao512.socialmedia.Services.AccountService.registerAccount(AccountService.java:70)
+	at dev.michaelcao512.socialmedia.UnitTesting.RegistrationTest.testRegisterAccount_Success(RegistrationTest.java:56)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

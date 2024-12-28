@@ -3,6 +3,7 @@ package dev.michaelcao512.socialmedia.Entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +15,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -38,9 +41,15 @@ public class Account implements UserDetails {
     private LocalDateTime dateCreated = LocalDateTime.now();
     private LocalDateTime dateUpdated = LocalDateTime.now();
 
+  
+    @Column()
+     private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
+
+
+  /*
     @Column()
     private Collection<? extends GrantedAuthority> authorities;
-
+*/
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
@@ -82,12 +91,17 @@ public class Account implements UserDetails {
         ;
     }
 
-    // ===== Implementing UserDetails Methods =====
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return authorities.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
-
+    
+    // ===== Implementing UserDetails Methods =====
+    */
+    
     @Override
     public String getPassword() {
         return password;
