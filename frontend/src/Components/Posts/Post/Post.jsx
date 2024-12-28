@@ -97,7 +97,7 @@ function Post(props) {
                 )}
             </PostHeader>
             <PostContent variant="body1">{post.content}</PostContent>
-            <DisplayReactions  post={post} user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
+            <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment
                     post={post}

@@ -1,7 +1,9 @@
 package dev.michaelcao512.socialmedia.UnitTesting;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +47,32 @@ public class ReactionTest {
     }
 
     @Test
+public void testCreateReaction() {
+    // Arrange
+    CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L, 1L, null, Reaction.ReactionType.LIKE); // Include commentId as null for post reaction
+    Reaction reaction = new Reaction();
+    reaction.setPost(post);
+    reaction.setReactionType(Reaction.ReactionType.LIKE);
+
+    when(postRepository.findById(createReactionRequest.postId())).thenReturn(Optional.of(post));
+    when(reactionRepository.findByPostIdAndAccountId(createReactionRequest.postId(), createReactionRequest.accountId()))
+        .thenReturn(Optional.empty()); // Simulate no existing reaction
+    when(reactionRepository.save(any(Reaction.class))).thenReturn(reaction);
+
+    // Act
+    Reaction savedReaction = reactionService.createReaction(createReactionRequest);
+
+    // Assert
+    assertNotNull(savedReaction);
+    assertEquals(post, savedReaction.getPost());
+    assertEquals(Reaction.ReactionType.LIKE, savedReaction.getReactionType());
+    verify(postRepository).findById(createReactionRequest.postId());
+    verify(reactionRepository).save(any(Reaction.class));
+}
+
+
+    /*
+    @Test
     public void testCreateReaction() {
 
         CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L, 1L, Reaction.ReactionType.LIKE);
@@ -64,7 +92,7 @@ public class ReactionTest {
         verify(reactionRepository).save(reaction);
     }
 
-
+*/
     @Test
     public void testDeleteReaction() {
         Reaction reaction = new Reaction();

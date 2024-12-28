@@ -101,4 +101,42 @@ public class ReactionController {
         Reaction reaction = reactionService.getReactionByPostIdAndAccountId(postId, accountId);
         return ResponseEntity.ok(reaction);
     }
+
+    @GetMapping("/getLikeCountByCommentId/{commentId}")
+    public ResponseEntity<Integer> getLikeCountByCommentId(@PathVariable Long commentId){
+        int likeCount = reactionService.getLikeCountByCommentId(commentId);
+        return ResponseEntity.ok(likeCount);
+    }
+
+    @GetMapping("/getDislikeCountByCommentId/{commentId}")
+    public ResponseEntity<Integer> getDislikeCountByCommentId(@PathVariable Long commentId){
+        int disLikeCount = reactionService.getDislikeCountByCommentId(commentId);
+        return ResponseEntity.ok(disLikeCount);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<Reaction> createCommentReaction(@RequestBody CreateReactionRequest createReactionRequest){
+        Reaction newReaction = reactionService.createCommentReaction(createReactionRequest);
+        return ResponseEntity.ok(newReaction);
+    }
+
+    @DeleteMapping("/comment/{reactionId}")
+    public ResponseEntity<Void> deleteCommentReaction(@PathVariable Long reactionId){
+        reactionService.deleteCommentReaction(reactionId);
+        return ResponseEntity.ok().build();
+    }
+    
+    // gets a user reaction by post and account
+    @GetMapping("/getReactionByCommentIdAndAccountId/{commentId}/{accountId}")
+    public ResponseEntity<Reaction> getReactionByCommentIdAndAccountId(@PathVariable Long commentId,
+        @PathVariable Long accountId) {
+        Reaction reaction = reactionService.getReactionByCommentIdAndAccountId(commentId, accountId);
+        return ResponseEntity.ok(reaction);
+}
+
+
+
+
+
+
 }
