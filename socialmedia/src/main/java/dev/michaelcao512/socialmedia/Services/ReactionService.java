@@ -39,15 +39,30 @@ public class ReactionService {
     public Reaction createReaction(CreateReactionRequest createReactionRequest) {
         ReactionType reactionType = createReactionRequest.reactionType();
         Account account = accountRepository.findById(createReactionRequest.accountId()).orElse(null);
-        Post post = postRepository.findById(createReactionRequest.postId()).orElse(null);
-      
-        if (reactionType == null || account == null || post == null) {
+
+        Post post = null;
+        Comment comment = null;
+
+        if (createReactionRequest.commentId() != null) {
+            comment = commentRepository.findById(createReactionRequest.commentId()).orElse(null);
+        }
+        if (createReactionRequest.postId() != null) {
+            post = postRepository.findById(createReactionRequest.postId()).orElse(null);
+        }
+        if (reactionType == null || account == null || (post == null && comment == null)) {
             throw new IllegalArgumentException("Request body contents cannot be null");
         }
 
         // in case users already liked a post
-        Optional<Reaction> existingReaction = reactionRepository.findByPostIdAndAccountId(post.getPostId(),
-                account.getAccountId());
+        Optional<Reaction> existingReaction = null;
+
+        if (post != null) {
+            existingReaction = reactionRepository.findByPostIdAndAccountId(post.getPostId(),
+                    account.getAccountId());
+        } else {
+            existingReaction = reactionRepository.findByCommentIdAndAccountId(comment.getCommentId(),
+                    account.getAccountId());
+        }
 
         if (existingReaction.isPresent()) {
 
@@ -58,17 +73,15 @@ public class ReactionService {
             }
             // UPDATE REACTION if the reaction type is different
             existingReaction.get().setReactionType(reactionType);
-            // postService.updateReaction(post, existingReaction, reactionType);
             return reactionRepository.save(existingReaction.get());
         }
         Reaction reaction = new Reaction();
         reaction.setPost(post);
         reaction.setReactionType(reactionType);
         reaction.setAccount(account);
+        reaction.setComment(comment);
 
         Reaction r = reactionRepository.save(reaction);
-
-        // postService.addReaction(post, r);
 
         return r;
     }
@@ -120,51 +133,51 @@ public class ReactionService {
         return reaction.get();
     }
 
-public int getLikeCountByCommentId(Long commentId){
-    return reactionRepository.getLikeCountByCommentId(commentId);
-}
-
-public int getDislikeCountByCommentId(Long commentId){
-    return reactionRepository.getDislikeCountByCommentId(commentId);
-}
-
-public Reaction getReactionByCommentIdAndAccountId(Long commentId, long accountId){
-    return reactionRepository.findByCommentIdAndAccountId(commentId, accountId).orElse(null);
-}
-
-public Reaction createCommentReaction(CreateReactionRequest createReactionRequest){
-    ReactionType reactionType = createReactionRequest.reactionType();
-    Account account = accountRepository.findById(createReactionRequest.accountId()).orElse(null);
-    Comment comment = commentRepository.findById(createReactionRequest.commentId()).orElse(null);
-
-    if( reactionType == null || account == null || comment == null){
-        throw new IllegalArgumentException("Request body contents cannot be null");
+    public int getLikeCountByCommentId(Long commentId) {
+        return reactionRepository.getLikeCountByCommentId(commentId);
     }
 
-    Optional<Reaction> existingReaction = reactionRepository.findByCommentIdAndAccountId(comment.getCommentId(), account.getAccountId());
+    public int getDislikeCountByCommentId(Long commentId) {
+        return reactionRepository.getDislikeCountByCommentId(commentId);
+    }
 
-    if(existingReaction.isPresent()){
-        if(existingReaction.get().getReactionType() == reactionType){
-            deleteReaction(existingReaction.get().getReactionId());
-            return null;
+    public Reaction getReactionByCommentIdAndAccountId(Long commentId, long accountId) {
+        return reactionRepository.findByCommentIdAndAccountId(commentId, accountId).orElse(null);
+    }
+
+    public Reaction createCommentReaction(CreateReactionRequest createReactionRequest) {
+        ReactionType reactionType = createReactionRequest.reactionType();
+        Account account = accountRepository.findById(createReactionRequest.accountId()).orElse(null);
+        Comment comment = commentRepository.findById(createReactionRequest.commentId()).orElse(null);
+
+        if (reactionType == null || account == null || comment == null) {
+            throw new IllegalArgumentException("Request body contents cannot be null");
         }
-        existingReaction.get().setReactionType(reactionType);
-        return reactionRepository.save(existingReaction.get());
+
+        Optional<Reaction> existingReaction = reactionRepository.findByCommentIdAndAccountId(comment.getCommentId(),
+                account.getAccountId());
+
+        if (existingReaction.isPresent()) {
+            if (existingReaction.get().getReactionType() == reactionType) {
+                deleteReaction(existingReaction.get().getReactionId());
+                return null;
+            }
+            existingReaction.get().setReactionType(reactionType);
+            return reactionRepository.save(existingReaction.get());
+        }
+
+        Reaction reaction = new Reaction();
+        reaction.setComment(comment);
+        reaction.setReactionType(reactionType);
+        reaction.setAccount(account);
+        return reactionRepository.save(reaction);
     }
 
-    Reaction reaction = new Reaction();
-    reaction.setComment(comment);
-    reaction.setReactionType(reactionType);
-    reaction.setAccount(account);
-    return reactionRepository.save(reaction);
-}
-
-public void deleteCommentReaction(Long reactionId){
-    if(!reactionRepository.existsById(reactionId)){
-        throw new IllegalArgumentException("Reaction does not exist");
+    public void deleteCommentReaction(Long reactionId) {
+        if (!reactionRepository.existsById(reactionId)) {
+            throw new IllegalArgumentException("Reaction does not exist");
+        }
+        reactionRepository.deleteById(reactionId);
     }
-    reactionRepository.deleteById(reactionId);
-}
-
 
 }

@@ -43,3 +43,6 @@ target/
 *.war
 *.jar
 *.ear
+
+# application.properties
+*application.properties

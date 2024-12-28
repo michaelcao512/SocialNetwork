@@ -41,9 +41,9 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
             getDislikeCount: () => reactionsService.getDislikeCountByPostId(entityId),
             getReaction: () => reactionsService.getReactionByPostIdAndAccountId(entityId, user.id),
             createReaction: (type) => reactionsService.createReaction({
-                reaction_type: type, 
-                post_id: entityId, 
-                account_id: user.id
+                reactionType: type, 
+                postId: entityId, 
+                accountId: user.id
             }),
             deleteReaction: (reactionId) => reactionsService.deleteReaction(reactionId),
             getCommentCount: () => commentService.getCommentsCountByPostId(entityId),
@@ -53,9 +53,9 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
             getDislikeCount: () => reactionsService.getDislikeCountByCommentId(entityId),
             getReaction: () => reactionsService.getReactionByCommentIdAndAccountId(entityId, user.id),
             createReaction: (type) => reactionsService.createCommentReaction({
-                reaction_type: type, 
-                comment_id: entityId, 
-                account_id: user.id
+                reactionType: type, 
+                commentId: entityId, 
+                accountId: user.id
             }),
             deleteReaction: (reactionId) => reactionsService.deleteCommentReaction(reactionId),
             getCommentCount: () => Promise.resolve(0), // Update if replies are added

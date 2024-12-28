@@ -31,9 +31,9 @@ class ReactionsService {
             });
     }
 
-    createReaction(reactionType, postId, accountId) {
-        const reactionRequest = { reactionType, postId, accountId };
-        return axios.post(api_url, reactionRequest)
+    createReaction(createReactionRequest) {
+        console.log("createReactionRequest:", createReactionRequest); 
+        return axios.post(api_url, createReactionRequest)
             .then(response => response.data)
             .catch(error => {
                 console.log("Error in createReaction: ", error);
@@ -85,9 +85,9 @@ class ReactionsService {
             });
     }
 
-    createCommentReaction(reactionType, commentId, accountId) {
-        const reactionRequest = { reactionType, commentId, accountId };
-        return axios.post(api_url, reactionRequest)
+    createCommentReaction(createReactionRequest) {
+        console.log("createReactionRequest:", createReactionRequest);
+        return axios.post(api_url, createReactionRequest)
             .then(response => response.data)
             .catch(error => {
                 console.log("Error in createCommentReaction: ", error);
