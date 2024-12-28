@@ -76,18 +76,6 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
         service.getReaction().then(setReaction);
         service.getCommentCount().then(setNumComments);
     }, [entityId, entityType, user.id]);
-        console.log("EntityType:", entityType);
-        if (!serviceMap[entityType]) {
-            console.error(`Invalid entityType: ${entityType}`);
-            return;
-        }
-
-        const service = serviceMap[entityType];
-        service.getLikeCount().then(setNumLikes);
-        service.getDislikeCount().then(setNumDislikes);
-        service.getReaction().then(setReaction);
-        service.getCommentCount().then(setNumComments);
-    }, [entityId, entityType, user.id]);
 
     useEffect(() => {
         fetchData();
@@ -97,14 +85,7 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
         const service = serviceMap[entityType];
         if (reaction?.reactionType === type) {
             service.deleteReaction(reaction.reactionId).then(fetchData);
-    const handleReactionClick = (type) => {
-        const service = serviceMap[entityType];
-        if (reaction?.reactionType === type) {
-            service.deleteReaction(reaction.reactionId).then(fetchData);
         } else {
-            service.createReaction(type).then(fetchData);
-        }
-    };
             service.createReaction(type).then(fetchData);
         }
     };
@@ -115,7 +96,6 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
                 <ReactionIconButton
                     className={reaction?.reactionType === "LIKE" ? 'active' : ''}
                     onClick={() => handleReactionClick("LIKE")}
-                    onClick={() => handleReactionClick("LIKE")}
                 >
                     {reaction?.reactionType === "LIKE" ? <Favorite /> : <FavoriteBorder />}
                 </ReactionIconButton>
@@ -124,7 +104,6 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
                     className={reaction?.reactionType === "DISLIKE" ? 'active' : ''}
-                    onClick={() => handleReactionClick("DISLIKE")}
                     onClick={() => handleReactionClick("DISLIKE")}
                 >
                     {reaction?.reactionType === "DISLIKE" ? <ThumbDown /> : <ThumbDownOffAlt />}

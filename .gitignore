@@ -44,5 +44,3 @@ target/
 *.jar
 *.ear
 
-# application.properties
-*application.properties
