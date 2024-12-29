@@ -10,6 +10,7 @@ import LoginPage from './Pages/LoginPage';
 import ProfilePage from './Pages/ProfilePage';
 import AllPostsPage from './Pages/AllPostsPage';
 import AllUsersPage from './Pages/AllUsersPage';
+import SearchPage from './Pages/SearchPostPage';
 
 import { ThemeProvider } from '@emotion/react';
 
@@ -31,7 +32,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route path="*" element={<Navigate to={`/`} />} />
-            
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/allposts" element={<AllPostsPage />} />
               <Route path="/allusers" element={<AllUsersPage />} />
               <Route path="/profile/:profileUserId" element={<ProfilePage />} />

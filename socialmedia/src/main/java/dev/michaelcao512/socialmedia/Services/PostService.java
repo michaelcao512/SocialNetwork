@@ -105,6 +105,11 @@ public class PostService {
         return posts;
     }
 
+    public List<Post> searchPosts(String query) {
+        List<Post> results = postRepository.searchPosts(query);
+        return results;
+    }
+
     // public void removeReaction(Post post, Reaction reaction) {
     // List<Reaction> reactions = post.getReactions();
     // reactions.remove(reaction);

@@ -53,6 +53,11 @@ function NavBar() {
         <ListItem  component={StyledNavLink} to="/allusers" className={location.pathname === '/allusers' ? 'active' : ''}>
           <ListItemText primary="All Users" />
         </ListItem>
+
+        <ListItem component={StyledNavLink} to="/search" className={location.pathname === '/search' ? 'active' : ''}>
+          <ListItemText primary="Search Posts" />
+        </ListItem>
+        
         <ListItem>
           <LogoutButton />
         </ListItem>
