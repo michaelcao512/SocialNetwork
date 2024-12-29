@@ -178,5 +178,9 @@ public class AccountService implements UserDetailsService {
         return followers;
     }
 
+    public List<Account> searchUsers(String query) {
+        return accountRepository.searchUsers(query);
+    }
+
 
 }

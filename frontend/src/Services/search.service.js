@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const api_url = "api/post";
+const api_url_user = "api/account";
 
 class SearchService {
     searchPosts(query) {
@@ -9,15 +10,22 @@ class SearchService {
             .then((response) => response.data)
             .catch((error) => {
                 if (error.response) {
-                    // Backend returned an error
                     console.error(`Search error: ${error.response.status} - ${error.response.data}`);
                 } else if (error.request) {
-                    // No response from backend
                     console.error("Search request error:", error.request);
                 } else {
-                    // Other errors
                     console.error("Error:", error.message);
                 }
+                throw error;
+            });
+    }
+
+    searchUsers(query) {
+        return axios
+            .get(`${api_url_user}/searchUser?query=${encodeURIComponent(query)}`)
+            .then((response) => response.data)
+            .catch((error) => {
+                console.error("Error during user search:", error);
                 throw error;
             });
     }

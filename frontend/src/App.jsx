@@ -11,6 +11,7 @@ import ProfilePage from './Pages/ProfilePage';
 import AllPostsPage from './Pages/AllPostsPage';
 import AllUsersPage from './Pages/AllUsersPage';
 import SearchPage from './Pages/SearchPostPage';
+import SearchUserPage from './Pages/SearchUserPage';
 
 import { ThemeProvider } from '@emotion/react';
 
@@ -32,7 +33,8 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route path="*" element={<Navigate to={`/`} />} />
-              <Route path="/search" element={<SearchPage />} />
+              <Route path="/searchPost" element={<SearchPage />} />
+              <Route path='/searchUser' element={<SearchUserPage/>}/>
               <Route path="/allposts" element={<AllPostsPage />} />
               <Route path="/allusers" element={<AllUsersPage />} />
               <Route path="/profile/:profileUserId" element={<ProfilePage />} />
