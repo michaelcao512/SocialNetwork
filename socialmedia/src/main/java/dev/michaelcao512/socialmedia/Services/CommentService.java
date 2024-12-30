@@ -105,4 +105,8 @@ public class CommentService {
         return commentRepository.countByPost(post.get());
     }
 
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
+
 }

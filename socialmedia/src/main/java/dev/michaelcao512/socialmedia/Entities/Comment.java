@@ -1,10 +1,12 @@
 package dev.michaelcao512.socialmedia.Entities;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "commentId")
 @Entity
 @Data
 public class Comment {
@@ -40,11 +43,11 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentCommentId")
-    @JsonBackReference(value = "replies")
+    @JsonBackReference(value = "parent-replies")
     private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "replies")
-    private Set<Comment> replies;
+    @JsonManagedReference(value = "parent-replies")
+    private List<Comment> replies;
 
 }
