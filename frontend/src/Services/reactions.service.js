@@ -52,16 +52,9 @@ class ReactionsService {
 
     // Comment-related reactions
     getReactionByCommentIdAndAccountId(commentId, accountId) {
-        console.log("Comment ID:", commentId); // Logs the `commentId` being passed
-    console.log("Account ID:", accountId); // Logs the `accountId` being passed
-
-    const url = `${api_url}/getReactionByCommentIdAndAccountId/${commentId}/${accountId}`;
-    console.log("Constructed URL:", url); // Logs the URL being sent to the backend
         return axios.get(`${api_url}/getReactionByCommentIdAndAccountId/${commentId}/${accountId}`)
             .then(response => response.data)
             .catch(error => {
-                
-
                 console.log("Error in getReactionByCommentIdAndAccountId: ", error);
                 throw error;
             });
@@ -86,7 +79,6 @@ class ReactionsService {
     }
 
     createCommentReaction(createReactionRequest) {
-        console.log("createReactionRequest:", createReactionRequest);
         return axios.post(api_url, createReactionRequest)
             .then(response => response.data)
             .catch(error => {

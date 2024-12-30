@@ -8,19 +8,8 @@ import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
-import { StandardContainer } from '../../../StyledComponents/StyledComponents';
-import { NavLink } from 'react-router-dom';
+import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledComponents/StyledComponents';
 
-
-
-const PostHeader = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: '0.5rem',
-}));
 
 const PostActions = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -85,9 +74,9 @@ function Post(props) {
             }
         >
             <PostHeader>
-                <NavLink to={`/profile/${postOwner.accountId}`}>
+                <StyledNavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
-                </NavLink>
+                </StyledNavLink>
                 
                 <Typography variant="caption">
                      {post.dateCreated

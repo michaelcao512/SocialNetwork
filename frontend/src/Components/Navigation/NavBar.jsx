@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { NavLink, useLocation } from 'react-router-dom';
 import LogoutButton from "./LogoutButton";
 import authService from "../../Services/auth.service";
+import { StyledNavLink } from '../../StyledComponents/StyledComponents';
 
 const drawerWidth = 180;
 
@@ -17,13 +18,6 @@ const NavBarContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
-  textDecoration: 'none',
-  color: theme.palette.text.primary,
-  '&.active > div': {
-    backgroundColor: theme.palette.action.selected,
-  },
-}));
 
 function NavBar() {
   const location = useLocation();
