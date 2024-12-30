@@ -1,10 +1,9 @@
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import styled from '@emotion/styled';
 import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import EditComment from './EditComment';
-import { NavLink } from 'react-router-dom';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -18,7 +17,7 @@ const CommentContainer = styled(Box)(({ theme }) => ({
     color: theme.palette.text.primary,
     width: '100%',
     marginBottom: '1rem',
-    boxSizing: 'border-box', // Include padding and border in the element's total width and height
+    boxSizing: 'border-box', 
 }));
 
 const CommentActions = styled(Box)(({ theme }) => ({
@@ -45,8 +44,8 @@ function Comment({ user, comment, fetchComments }) {
             });
     }, [comment.commentId, user.username]);
 
-    const handleUpdate = (updatedComment) => {
-        setContent(updatedComment.content);
+    const handleUpdate = (updatedContent) => {
+        setContent(updatedContent);
         fetchComments();
     };
 
@@ -59,11 +58,9 @@ function Comment({ user, comment, fetchComments }) {
 
     return (
         <CommentContainer>
-                <NavLink to={`/profile/${commentOwner.accountId}`}>
-                    <Typography variant="h6">{commentOwner.username}</Typography>
-                </NavLink>
-                    <Typography variant="body2">{content}</Typography>
-            
+            <Typography variant="body2">
+                {commentOwner.username}: {content}
+            </Typography>
             {canManageComment && (
                 <CommentActions>
                     <EditComment comment={comment} onCommentUpdate={handleUpdate}>
@@ -74,6 +71,11 @@ function Comment({ user, comment, fetchComments }) {
                     </Button>
                 </CommentActions>
             )}
+            <Box sx={{ marginLeft: '1rem', marginTop: '0.5rem' }}>
+                {comment.replies && comment.replies.map(reply => (
+                    <Comment key={reply.commentId} user={user} comment={reply} fetchComments={fetchComments} />
+                ))}
+            </Box>
         </CommentContainer>
     );
 }
