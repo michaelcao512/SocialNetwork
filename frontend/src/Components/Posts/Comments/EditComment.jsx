@@ -9,7 +9,7 @@ function EditComment(props) {
 
    
 
-//new changes to make same as edit post so will write to db
+//new changes by Tyson to make work the same as edit post. fix will write to DB
     const handleSave = async() => {
         try {
             // Only send necessary fields
@@ -25,6 +25,7 @@ function EditComment(props) {
             console.error("Error updating comment: ", error);
         }
     };
+
 
 
     return (  
