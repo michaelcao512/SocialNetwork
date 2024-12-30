@@ -88,6 +88,13 @@ function Post(props) {
                 <NavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
                 </NavLink>
+                
+                <Typography variant="caption">
+                     {post.dateCreated
+                     ? new Date(post.dateCreated).toLocaleString()
+                    : "No timestamp available"}
+                </Typography>
+
                 {canManagePost && (
                     <PostActions>
                         <EditPost post={post} onPostUpdate={onPostUpdate} />
@@ -96,7 +103,7 @@ function Post(props) {
                 )}
             </PostHeader>
             <PostContent variant="body1">{post.content}</PostContent>
-            <DisplayReactions  post={post} user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
+            <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment
                     post={post}

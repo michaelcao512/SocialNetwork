@@ -38,9 +38,15 @@ public class Account implements UserDetails {
     private LocalDateTime dateCreated = LocalDateTime.now();
     private LocalDateTime dateUpdated = LocalDateTime.now();
 
+  
+    @Column()
+     private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
+
+
+  /*
     @Column()
     private Collection<? extends GrantedAuthority> authorities;
-
+*/
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
@@ -82,12 +88,17 @@ public class Account implements UserDetails {
         ;
     }
 
-    // ===== Implementing UserDetails Methods =====
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return authorities.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
-
+    
+    // ===== Implementing UserDetails Methods =====
+    */
+    
     @Override
     public String getPassword() {
         return password;

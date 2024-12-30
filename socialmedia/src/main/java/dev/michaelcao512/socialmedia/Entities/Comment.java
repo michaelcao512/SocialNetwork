@@ -37,6 +37,11 @@ public class Comment {
     @JsonBackReference(value = "post-comments")
     private Post post;
 
+    
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "comment-reactions")
+    private List<Reaction> reactions;
+
     private String content;
 
     private LocalDateTime dateCreated = LocalDateTime.now();
