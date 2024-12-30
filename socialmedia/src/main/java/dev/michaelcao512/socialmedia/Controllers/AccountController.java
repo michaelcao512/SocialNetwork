@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -31,12 +30,24 @@ public class AccountController {
     }
 
     /**
+     * Search users by query (username or email).
+     *
+     * @param query the search query
+     * @return a list of users matching the query
+     */
+    @GetMapping("/searchUser")
+    public ResponseEntity<List<Account>> searchUsers(@RequestParam("query") String query) {
+        List<Account> users = accountService.searchUsers(query);
+        return ResponseEntity.ok(users);
+}
+
+    /**
      * Retrieves the account associated with the given account id.
      *
      * @param accountId the id of the account to retrieve
      * @return the account associated with the given id
      */
-    @GetMapping("/{accountId}")
+    @GetMapping("/{accountId:[0-9]+}")
     public ResponseEntity<Account> getAccountById(@PathVariable Long accountId) {
         return ResponseEntity.ok(accountService.getAccountById(accountId));
     }

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
@@ -31,5 +32,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT f.account FROM Friendship f JOIN f.friend a WHERE a.accountId =?1")
     List<Account> findFollowers(Long accountId);
+
+    @Query("SELECT a FROM Account a WHERE LOWER(a.username) LIKE LOWER(CONCAT('%', :query, '%')) " +
+       "OR LOWER(a.email) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Account> searchUsers(@Param("query") String query);
 
 }

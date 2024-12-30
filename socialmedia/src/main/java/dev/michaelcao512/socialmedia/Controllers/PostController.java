@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.michaelcao512.socialmedia.Entities.Post;
@@ -24,6 +25,14 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
+
+    @GetMapping("/searchPosts")
+    public ResponseEntity<List<Post>> searchPosts(@RequestParam("query") String query) {
+        System.out.println("Received query: " + query);
+        List<Post> posts = postService.searchPosts(query);
+        return ResponseEntity.ok(posts);
+    }
+    
 
     /**
      * Retrieves all posts.
@@ -90,7 +99,7 @@ public class PostController {
      * @return the post with the given post id
      * @throws IllegalArgumentException if the post does not exist
      */
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId:[0-9]+}")
     public ResponseEntity<Post> getPostById(@PathVariable Long postId) {
         Post post = postService.getPostById(postId);
         return ResponseEntity.ok(post);
@@ -114,4 +123,7 @@ public class PostController {
         List<Post> post = postService.getAllPostsBesidesOwn(accountId);
         return ResponseEntity.ok(post);
     }
+
+    
+
 }
