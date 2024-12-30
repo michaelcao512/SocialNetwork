@@ -5,6 +5,7 @@ import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import EditComment from './EditComment';
 import { NavLink } from 'react-router-dom';
+import DisplayReactions from '../Reactions/DisplayReactions';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -37,12 +38,16 @@ function Comment({ user, comment, fetchComments }) {
 
     useEffect(() => {
         userService.getAccountOfComment(comment.commentId)
-            .then(response => {
-                setCommentOwner(response);
-                if (response.username === user.username) {
-                    setCanManageComment(true);
-                }
-            });
+    .then(response => {
+        setCommentOwner(response);
+        if (response.username === user.username) {
+            setCanManageComment(true);
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching comment owner:", error);
+    });
+
     }, [comment.commentId, user.username]);
 
     const handleUpdate = (updatedComment) => {
@@ -63,6 +68,20 @@ function Comment({ user, comment, fetchComments }) {
                     <Typography variant="h6">{commentOwner.username}</Typography>
                 </NavLink>
                     <Typography variant="body2">{content}</Typography>
+                    <Typography variant="caption">
+                        {comment.dateCreated
+                        ? new Date(comment.dateCreated).toLocaleString()
+                        : "No timestamp available"}
+                    </Typography>
+
+                    
+
+            <DisplayReactions
+                entityId={comment.commentId}
+                entityType="comment"
+                user={user}
+                reactions={comment.reactions || []}
+            />
             
             {canManageComment && (
                 <CommentActions>

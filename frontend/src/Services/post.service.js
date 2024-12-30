@@ -51,7 +51,8 @@ class PostService {
     }
 
     updatePost(post) {
-        return axios.patch(`${api_url}/${post.postId}`, post).then(response => {
+        return axios.put(`${api_url}/${post.postId}`, post).then(response => {
+            console.log("patch response: ", response);
             return response.data;
         }).catch(error => {
             console.log("error: ", error);

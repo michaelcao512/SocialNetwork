@@ -1,7 +1,7 @@
 package dev.michaelcao512.socialmedia.Entities;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,6 +34,11 @@ public class Comment {
     @JsonBackReference(value = "post-comments")
     private Post post;
 
+    
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "comment-reactions")
+    private List<Reaction> reactions;
+
     private String content;
 
     private LocalDateTime dateCreated = LocalDateTime.now();
@@ -45,6 +50,6 @@ public class Comment {
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "replies")
-    private Set<Comment> replies;
+    private List<Comment> replies;
 
 }
