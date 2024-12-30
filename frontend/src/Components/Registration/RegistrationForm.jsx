@@ -108,7 +108,7 @@ function RegistrationForm() {
             sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: '400px', margin: 'auto' }}>
             
             <FormControl>
-                <FormLabel htmlFor="email">Email*</FormLabel>
+                <FormLabel htmlFor="email">Email *</FormLabel>
                 <TextField
                     id="email"
                     name="email"
@@ -127,7 +127,7 @@ function RegistrationForm() {
             </FormControl>
 
             <FormControl>
-                <FormLabel htmlFor="password">Password <RequiredField /></FormLabel>
+                <FormLabel htmlFor="password">Password *</FormLabel>
                 <TextField
                     id="password"
                     name="password"
