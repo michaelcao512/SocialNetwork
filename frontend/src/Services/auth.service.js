@@ -24,22 +24,22 @@ class AuthService {
         delete axios.defaults.headers.common['Authorization'];
     }
 
-    register(registerRequest) {
-        console.log("registration request: ", registerRequest)
-        const data = axios.post(api_url + "/register", registerRequest)
-            .then(response => {
-                return response.data;
-            })
-            .catch(error => {
-                console.log("registration error: ", error);
-            }); 
-        return data;
-        
+    async register(registerRequest) {
+        try {
+            const response = await axios.post(api_url + "/register", registerRequest);
+            return response.data;
+
+        } catch (error) {
+            const errorMessage = error.response.data;
+            alert(errorMessage);
+            throw error;
+        }
     }
 
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));
     }
+
 }
 
 const authService = new AuthService();

@@ -29,7 +29,7 @@ public class AccountService implements UserDetailsService {
     private final ApplicationContext applicationContext;
 
     public AccountService(AccountRepository accountRepository, UserInfoRepository userInfoRepository,
-            ApplicationContext applicationContext) {
+                          ApplicationContext applicationContext) {
         this.accountRepository = accountRepository;
         this.userInfoRepository = userInfoRepository;
         this.applicationContext = applicationContext;
@@ -50,13 +50,19 @@ public class AccountService implements UserDetailsService {
         String lastName = registrationRequest.getLastName();
         String gender = registrationRequest.getGender();
         // checking for non null required fields
+
         if (email == null || password == null || username == null) {
             throw new IllegalArgumentException("Email, password, and username must be provided.");
         }
 
         // checking for empty required fields
-        if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
+        if (email.trim().isEmpty() || password.trim().isEmpty() || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Email, password, and username must be provided.");
+        }
+
+        // ensuring no whitespace exists in any field
+        if (email.contains(" ") || password.contains(" ") || username.contains(" ")) {
+            throw new IllegalArgumentException("Email, password, and username cannot contain whitespace.");
         }
 
         // checking if email or username already exists
@@ -92,7 +98,7 @@ public class AccountService implements UserDetailsService {
 
     /**
      * Logs in an account given the provided email and password.
-     * 
+     *
      * @param account The account to log in.
      * @return The account if the login is successful, null if the login fails.
      * @throws InvalidCredentialsException If the username or password is incorrect
@@ -178,5 +184,16 @@ public class AccountService implements UserDetailsService {
         return followers;
     }
 
+    public List<Account> searchUsers(String query) {
+        return accountRepository.searchUsers(query);
+    }
+
+    public Boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email);
+    }
+
+    public Boolean existsByUsername(String username) {
+        return accountRepository.existsByUsername(username);
+    }
 
 }
