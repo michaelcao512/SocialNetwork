@@ -34,13 +34,15 @@ const FullWidthButton = styled(Button)(({ theme }) => ({
 }));
 
 function CreateComment(props) {
-    const { post, user, fetchComments, onCancel } = props;
+    const { post, user, parentComment, fetchComments, onCancel } = props;
     const [content, setContent] = useState("");
 
     async function handleSubmit(event) {
         event.preventDefault();
+        const postId = post ? post.postId : null;
+        const parentCommentId = parentComment ? parentComment.commentId : null;
         try {
-            await commentService.createComment(content, user.id, post.postId);
+            await commentService.createComment(content, user.id, postId, parentCommentId);
             fetchComments();
             setContent("");
             onCancel();

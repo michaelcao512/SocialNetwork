@@ -103,3 +103,12 @@ export const MainContent = styled.div`
     padding: 1rem;
   }
 `;
+
+export const PostHeader = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: '0.5rem',
+}));

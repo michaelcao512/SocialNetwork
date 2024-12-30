@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Services.CommentService;
 import dev.michaelcao512.socialmedia.dto.Requests.CreateCommentRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -101,6 +102,11 @@ public class CommentController {
     public ResponseEntity<Integer> getCommentsCountByPostId(@PathVariable Long postId) {
         int commentsCount = commentService.getCommentsCountByPostId(postId);
         return ResponseEntity.ok(commentsCount);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Comment>> getAllComments() {
+        return ResponseEntity.ok(commentService.getAllComments());
     }
 
 }

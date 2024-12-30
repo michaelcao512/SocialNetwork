@@ -64,7 +64,6 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
     };
 
     const fetchData = useCallback(() => {
-        console.log("EntityType:", entityType);
         if (!serviceMap[entityType]) {
             console.error(`Invalid entityType: ${entityType}`);
             return;
@@ -98,8 +97,8 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
                     onClick={() => handleReactionClick("LIKE")}
                 >
                     {reaction?.reactionType === "LIKE" ? <Favorite /> : <FavoriteBorder />}
+                    <IndentedTypography variant="body2">{numLikes}</IndentedTypography>
                 </ReactionIconButton>
-                <IndentedTypography variant="body2">{numLikes}</IndentedTypography>
             </Box>
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
@@ -107,15 +106,18 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
                     onClick={() => handleReactionClick("DISLIKE")}
                 >
                     {reaction?.reactionType === "DISLIKE" ? <ThumbDown /> : <ThumbDownOffAlt />}
+                    <IndentedTypography variant="body2">{numDislikes}</IndentedTypography>
+                
                 </ReactionIconButton>
-                <IndentedTypography variant="body2">{numDislikes}</IndentedTypography>
             </Box>
             {onAddCommentClick && (
                 <Box display="flex" alignItems="center">
                     <ReactionIconButton onClick={onAddCommentClick} color="primary">
                         <AddComment />
                         <IndentedTypography variant="body2">{numComments}</IndentedTypography>
+
                     </ReactionIconButton>
+
                 </Box>
             )}
           
