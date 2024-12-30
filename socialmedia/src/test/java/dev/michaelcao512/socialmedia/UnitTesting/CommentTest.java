@@ -46,7 +46,7 @@ public class CommentTest {
 
     @Test
     public void testCreateComment() {
-        CreateCommentRequest createCommentRequest = new CreateCommentRequest(1L, 1L, "Test Comment Content");
+        CreateCommentRequest createCommentRequest = new CreateCommentRequest(1L, null, 1L, "Test Comment Content");
 
 
 

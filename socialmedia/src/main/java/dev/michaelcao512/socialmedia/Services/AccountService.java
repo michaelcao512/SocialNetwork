@@ -188,5 +188,12 @@ public class AccountService implements UserDetailsService {
         return accountRepository.searchUsers(query);
     }
 
+    public Boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email);
+    }
+
+    public Boolean existsByUsername(String username) {
+        return accountRepository.existsByUsername(username);
+    }
 
 }
