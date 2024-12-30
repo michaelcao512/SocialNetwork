@@ -118,14 +118,7 @@ function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
                     </ReactionIconButton>
                 </Box>
             )}
-            {onAddCommentClick && (
-                <Box display="flex" alignItems="center">
-                    <ReactionIconButton onClick={onAddCommentClick} color="primary">
-                        <AddComment />
-                        <IndentedTypography variant="body2">{numComments}</IndentedTypography>
-                    </ReactionIconButton>
-                </Box>
-            )}
+          
         </ReactionsContainer>
     );
 }

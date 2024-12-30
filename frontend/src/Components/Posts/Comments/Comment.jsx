@@ -69,8 +69,12 @@ function Comment({ user, comment, fetchComments }) {
                 </NavLink>
                     <Typography variant="body2">{content}</Typography>
                     <Typography variant="caption">
-                    {comment.timestamp ? new Date(comment.timestamp).toLocaleString() : "No timestamp available"}
-                </Typography>
+                        {comment.dateCreated
+                        ? new Date(comment.dateCreated).toLocaleString()
+                        : "No timestamp available"}
+                    </Typography>
+
+                    
 
             <DisplayReactions
                 entityId={comment.commentId}

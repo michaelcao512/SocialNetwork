@@ -1,4 +1,5 @@
 import { useState } from "react";
+import commentService from "../../../Services/comment.service";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 
 function EditComment(props) {  
@@ -6,7 +7,30 @@ function EditComment(props) {
     const [content, setContent] = useState(comment.content);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
-    const handleSave = () => {
+   
+
+
+    const handleSave = async() => {
+        try {
+            // Only send necessary fields
+            const updatedComment = { ...comment, content };
+            await commentService.updateComment(updatedComment);
+            
+            // Call the update callback to refresh the parent
+            onCommentUpdate(updatedComment); 
+
+            // Close the dialog after saving
+            setIsEditOpen(false);
+        } catch (error) {
+            console.error("Error updating comment: ", error);
+        }
+    };
+
+
+
+
+/*
+
         const updatedComment = {
             ...comment,
             content
@@ -15,7 +39,7 @@ function EditComment(props) {
         onCommentUpdate(updatedComment);
         setIsEditOpen(false);
     }
-
+*/
     return (  
         <>
             <Button onClick={() => setIsEditOpen(true)}>Edit</Button>
