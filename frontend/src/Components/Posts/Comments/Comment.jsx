@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
@@ -17,7 +18,7 @@ const CommentContainer = styled(Box)(({ theme }) => ({
     color: theme.palette.text.primary,
     width: '100%',
     marginBottom: '1rem',
-    boxSizing: 'border-box', 
+    boxSizing: 'border-box', // Include padding and border in the element's total width and height
 }));
 
 const CommentActions = styled(Box)(({ theme }) => ({
@@ -26,6 +27,15 @@ const CommentActions = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: '0.5rem',
+    marginTop: '0.5rem',
+}));
+
+const RepliesContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: 'calc(100% - 1rem)', // Ensure it takes the full width minus the left margin
+    marginLeft: '1rem',
     marginTop: '0.5rem',
 }));
 
@@ -59,7 +69,10 @@ function Comment({ user, comment, fetchComments }) {
     return (
         <CommentContainer>
             <Typography variant="body2">
-                {commentOwner.username}: {content}
+                <NavLink to={`/profile/${commentOwner.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Typography variant="h6">{commentOwner.username}</Typography>
+                </NavLink>
+                {content}
             </Typography>
             {canManageComment && (
                 <CommentActions>
@@ -71,11 +84,11 @@ function Comment({ user, comment, fetchComments }) {
                     </Button>
                 </CommentActions>
             )}
-            <Box sx={{ marginLeft: '1rem', marginTop: '0.5rem' }}>
+            <RepliesContainer>
                 {comment.replies && comment.replies.map(reply => (
                     <Comment key={reply.commentId} user={user} comment={reply} fetchComments={fetchComments} />
                 ))}
-            </Box>
+            </RepliesContainer>
         </CommentContainer>
     );
 }

@@ -87,7 +87,6 @@ function Post(props) {
             <PostHeader>
                 <NavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
-                    <Typography variant="body2">{postOwner.firstName} {postOwner.lastName}</Typography>
                 </NavLink>
                 {canManagePost && (
                     <PostActions>
