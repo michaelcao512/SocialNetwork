@@ -9,7 +9,7 @@ function EditComment(props) {
 
    
 
-
+//new changes to make same as edit post so will write to db
     const handleSave = async() => {
         try {
             // Only send necessary fields
@@ -27,19 +27,6 @@ function EditComment(props) {
     };
 
 
-
-
-/*
-
-        const updatedComment = {
-            ...comment,
-            content
-        }
-        
-        onCommentUpdate(updatedComment);
-        setIsEditOpen(false);
-    }
-*/
     return (  
         <>
             <Button onClick={() => setIsEditOpen(true)}>Edit</Button>
