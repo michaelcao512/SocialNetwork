@@ -26,5 +26,6 @@ public class UserInfo {
     private String lastName;
     private String biography;
     private String gender;
+    private String profilePictureUrl;
 
 }
