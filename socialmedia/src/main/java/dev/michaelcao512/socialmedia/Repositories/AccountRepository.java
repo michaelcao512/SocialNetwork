@@ -37,4 +37,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
        "OR LOWER(a.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Account> searchUsers(@Param("query") String query);
 
+    @Query(value = "select username from account\n" +
+            "where account_id = :accountId", nativeQuery = true)
+    String findUsernameByAccountId(@Param("accountId") Long accountId);
 }

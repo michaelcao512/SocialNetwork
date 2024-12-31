@@ -103,4 +103,9 @@ public class AccountController {
         return ResponseEntity.ok(accountService.existsByEmail(email));
     }
 
+    @GetMapping("/getUsername/{accountId}")
+    public ResponseEntity<String> getUsernameByAccountId(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountService.getUsernameByAccountId(accountId));
+    }
+
 }
