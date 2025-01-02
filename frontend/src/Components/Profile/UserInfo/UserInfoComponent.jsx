@@ -9,11 +9,12 @@ const UserInfoComponent = (props) => {
     const { user, userInfo, profileId } = props;
 
     return (
-        <StandardContainer
+        <StandardContainer style={{ backgroundColor: "#f4f9fd",border: "none" ,boxShadow: "none"}}
             sx={{
                 textAlign: 'center',
                 padding: '20px',
                 marginBottom: '20px',
+                border: "none"
             }}>
             <Typography variant="h5" >
                 {userInfo.firstName} {userInfo.lastName}

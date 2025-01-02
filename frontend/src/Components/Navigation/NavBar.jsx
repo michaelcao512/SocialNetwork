@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemText, Box, Typography, IconButton } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { NavLink, useLocation } from 'react-router-dom';
 import LogoutButton from "./LogoutButton";
 import authService from "../../Services/auth.service";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import "../../StyledComponents/NavBar.css";
 
 const drawerWidth = 180;
 
@@ -43,31 +46,107 @@ function NavBar() {
         </Typography>
       </Box>
       <List>
-        <ListItem  component={StyledNavLink} to={ownProfile} className={location.pathname === ownProfile ? 'active' : ''}>
+        <ListItem
+          component={StyledNavLink}
+          to={ownProfile}
+          className={location.pathname === ownProfile ? 'active' : ''}
+        >
           <ListItemText primary="My Profile" />
         </ListItem>
-        <ListItem  component={StyledNavLink} to="/allposts" className={location.pathname === '/allposts' ? 'active' : ''}>
+        <ListItem
+          component={StyledNavLink}
+          to="/allposts"
+          className={location.pathname === '/allposts' ? 'active' : ''}
+        >
           <ListItemText primary="All Posts" />
         </ListItem>
-
-        <ListItem  component={StyledNavLink} to="/allusers" className={location.pathname === '/allusers' ? 'active' : ''}>
+        <ListItem
+          component={StyledNavLink}
+          to="/allusers"
+          className={location.pathname === '/allusers' ? 'active' : ''}
+        >
           <ListItemText primary="All Users" />
         </ListItem>
-
-        <ListItem component={StyledNavLink} to="/searchPost" className={location.pathname === '/searchPost' ? 'active' : ''}>
+        <ListItem
+          component={StyledNavLink}
+          to="/searchPost"
+          className={location.pathname === '/searchPost' ? 'active' : ''}
+        >
           <ListItemText primary="Search Posts" />
         </ListItem>
-
-        <ListItem component={StyledNavLink} to="/searchUser" className={location.pathname === '/searchUser' ? 'active' : ''}>
+        <ListItem
+          component={StyledNavLink}
+          to="/searchUser"
+          className={location.pathname === '/searchUser' ? 'active' : ''}
+        >
           <ListItemText primary="Search User" />
         </ListItem>
-
         <ListItem>
           <LogoutButton />
         </ListItem>
       </List>
     </div>
   );
+  /*Animation which only apply to navbar
+  const drawer = (
+    <div>
+      <Box sx={{ padding: '1rem' }}>
+        <Typography variant="h6" noWrap>
+          Navigation
+        </Typography>
+      </Box>
+      <List>
+        <TransitionGroup>
+          <CSSTransition
+            key={location.pathname}
+            timeout={300}
+            classNames="fade"
+          >
+            <div>
+              <ListItem
+                component={StyledNavLink}
+                to={ownProfile}
+                className={location.pathname === ownProfile ? 'active' : ''}
+              >
+                <ListItemText primary="My Profile" />
+              </ListItem>
+              <ListItem
+                component={StyledNavLink}
+                to="/allposts"
+                className={location.pathname === '/allposts' ? 'active' : ''}
+              >
+                <ListItemText primary="All Posts" />
+              </ListItem>
+              <ListItem
+                component={StyledNavLink}
+                to="/allusers"
+                className={location.pathname === '/allusers' ? 'active' : ''}
+              >
+                <ListItemText primary="All Users" />
+              </ListItem>
+              <ListItem
+                component={StyledNavLink}
+                to="/searchPost"
+                className={location.pathname === '/searchPost' ? 'active' : ''}
+              >
+                <ListItemText primary="Search Posts" />
+              </ListItem>
+              <ListItem
+                component={StyledNavLink}
+                to="/searchUser"
+                className={location.pathname === '/searchUser' ? 'active' : ''}
+              >
+                <ListItemText primary="Search User" />
+              </ListItem>
+              <ListItem>
+                <LogoutButton />
+              </ListItem>
+            </div>
+          </CSSTransition>
+        </TransitionGroup>
+      </List>
+    </div>
+  );*/
 
   return (
     <>

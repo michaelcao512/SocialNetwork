@@ -24,6 +24,8 @@ function CreatePost(props) {
         <StandardContainer component="form" onSubmit={handleSubmit}
             style={{
                 marginBottom: "1rem",
+                backgroundColor: "#f4f9fd",
+                boxShadow: "none"
             }}
         >
             <FormControl fullWidth>

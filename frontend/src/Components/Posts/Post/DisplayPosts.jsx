@@ -8,6 +8,9 @@ function DisplayPosts(props) {
     return (  
         <StandardContainer style={{
             padding: "0 0.2rem",
+            backgroundColor: "#ffffff" ,
+            border:"none",
+            boxShadow: "none"
         }}>
             {posts.map(post => (
                 <Post key={post.postId} post={post} user={user} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate}/>

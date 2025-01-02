@@ -56,12 +56,25 @@ function Comment({ user, comment, fetchComments }) {
                 fetchComments();
             });
     };
+    const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: #1976d2;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+
+  &:hover {
+    color: #f1356d;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+`;
 
     return (
-        <CommentContainer>
-                <NavLink to={`/profile/${commentOwner.accountId}`}>
+        <CommentContainer style={{ backgroundColor: "#f4f9fd",boxShadow: "none" }}>
+                <StyledNavLink to={`/profile/${commentOwner.accountId}`}>
                     <Typography variant="h6">{commentOwner.username}</Typography>
-                </NavLink>
+                </StyledNavLink>
                     <Typography variant="body2">{content}</Typography>
             
             {canManageComment && (

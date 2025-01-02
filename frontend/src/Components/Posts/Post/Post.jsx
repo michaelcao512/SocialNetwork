@@ -12,6 +12,19 @@ import { StandardContainer } from '../../../StyledComponents/StyledComponents';
 import { NavLink } from 'react-router-dom';
 
 
+const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: #1976d2;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+
+  &:hover {
+    color: #f1356d;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+`;
 
 const PostHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -76,19 +89,24 @@ function Post(props) {
         setIsCommentInputVisible(false);
     };
 
+    
+
     return (
         <StandardContainer
             style={
                 {
                     margin: "0.5rem 0",
+                    backgroundColor: "#f4f9fd",
+                    border: "4px",
+                    boxShadow: "2px 4px 6px #CAE4F6",
                 }
             }
         >
-            <PostHeader>
-                <NavLink to={`/profile/${postOwner.accountId}`}>
+            <PostHeader style={{border: "none",boxShadow: "none"}}>
+                <StyledNavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
                     <Typography variant="body2">{postOwner.firstName} {postOwner.lastName}</Typography>
-                </NavLink>
+                </StyledNavLink>
                 {canManagePost && (
                     <PostActions>
                         <EditPost post={post} onPostUpdate={onPostUpdate} />
@@ -96,7 +114,7 @@ function Post(props) {
                     </PostActions>
                 )}
             </PostHeader>
-            <PostContent variant="body1">{post.content}</PostContent>
+            <PostContent variant="body1" style={{border: "none",boxShadow: "none"}}>{post.content}</PostContent>
             <DisplayReactions  post={post} user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment

@@ -1,16 +1,17 @@
 import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
-import { Button, CardContent, Stack, Box } from "@mui/material";
+import { Stack, CardContent, Divider, Typography, Box, Button } from "@mui/material";
 
 export const StyledStack = styled(Stack)({
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    width: "100%",
-    maxWidth: "100vw", 
-    margin: "auto",
-    padding: "1rem",
-    boxSizing: "border-box",
+  alignItems: "center",
+  justifyContent: "center",
+  flexDirection: "column",
+  width: "100%",
+  maxWidth: "100vw",
+  margin: "auto",
+  padding: "1rem",
+  boxSizing: "border-box",
+  backgroundColor: "#f3f3f3",
 });
 
 export const StyledCard = styled(CardContent)(({ theme }) => ({
@@ -28,9 +29,10 @@ export const StyledCard = styled(CardContent)(({ theme }) => ({
     color: theme.palette.text.primary,
     boxSizing: "border-box",
     "&:hover": {
-        boxShadow: "0 8px 16px 0 rgba(0,0,0,0.2)"
-    }
-}));
+      boxShadow: "0 8px 16px 0 rgba(0,0,0,0.2)",
+    },
+  }));
+  
 
 export const StandardContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -59,31 +61,53 @@ export const StyledNavLink = styled(Link)(({ theme }) => ({
   },
 }));
 
-export function StyledLink(props) {
-    const { destination, text } = props;
-    return ( 
-        <Button component={Link} to={destination} 
-            color="secondary" variant="contained"
-            sx={
-                {
-                    "&:hover": {
-                        backgroundColor: "#f1356d",
-                        color: "white"
-                    },
-                    margin: "5px"
-                }
-            }
-        >{text}</Button>
+export function StyledLink({ destination, text }) {
+    return (
+      <Button
+        component={Link}
+        to={destination}
+        color="third"
+        variant="contained"
+        sx={{
+          textTransform: "none",
+          fontSize: "1rem",
+          padding: "0.5rem 1.5rem",
+          borderRadius: "12px",
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+          margin: "5px",
+          "&:hover": {
+            backgroundColor: "#1E8EAB",
+            color: "white",
+            transform: "scale(1.05)",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+          },
+        }}
+      >
+        {text}
+      </Button>
     );
-}
+  }
+  
 
-export const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledTypography = styled(Typography)({
+    fontSize: "1.2rem",
+    color: "#333",
+  });
+  
+  export const StyledDivider = styled(Divider)({
+    margin: "1rem 0",
+    width: "100%",
+  });
+  
+  export const StyledButton = styled(Button)(({ theme }) => ({
     width: '100%',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
     '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.primary.contrastText,
     },
-}));
+  }));
 
 export const AppContainer = styled.div`
   display: flex;
