@@ -19,6 +19,9 @@ import dev.michaelcao512.socialmedia.Services.AccountService;
 import dev.michaelcao512.socialmedia.dto.Requests.LoginRequest;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 import dev.michaelcao512.socialmedia.dto.Responses.JwtResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -37,7 +40,7 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<Account> register(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {
         Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
         logger.info("Registering account: " + registrationRequest);
         Account account = accountService.registerAccount(registrationRequest);
@@ -57,5 +60,18 @@ public class AuthController {
         return ResponseEntity.ok(
                 new JwtResponse(jwt, account.getAccountId(), account.getUsername(), account.getEmail()));
     }
+
+
+    @GetMapping("/verify")
+    public ResponseEntity<?>verifyEmail(@RequestParam ("token") String token) {
+        try{
+            accountService.verifyAccount(token);
+            return ResponseEntity.ok("Email Verification Successful!");
+        }
+            catch(IllegalArgumentException e){
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+    }
+    
 
 }

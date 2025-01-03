@@ -3,6 +3,8 @@ package dev.michaelcao512.socialmedia.Entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -38,6 +40,7 @@ public class Post {
     @JsonManagedReference(value = "post-reactions")
     private List<Reaction> reactions;
 
+    
     private LocalDateTime dateCreated = LocalDateTime.now();
 
 }

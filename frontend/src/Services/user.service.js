@@ -2,78 +2,96 @@ import axios from 'axios';
 
 const api_url = "api/account";
 
+
+//this page has been reworked.  I was getting some weird random errors with the email and username checks these changes seemed to fix. 
+
+
 class UserService {
 
-    getAllUsers() {
-        return axios.get(api_url).then(response => {
+    
+
+    async getAllUsers() {
+        try {
+            const response = await axios.get(api_url);
             return response.data;
-        }).catch(error => {
+        } catch (error) {
+            console.error("Error fetching all users:", error);
             throw error;
-        });
+        }
     }
 
-    getUserById(id) {
-        return axios.get(api_url + "/" + id).then(response => {
+    async getUserById(id) {
+        try {
+            const response = await axios.get(`${api_url}/${id}`);
             return response.data;
-        }).catch(error => {
+        } catch (error) {
+            console.error(`Error fetching user by ID (${id}):`, error);
             throw error;
-        });
+        }
     }
 
-    getAccountOfComment(commentId) {
-        return axios.get(`${api_url}/getAccountOfComment/${commentId}`).then(response => {
-        return response.data;
-    }).catch(error => {
-        throw error;
-    });
-    }
-
-    getAccountOfPost(postId) {
-        return axios.get(`${api_url}/getAccountOfPost/${postId}`).then(response => {
+    async getAccountOfComment(commentId) {
+        try {
+            const response = await axios.get(`${api_url}/getAccountOfComment/${commentId}`);
             return response.data;
-        }).catch(error => {
+        } catch (error) {
+            console.error(`Error fetching account of comment (${commentId}):`, error);
             throw error;
-        });
+        }
     }
 
-    getFollowers(id) {
-        return axios.get(`${api_url}/getFollowers/${id}`).then(response => {
+    async getAccountOfPost(postId) {
+        try {
+            const response = await axios.get(`${api_url}/getAccountOfPost/${postId}`);
             return response.data;
-        }).catch(error => {
+        } catch (error) {
+            console.error(`Error fetching account of post (${postId}):`, error);
             throw error;
-        });
+        }
     }
 
-    getFollowing(id) {  
-        return axios.get(`${api_url}/getFollowing/${id}`).then(response => {
+    async getFollowers(id) {
+        try {
+            const response = await axios.get(`${api_url}/getFollowers/${id}`);
             return response.data;
-        }).catch(error => {
+        } catch (error) {
+            console.error(`Error fetching followers for ID (${id}):`, error);
             throw error;
-        });
+        }
     }
 
-    checkEmailExists(email) {
-        return axios.get(api_url + "/existsByEmail/" + email)
-            .then(response => {
-                console.log("response: ", response.data);
-                return response.data;
-            })
-            .catch(error => {
-                throw error;
-            });
+    async getFollowing(id) {
+        try {
+            const response = await axios.get(`${api_url}/getFollowing/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching following for ID (${id}):`, error);
+            throw error;
+        }
     }
 
-    checkUsernameExists(username) {
-        return axios.get(api_url + "/existsByUsername/" + username)
-            .then(response => {
-                console.log("response: ", response);
+    async checkEmailExists(email) {
+        try {
+            const response = await axios.get(`${api_url}/existsByEmail/${email}`);
+            console.log("Email exists response:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error(`Error checking if email exists (${email}):`, error);
+            throw error;
+        }
+    }
 
-                return response.data;
-            })
-            .catch(error => {
-                throw error;
-            });
+    async checkUsernameExists(username) {
+        try {
+            const response = await axios.get(`${api_url}/existsByUsername/${username}`);
+            console.log("Username exists response:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error(`Error checking if username exists (${username}):`, error);
+            throw error;
+        }
     }
 }
+
 const userService = new UserService();
 export default userService;

@@ -4,6 +4,8 @@ import authService from '../../Services/auth.service';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import userService from '../../Services/user.service';
+import axios from 'axios';
+
 
 function RegistrationForm() {
     const navigate = useNavigate();
@@ -33,7 +35,37 @@ function RegistrationForm() {
         );
     }, [emailError, usernameError, email, password, username, firstName]);
     
-    const handleSubmit = (event) => {
+
+/*
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8080/api/auth/register', {
+                email: email,
+                password: password,
+                username: username,
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender,
+            });
+    
+            // Axios already parses JSON, so no need to call response.json()
+            console.log('Registration successful:', response.data);
+    
+            if (response.data.success) {
+                alert('Registration successful!');
+            } else {
+                alert('Registration failed.');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
+    */
+
+
+        const handleSubmit = async (event) => {
         event.preventDefault();
         
         const registrationRequest = {
@@ -45,9 +77,60 @@ function RegistrationForm() {
             gender: gender
         };
 
+        try {
+            const response = await authService.register(registrationRequest);
+           
+            // Check the response structure
+            if (response.accountId) {
+                navigate('/registration-confirmation');
+            } else {
+                
+                alert(response.message || 'Registration failed');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            
+            // Handle the error response properly
+            if (error.response && error.response.data) {
+                alert(error.response.data.message || 'Registration failed. Please try again.');
+            } else {
+                alert(error.message || 'An unexpected error occurred. Please try again.');
+            }
+        }
+    };
+        
+
+        /*
+        try{
+            const response = await authService.register(registrationRequest);
+            if (response.ok) {
+                navigate('/registration-confirmation');
+            } else{
+                const error = await response.json();
+                alert(error.message || 'Registration failed')
+            }
+        }catch (error){
+            console.error('Registration error:', error);
+            alert(error.message || 'Registration failed.  Please try again.');
+        }
+
+    };
+
+        /*
         authService.register(registrationRequest)
             .then(response => {
                 console.log("registration response: ", response);
+                if(response.ok){
+                    navigate("/registration-confirmation");
+                }
+                else{
+                    const error = response.json();
+                    alert(error.message || "Registration failed.")
+                }
+
+
+/*
+
                 authService.login({ username: username, password: password })
                     .then(response => {
                         console.log("login response: ", response);
@@ -59,17 +142,72 @@ function RegistrationForm() {
             })
             .catch(error => {
                 console.log("registration error: ", error);
+
+                
             });
     };
 
+*/
 
-    const handleEmailValidation = (email) => {
+const handleEmailValidation = async (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Reset error state at the beginning
+    setEmailError(false);
+    setEmailErrorMessage('');
+
+    // Check email format
+    if (!emailRegex.test(email)) {
+        setEmailError(true);
+        setEmailErrorMessage('Invalid email format');
+        return; // Stop further execution
+    }
+
+    try {
+        // Call backend to check if the email exists
+        const exists = await userService.checkEmailExists(email);
+
+        if (exists) {
+            setEmailError(true);
+            setEmailErrorMessage('Email already exists');
+        } else {
+            setEmailError(false);
+            setEmailErrorMessage('');
+        }
+    } catch (error) {
+        console.error('Error checking email:', error);
+        setEmailError(true);
+        setEmailErrorMessage('Unable to validate email');
+    }
+};
+
+
+/*
+    const handleEmailValidation = async (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setEmailError(true);
             setEmailErrorMessage('Invalid email format');
         }
         
+        try{
+            const exists = await userService.checkEmailExists(email);
+            if (exists) {
+                setEmailError(true);
+                setEmailErrorMessage('Email already exists')
+            }else {
+                setEmailError(false);
+                setEmailErrorMessage('');
+            }
+
+        } catch (error) {
+            console.error('Error checking email:', error);
+            setEmailError(true);
+            setEmailErrorMessage('Unable to validate email')
+        }
+    };
+
+/*
         userService.checkEmailExists(email)
             .then(response => {
 
@@ -85,8 +223,27 @@ function RegistrationForm() {
                 console.log("error: ", error);
             })
     };
+*/
 
-    const hadnleUsernameValidation = (username) => {
+
+    const handleUsernameValidation = async (username) => {
+        try{
+            const exists = await userService.checkUsernameExists(username);
+            if (exists) {
+                setUsernameError(true);
+                setUsernameErrorMessage('Username already exists');
+            }else{
+                setUsernameError(false);
+                setUsernameErrorMessage('');
+            }
+        } catch (error) {
+            console.error('Error checking username:', error);
+            setUsernameError(true);
+            setUsernameErrorMessage('Unable to validate username');
+        }
+    };
+    /* 
+    const handleUsernameValidation = (username) => {
         userService.checkUsernameExists(username)
             .then(response => {
                 if (response) {
@@ -102,7 +259,7 @@ function RegistrationForm() {
             }); 
         
     };
-
+*/
     return ( 
         <Box component="form" onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: '400px', margin: 'auto' }}>
@@ -155,7 +312,7 @@ function RegistrationForm() {
                     value={username}
                     error={usernameError}
                     helperText={usernameErrorMessage}
-                    onBlur={(event) => hadnleUsernameValidation(event.target.value)}
+                    onBlur={(event) => handleUsernameValidation(event.target.value)}
                     onChange={(event) => setUsername(event.target.value)}
                 />  
             </FormControl>

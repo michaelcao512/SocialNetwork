@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 
+
+import dev.michaelcao512.socialmedia.Utilities.TokenGenerator;
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Exceptions.EmailAlreadyExistsException;
@@ -28,11 +31,18 @@ public class AccountService implements UserDetailsService {
     private final UserInfoRepository userInfoRepository;
     private final ApplicationContext applicationContext;
 
+    //new emailService class
+    private final EmailService emailService;
+    
+
+
+
     public AccountService(AccountRepository accountRepository, UserInfoRepository userInfoRepository,
-                          ApplicationContext applicationContext) {
+                          ApplicationContext applicationContext, EmailService emailService) {
         this.accountRepository = accountRepository;
         this.userInfoRepository = userInfoRepository;
         this.applicationContext = applicationContext;
+        this.emailService = emailService;
 
     }
 
@@ -76,11 +86,23 @@ public class AccountService implements UserDetailsService {
         password = getPasswordEncoder().encode(password);
 
         Account newAccount = new Account();
+
+        //generate verification token
+        String token = TokenGenerator.generateToken();
+        logger.info("Generated token: " + token);
+        
+
+        newAccount.setVerificationToken(token);
+        newAccount.setTokenExpiration(LocalDateTime.now().plusHours(4));
+
         newAccount.setEmail(email);
         newAccount.setPassword(password);
         newAccount.setUsername(username);
+        newAccount.setEmailVerified(false);
 
         Account savedAccount = accountRepository.save(newAccount);
+
+       
 
         UserInfo userInfo = new UserInfo();
         userInfo.setAccount(savedAccount);
@@ -91,10 +113,39 @@ public class AccountService implements UserDetailsService {
         userInfoRepository.save(userInfo);
 
         newAccount.setUserInfo(userInfo);
-        accountRepository.save(newAccount);
+        accountRepository.save(savedAccount);
         logger.info("Account registered: " + newAccount);
+
+        String verificationUrl = "http://localhost:5173/verify?token=" + token;
+        emailService.sendVerificationEmail(newAccount.getEmail(), verificationUrl);
+
+
         return newAccount;
     }
+
+    public void verifyAccount(String token) {
+        logger.info("Passed in token: " + token);
+        Optional<Account> accountOptional = accountRepository.findByVerificationToken(token);
+      ;
+        
+        // Check if the token exists
+        if (accountOptional.isEmpty()) {
+            throw new IllegalArgumentException("Invalid verification token");
+        }
+    
+        Account account = accountOptional.get();
+        String accountToken = account.getVerificationToken();
+    
+        // Compare token content, not references
+        if (accountToken.equals(token)) {
+            account.setEmailVerified(true);
+            account.setVerificationToken(null); // Optional: Invalidate token after use
+            accountRepository.save(account); // Persist changes
+        } else {
+            throw new IllegalArgumentException("Token mismatch");
+        }
+    }
+    
 
     /**
      * Logs in an account given the provided email and password.

@@ -37,4 +37,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
        "OR LOWER(a.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Account> searchUsers(@Param("query") String query);
 
+    Optional<Account> findByVerificationToken(String token);
+
 }
