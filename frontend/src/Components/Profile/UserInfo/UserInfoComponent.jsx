@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Typography, Avatar } from "@mui/material";
 import Friendship from "../Friendship/Friendship";
 import { StandardContainer } from "../../../StyledComponents/StyledComponents";
 
@@ -14,6 +14,10 @@ const UserInfoComponent = (props) => {
         marginBottom: "20px",
       }}
     >
+      {/* profile picture will replace the letter if there exists a url */}
+      <Avatar src={userInfo.profilePictureUrl || null}>
+        {userInfo.firstName?.charAt(0) || "#"}
+      </Avatar>
       <Typography variant="h5">
         {userInfo.firstName} {userInfo.lastName}
       </Typography>
