@@ -4,6 +4,7 @@ import DeletePost from './DeletePost';
 import EditPost from './EditPost';
 import DisplayComments from '../Comments/DisplayComments';
 import CreateComment from '../Comments/CreateComment';
+import Image from '../../Image/Image';
 import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import { Box, Typography } from '@mui/material';
@@ -87,6 +88,7 @@ function Post(props) {
 
             </PostHeader>
             <PostContent variant="body1">{post.content}</PostContent>
+            <Image images={post.images} />
             <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment

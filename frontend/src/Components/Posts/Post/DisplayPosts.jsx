@@ -1,5 +1,4 @@
 import Post from "./Post";
-import { StandardContainer } from "../../../StyledComponents/StyledComponents";
 function DisplayPosts(props) {
     const { posts, user, onPostDelete, onPostUpdate } = props;
     if (posts.length === 0) {

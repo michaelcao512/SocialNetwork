@@ -1,4 +1,4 @@
-package dev.michaelcao512.socialmedia.Configurations;
+package dev.michaelcao512.socialmedia.Configurations.Security;
 
 import java.io.IOException;
 
