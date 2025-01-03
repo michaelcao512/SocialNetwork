@@ -35,14 +35,20 @@ function AllUsersPage() {
     }
 
     return (
-        <StyledStack>
-            <Typography variant="h4" gutterBottom>
+        <StyledStack 
+        style={{ backgroundColor: "#ffffff",boxShadow: "none" ,textAlign: "left",alignItems: "flex-start",padding: "1rem",}}>
+            <Typography variant="h4" gutterBottom 
+            style={{ textAlign: "left", width: "100%" }}>
                 All Users
             </Typography>
-            <StandardContainer>
-                    <List>
+            <StandardContainer 
+            style={{ backgroundColor: "#ffffff",boxShadow: "none", textAlign: "left",width: "100%",}}>
+                    <List 
+                    style={{ width: "100%",padding: 0 }}>
                         {users.map(user => (
-                            <ListItem key={user.accountId}>
+                            <ListItem key={user.accountId} 
+                                style={{ display: "flex",justifyContent: "flex-start",textAlign: "left", alignItems: "center",
+                                justifyContent: "flex-start", padding: "0.5rem 0",width: "100%",}}>
                                 <User user={user} />
                             </ListItem>
                         ))}

@@ -10,9 +10,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -23,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import dev.michaelcao512.socialmedia.Services.AccountService;
 
 @Entity
 @Data
@@ -54,42 +50,45 @@ public class Account implements UserDetails {
 
     private LocalDateTime tokenExpiration; 
     
-
-
   
     @Column()
-     private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
+    private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
 
-
-  /*
-    @Column()
-    private Collection<? extends GrantedAuthority> authorities;
-*/
+    /*
+     * @Column()
+     * private Collection<? extends GrantedAuthority> authorities;
+     */
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "following")
     private List<Friendship> following;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "followers")
     private List<Friendship> followers;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-posts")
+    @JsonManagedReference(value = "account-posts")
     private List<Post> posts;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-comments")
+    @JsonManagedReference(value = "account-comments")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-reactions")
+    @JsonManagedReference(value = "account-reactions")
     private List<Reaction> reactions;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "account-images")
+    private List<Image> images;
+
+    // @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JsonManagedReference(value = "profile-image")
+    // private Image profileImage;
 
     @PreUpdate
     public void onUpdate() {

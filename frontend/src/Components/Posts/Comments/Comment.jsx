@@ -73,6 +73,7 @@ function Comment({ user, comment, fetchComments }) {
             });
     };
 
+
     const handleAddCommentClick = () => {
         setIsCommentInputVisible(() => !(isCommentInputVisible));
     };
@@ -82,7 +83,7 @@ function Comment({ user, comment, fetchComments }) {
     };
 
     return (
-        <CommentContainer>
+        <CommentContainer style={{ backgroundColor: "#f4f9fd",boxShadow: "none" }}>
             <PostHeader>
                 <StyledNavLink to={`/profile/${commentOwner.accountId}`}>
                     <Typography variant="h6">{commentOwner.username}</Typography>

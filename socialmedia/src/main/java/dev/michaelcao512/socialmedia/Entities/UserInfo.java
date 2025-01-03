@@ -2,12 +2,7 @@ package dev.michaelcao512.socialmedia.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -26,5 +21,7 @@ public class UserInfo {
     private String lastName;
     private String biography;
     private String gender;
+    @Column(columnDefinition = "TEXT")
+    private String avatarUrl;
 
 }

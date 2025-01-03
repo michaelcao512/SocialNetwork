@@ -45,3 +45,4 @@ target/
 *.jar
 *.ear
 
+.env

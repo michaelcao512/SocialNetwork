@@ -1,5 +1,5 @@
 
-package dev.michaelcao512.socialmedia.Configurations;
+package dev.michaelcao512.socialmedia.Configurations.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

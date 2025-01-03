@@ -4,3 +4,13 @@ INSERT INTO friendship (account_id, friend_id) VALUES (1, 2), (2, 1),(1, 3), (3,
 INSERT INTO post (account_id, date_created, content) VALUES (1, '2024-12-30 09:00:00', 'Hello, world! This is my first post.'),(2, '2024-12-30 09:10:00', 'Loving the new social media app!'),(3, '2024-12-30 09:20:00', 'Just finished an amazing book. Highly recommend!'), (4, '2024-12-30 09:30:00', 'Great weather for a hike today.'),(5, '2024-12-30 09:40:00', 'Did you know? Chess is over 1500 years old!'),(6, '2024-12-30 09:50:00', 'Feeling inspired to write my first novel.'),(7, '2024-12-30 10:00:00', 'Check out my latest track on Spotify!'),(8, '2024-12-30 10:10:00', 'Business is booming! Excited for the future.');
 INSERT INTO comment (account_id, date_created, post_id, content) VALUES (2, '2024-12-30 10:20:00', 1, 'Welcome to the platform!'),(3, '2024-12-30 10:25:00', 1, 'Nice to see you here!'),(1, '2024-12-30 10:30:00', 2, 'Thanks! Glad to be here.'), (4, '2024-12-30 10:40:00', 3, 'Sounds interesting, what’s the book about?'), (5, '2024-12-30 10:50:00', 4, 'Agreed! The weather is perfect.'), (6, '2024-12-30 11:00:00', 5, 'Wow, that’s fascinating.'), (7, '2024-12-30 11:10:00', 6, 'Looking forward to reading it!'), (8, '2024-12-30 11:20:00', 7, 'Awesome track! Keep it up.');
 INSERT INTO reaction (account_id, post_id, reaction_type) VALUES (2, 1, 'LIKE'), (3, 1, 'LIKE'), (4, 2, 'LIKE'), (5, 3, 'LIKE'), (6, 4, 'DISLIKE'), (7, 5, 'LIKE'), (8, 6, 'LIKE'), (1, 7, 'LIKE');
+
+-- john_doe: Passw0rd! 
+-- jane_smith: MyS3cureP@ss 
+-- mike_brown: Brownie123 
+-- alice_johnson: Yog@Love! 
+-- bob_taylor: ChessM@ster 
+-- emily_davis: Writer2024 
+-- charlie_wilson: DJMixItUp! 
+-- sophia_lee: BusinessRocks
+

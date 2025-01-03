@@ -5,6 +5,7 @@ const api_url = "api/userinfo";
 class UserInfoService {
 
     getUserInfoByAccountId(id) {
+        console.log("id: ", id);
         return axios.get(api_url + "/getByAccountId/" + id).then(response => {
             return response.data;
         }).catch(error => {
