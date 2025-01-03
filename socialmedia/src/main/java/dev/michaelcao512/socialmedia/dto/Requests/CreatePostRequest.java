@@ -1,7 +1,8 @@
 package dev.michaelcao512.socialmedia.dto.Requests;
 
-import dev.michaelcao512.socialmedia.Entities.Post;
+import java.util.List;
 
-public record CreatePostRequest(Post post, Long accountId) {
+
+public record CreatePostRequest(String content, Long accountId, List<Long> imageIds) {
 
 }
