@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import { StyledStack, StyledCard } from "../StyledComponents/StyledComponents";
 import { Typography, Divider } from "@mui/material";
@@ -38,7 +38,7 @@ function ProfilePage() {
     try {
       const response = await userInfoService.getUserInfoByAccountId(profileId);
       setUserInfo(response);
-      console.log(response);
+      console.log("response", response);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -70,11 +70,11 @@ function ProfilePage() {
     await fetchPosts();
   }
   return (
-    <StyledStack>
-      <Typography variant="h4" gutterBottom>
+    <StyledStack style={{ backgroundColor: "#ffffff",border: "none",boxShadow: "none"}}>
+      <Typography variant="h3" gutterBottom>
         Profile
       </Typography>
-      <StyledCard>
+      <StyledCard style={{ backgroundColor: "#f4f9fd",border: "none",boxShadow: "2px 4px 6px #CAE4F6"}}>
         <UserInfoComponent
           user={user}
           userInfo={userInfo}

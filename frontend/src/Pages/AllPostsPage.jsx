@@ -34,7 +34,7 @@ function AllPostsPage() {
     }
 
     return (
-        <StyledStack>
+        <StyledStack style={{background: "#ffffff",border:"none"}}>
             <Typography variant="h4" gutterBottom>
                 All Posts
             </Typography>

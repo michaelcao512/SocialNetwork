@@ -1,7 +1,5 @@
 package dev.michaelcao512.socialmedia.Configurations;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +21,6 @@ public class AmazonConfig {
     @Value("${S3.region}")
     private String region;
 
-    Logger logger = LoggerFactory.getLogger(AmazonConfig.class);
 
     @Bean
     public S3Client s3Client() {

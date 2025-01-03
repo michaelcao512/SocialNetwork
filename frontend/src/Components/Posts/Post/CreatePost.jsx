@@ -53,7 +53,7 @@ function CreatePost(props) {
     };
 
     return (
-        <Box sx={{  maxWidth: '100%' }}>
+        <Box sx={{  width: '100%', mb: 2 }}>
             <Typography variant="h6" gutterBottom>
                 Create a New Post
             </Typography>

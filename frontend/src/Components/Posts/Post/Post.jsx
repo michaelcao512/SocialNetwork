@@ -11,6 +11,19 @@ import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledComponents/StyledComponents';
 
+// const StyledNavLink = styled(NavLink)`
+//   text-decoration: none;
+//   color: #1976d2;
+//   font-family: "Poppins", sans-serif;
+//   font-weight: bold;
+//   font-size: 1.2rem;
+//   transition: color 0.3s ease, text-shadow 0.3s ease;
+
+//   &:hover {
+//     color: #f1356d;
+//     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+//   }
+// `;
 
 const PostActions = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -66,15 +79,20 @@ function Post(props) {
         setIsCommentInputVisible(false);
     };
 
+    
+
     return (
         <StandardContainer
             style={
                 {
                     margin: "0.5rem 0",
+                    backgroundColor: "#f4f9fd",
+                    border: "4px",
+                    boxShadow: "2px 4px 6px #CAE4F6",
                 }
             }
         >
-            <PostHeader>
+            <PostHeader style={{border: "none",boxShadow: "none"}}>
                 <StyledNavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
                 </StyledNavLink>
@@ -87,7 +105,7 @@ function Post(props) {
 
 
             </PostHeader>
-            <PostContent variant="body1">{post.content}</PostContent>
+            <PostContent variant="body1" style={{border: "none",boxShadow: "none"}}>{post.content}</PostContent>
             <Image images={post.images} />
             <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
