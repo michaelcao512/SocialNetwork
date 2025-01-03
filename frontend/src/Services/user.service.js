@@ -74,6 +74,14 @@ class UserService {
                 throw error;
             });
     }
+
+    getUsernameByAccountId(accountId) {
+        return axios.get(`${api_url}/getUsername/${accountId}`).then(response => {
+            return response.data;
+        }).catch(error => {
+            throw error;
+        });
+    }
 }
 const userService = new UserService();
 export default userService;

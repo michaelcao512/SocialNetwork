@@ -196,4 +196,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.existsByUsername(username);
     }
 
+    public String getUsernameByAccountId(Long accountId) {
+        return accountRepository.findUsernameByAccountId(accountId);
+    }
 }
