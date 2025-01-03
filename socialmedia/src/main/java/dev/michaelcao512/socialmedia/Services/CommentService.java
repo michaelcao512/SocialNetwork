@@ -31,8 +31,16 @@ public class CommentService {
 
     public Comment createComment(CreateCommentRequest createCommentRequest) {
         Account account = accountRepository.findById(createCommentRequest.accountId()).orElse(null);
-        Post post = postRepository.findById(createCommentRequest.postId()).orElse(null);
-        if (account == null || post == null) {
+        Post post = null;
+        Comment parentComment = null;
+        if (createCommentRequest.postId() != null) {
+            post = postRepository.findById(createCommentRequest.postId()).orElse(null);
+        }
+        if (createCommentRequest.parentCommentId() != null) {
+            parentComment = commentRepository.findById(createCommentRequest.parentCommentId()).orElse(null);
+        }
+
+        if (account == null || (post == null && parentComment == null)) {
             throw new IllegalArgumentException("Request body contents cannot be null");
         }
         Comment comment = new Comment();
@@ -40,10 +48,9 @@ public class CommentService {
         comment.setContent(createCommentRequest.content());
         comment.setPost(post);
         comment.setAccount(account);
+        comment.setParentComment(parentComment);
 
         Comment c = commentRepository.save(comment);
-
-        // accountService.addComment(account, c);
 
         return c;
     }
@@ -58,7 +65,6 @@ public class CommentService {
 
         Comment existingComment = commentRepository.findById(updates.getCommentId()).get();
         existingComment.setContent(updates.getContent());
-
 
         return commentRepository.save(existingComment);
 
@@ -99,5 +105,8 @@ public class CommentService {
         return commentRepository.countByPost(post.get());
     }
 
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
 
 }

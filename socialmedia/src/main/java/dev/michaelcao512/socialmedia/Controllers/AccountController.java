@@ -93,5 +93,19 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getFollowers(accountId));
     }
     
+    @GetMapping("/existsByUsername/{username}")
+    public ResponseEntity<Boolean> existsByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(accountService.existsByUsername(username));
+    }
+
+    @GetMapping("/existsByEmail/{email}")
+    public ResponseEntity<Boolean> existsByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(accountService.existsByEmail(email));
+    }
+
+    @GetMapping("/getUsername/{accountId}")
+    public ResponseEntity<String> getUsernameByAccountId(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountService.getUsernameByAccountId(accountId));
+    }
 
 }

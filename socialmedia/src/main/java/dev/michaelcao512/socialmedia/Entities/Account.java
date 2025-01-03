@@ -39,33 +39,43 @@ public class Account implements UserDetails {
     private LocalDateTime dateUpdated = LocalDateTime.now();
 
     @Column()
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
 
+    /*
+     * @Column()
+     * private Collection<? extends GrantedAuthority> authorities;
+     */
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "userinfo")
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "following")
     private List<Friendship> following;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval =
-    true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "followers")
     private List<Friendship> followers;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-posts")
+    @JsonManagedReference(value = "account-posts")
     private List<Post> posts;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-comments")
+    @JsonManagedReference(value = "account-comments")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference (value = "account-reactions")
+    @JsonManagedReference(value = "account-reactions")
     private List<Reaction> reactions;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "account-images")
+    private List<Image> images;
+
+    // @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JsonManagedReference(value = "profile-image")
+    // private Image profileImage;
 
     @PreUpdate
     public void onUpdate() {
@@ -82,11 +92,16 @@ public class Account implements UserDetails {
         ;
     }
 
-    // ===== Implementing UserDetails Methods =====
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+    /*
+     * @Override
+     * public Collection<? extends GrantedAuthority> getAuthorities() {
+     * return authorities.stream()
+     * .map(role -> new SimpleGrantedAuthority(role.getName()))
+     * .collect(Collectors.toList());
+     * }
+     * 
+     * // ===== Implementing UserDetails Methods =====
+     */
 
     @Override
     public String getPassword() {

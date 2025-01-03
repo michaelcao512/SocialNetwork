@@ -51,7 +51,7 @@ public class PostTest {
         post.setPostId(1L);
         post.setContent("Test Post Content");
 
-        CreatePostRequest createPostRequest = new CreatePostRequest(post, 1L);
+        CreatePostRequest createPostRequest = new CreatePostRequest("test post content", 1L, null);
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
 

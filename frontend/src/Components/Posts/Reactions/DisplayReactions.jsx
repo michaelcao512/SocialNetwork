@@ -11,6 +11,8 @@ const ReactionsContainer = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     width: '100%',
 }));
+
+
 const ReactionIconButton = styled(IconButton)(({ theme }) => ({
     color: theme.palette.grey[500],
     '&.active': {
@@ -28,94 +30,100 @@ const IndentedTypography = styled(Typography)(({ theme }) => ({
     marginLeft: '0.5rem',
 }));
 
-function DisplayReactions(props) {
-    const { post, user, onAddCommentClick, comments} = props;
-    const postId = post.postId;
-    const [ numLikes, setNumLikes] = useState(0);
-    const [ numDislikes, setNumDislikes] = useState(0);
-    const [ numComments, setNumComments ] = useState(0);
-    const [ reaction, setReaction] = useState(null);
+function DisplayReactions({ entityId, entityType, user, onAddCommentClick }) {
+    const [numLikes, setNumLikes] = useState(0);
+    const [numDislikes, setNumDislikes] = useState(0);
+    const [numComments, setNumComments] = useState(0);
+    const [reaction, setReaction] = useState(null);
+
+    const serviceMap = {
+        post: {
+            getLikeCount: () => reactionsService.getLikeCountByPostId(entityId),
+            getDislikeCount: () => reactionsService.getDislikeCountByPostId(entityId),
+            getReaction: () => reactionsService.getReactionByPostIdAndAccountId(entityId, user.id),
+            createReaction: (type) => reactionsService.createReaction({
+                reactionType: type, 
+                postId: entityId, 
+                accountId: user.id
+            }),
+            deleteReaction: (reactionId) => reactionsService.deleteReaction(reactionId),
+            getCommentCount: () => commentService.getCommentsCountByPostId(entityId),
+        },
+        comment: {
+            getLikeCount: () => reactionsService.getLikeCountByCommentId(entityId),
+            getDislikeCount: () => reactionsService.getDislikeCountByCommentId(entityId),
+            getReaction: () => reactionsService.getReactionByCommentIdAndAccountId(entityId, user.id),
+            createReaction: (type) => reactionsService.createCommentReaction({
+                reactionType: type, 
+                commentId: entityId, 
+                accountId: user.id
+            }),
+            deleteReaction: (reactionId) => reactionsService.deleteCommentReaction(reactionId),
+            getCommentCount: () => Promise.resolve(0), // Update if replies are added
+        },
+    };
 
     const fetchData = useCallback(() => {
-        reactionsService.getLikeCountByPostId(postId)
-            .then(response => {
-                setNumLikes(response);
-            });
-        reactionsService.getDislikeCountByPostId(postId)
-            .then(response => {
-                setNumDislikes(response);
-            });
-        reactionsService.getReactionByPostIdAndAccountId(postId, user.id)
-            .then(response => {
-                setReaction(response);
-            });
-        
-        commentService.getCommentsCountByPostId(postId)
-            .then(response => {
-                setNumComments(response);
-        })
-    }, [postId, user.id, comments]);
+        if (!serviceMap[entityType]) {
+            console.error(`Invalid entityType: ${entityType}`);
+            return;
+        }
+
+        const service = serviceMap[entityType];
+        service.getLikeCount().then(setNumLikes);
+        service.getDislikeCount().then(setNumDislikes);
+        service.getReaction().then(setReaction);
+        service.getCommentCount().then(setNumComments);
+    }, [entityId, entityType, user.id]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
-    function handleLikeClick() {
-        if (reaction != null && reaction.reactionType === "LIKE") {
-            reactionsService.deleteReaction(reaction.reactionId)
-                .then(() => {
-                    fetchData();
-                });
+    const handleReactionClick = (type) => {
+        const service = serviceMap[entityType];
+        if (reaction?.reactionType === type) {
+            service.deleteReaction(reaction.reactionId).then(fetchData);
         } else {
-            reactionsService.createReaction("LIKE", postId, user.id)
-                .then(() => {
-                    fetchData();
-                });
+            service.createReaction(type).then(fetchData);
         }
-    }
-
-    function handleDislikeClick() {
-        if (reaction != null && reaction.reactionType === "DISLIKE") {
-            reactionsService.deleteReaction(reaction.reactionId)
-                .then(() => {
-                    fetchData();
-                });
-        } else {
-            reactionsService.createReaction("DISLIKE", postId, user.id)
-                .then(() => {
-                    fetchData();
-                });
-        }
-    }
+    };
 
     return (
         <ReactionsContainer>
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
                     className={reaction?.reactionType === "LIKE" ? 'active' : ''}
-                    onClick={handleLikeClick}
+                    onClick={() => handleReactionClick("LIKE")}
                 >
                     {reaction?.reactionType === "LIKE" ? <Favorite /> : <FavoriteBorder />}
+                    <IndentedTypography variant="body2">{numLikes}</IndentedTypography>
                 </ReactionIconButton>
-                <IndentedTypography variant="body2">{numLikes}</IndentedTypography>
             </Box>
             <Box display="flex" alignItems="center">
                 <ReactionIconButton
                     className={reaction?.reactionType === "DISLIKE" ? 'active' : ''}
-                    onClick={handleDislikeClick}
+                    onClick={() => handleReactionClick("DISLIKE")}
                 >
                     {reaction?.reactionType === "DISLIKE" ? <ThumbDown /> : <ThumbDownOffAlt />}
-                </ReactionIconButton>
-                <IndentedTypography variant="body2">{numDislikes}</IndentedTypography>
-            </Box>
-            <Box display="flex" alignItems="center">
-                <ReactionIconButton onClick={onAddCommentClick} color="primary">
-                    <AddComment />
-                    <IndentedTypography variant="body2">{numComments}</IndentedTypography>
+                    <IndentedTypography variant="body2">{numDislikes}</IndentedTypography>
+                
                 </ReactionIconButton>
             </Box>
+            {onAddCommentClick && (
+                <Box display="flex" alignItems="center">
+                    <ReactionIconButton onClick={onAddCommentClick} color="primary">
+                        <AddComment />
+                        <IndentedTypography variant="body2">{numComments}</IndentedTypography>
+
+                    </ReactionIconButton>
+
+                </Box>
+            )}
+          
         </ReactionsContainer>
     );
 }
 
 export default DisplayReactions;
+

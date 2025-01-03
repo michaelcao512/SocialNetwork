@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.Reaction;
+import dev.michaelcao512.socialmedia.Entities.Comment;
 
 @Repository
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
@@ -28,4 +29,19 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
     @Query("SELECT r FROM Reaction r WHERE r.post.postId = ?1 AND r.account.accountId = ?2")
     Optional<Reaction> findByPostIdAndAccountId(long postId, long accountId);
+
+
+    List<Reaction> findByComment(Comment comment);
+    boolean existsByComment(Comment comment);
+    
+    @Query("SELECT COUNT(r) FROM Reaction r WHERE r.comment.commentId = ?1 AND r.reactionType = 'LIKE'")
+    int getLikeCountByCommentId(Long commentId);
+    
+    @Query("SELECT COUNT(r) FROM Reaction r WHERE r.comment.commentId = ?1 AND r.reactionType = 'DISLIKE'")
+    int getDislikeCountByCommentId(Long commentId);
+
+    @Query("SELECT r FROM Reaction r WHERE r.comment.commentId = ?1 AND r.account.accountId = ?2")
+    Optional<Reaction> findByCommentIdAndAccountId(long commentId, long accountId);
+
+
 }

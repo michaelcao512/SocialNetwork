@@ -43,3 +43,5 @@ target/
 *.war
 *.jar
 *.ear
+
+.env

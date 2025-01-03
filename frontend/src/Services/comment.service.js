@@ -14,11 +14,15 @@ class CommentService {
 
 
     // 
-    createComment(content, accountId, postId) {
+    createComment(content, accountId, postId, parentCommentId) {
         const commentRequest = {
             content: content,
             accountId: accountId,
-            postId: postId
+        }
+        if (postId) {
+            commentRequest.postId = postId;
+        } else {
+            commentRequest.parentCommentId = parentCommentId;
         }
         return axios.post(api_url, commentRequest).then(response => {
             return response.data;
@@ -36,7 +40,7 @@ class CommentService {
     }
 
     updateComment(comment) {
-        return axios.patch(`${api_url}/${comment.commentId}`, comment).then(response => {
+        return axios.put(`${api_url}/${comment.commentId}`, comment).then(response => {
             console.log("patch response: ", response);
             return response.data;
         }).catch(error => {

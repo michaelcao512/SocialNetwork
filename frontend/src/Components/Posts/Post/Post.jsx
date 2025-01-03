@@ -4,36 +4,26 @@ import DeletePost from './DeletePost';
 import EditPost from './EditPost';
 import DisplayComments from '../Comments/DisplayComments';
 import CreateComment from '../Comments/CreateComment';
+import Image from '../../Image/Image';
 import userService from '../../../Services/user.service';
 import commentService from '../../../Services/comment.service';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
-import { StandardContainer } from '../../../StyledComponents/StyledComponents';
-import { NavLink } from 'react-router-dom';
+import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledComponents/StyledComponents';
 
+// const StyledNavLink = styled(NavLink)`
+//   text-decoration: none;
+//   color: #1976d2;
+//   font-family: "Poppins", sans-serif;
+//   font-weight: bold;
+//   font-size: 1.2rem;
+//   transition: color 0.3s ease, text-shadow 0.3s ease;
 
-const StyledNavLink = styled(NavLink)`
-  text-decoration: none;
-  color: #1976d2;
-  font-family: "Poppins", sans-serif;
-  font-weight: bold;
-  font-size: 1.2rem;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-
-  &:hover {
-    color: #f1356d;
-    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const PostHeader = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: '0.5rem',
-}));
+//   &:hover {
+//     color: #f1356d;
+//     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+//   }
+// `;
 
 const PostActions = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -105,17 +95,19 @@ function Post(props) {
             <PostHeader style={{border: "none",boxShadow: "none"}}>
                 <StyledNavLink to={`/profile/${postOwner.accountId}`}>
                     <Typography variant="h6">{postOwner.username}</Typography>
-                    <Typography variant="body2">{postOwner.firstName} {postOwner.lastName}</Typography>
                 </StyledNavLink>
-                {canManagePost && (
-                    <PostActions>
-                        <EditPost post={post} onPostUpdate={onPostUpdate} />
-                        <DeletePost post={post} onPostDelete={onPostDelete} />
-                    </PostActions>
-                )}
+                
+                <Typography variant="caption">
+                     {post.dateCreated
+                     ? new Date(post.dateCreated).toLocaleString()
+                    : "No timestamp available"}
+                </Typography>
+
+
             </PostHeader>
             <PostContent variant="body1" style={{border: "none",boxShadow: "none"}}>{post.content}</PostContent>
-            <DisplayReactions  post={post} user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
+            <Image images={post.images} />
+            <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment
                     post={post}
@@ -124,7 +116,13 @@ function Post(props) {
                     onCancel={handleCancelComment}
                 />
             )}
-            <DisplayComments user={user} comments={comments} fetchComments={fetchComments}/>
+            <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
+            {canManagePost && (
+                <PostActions>
+                    <EditPost post={post} onPostUpdate={onPostUpdate} />
+                    <DeletePost post={post} onPostDelete={onPostDelete} />
+                </PostActions>
+            )}
         </StandardContainer>
     );
 }

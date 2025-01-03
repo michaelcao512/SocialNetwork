@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link } from "react-router-dom";
+import { Link, NavLink} from "react-router-dom";
 import { Stack, CardContent, Divider, Typography, Box, Button } from "@mui/material";
 
 export const StyledStack = styled(Stack)({
@@ -49,17 +49,47 @@ export const StandardContainer = styled(Box)(({ theme }) => ({
     boxSizing: "border-box", 
 }));
 
-export const StyledNavLink = styled(Link)(({ theme }) => ({
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
-    '&:hover': {
-        color: theme.palette.primary.main,
-    },
+// export const StyledNavLink = styled(Link)(({ theme }) => ({
+//     textDecoration: 'none',
+//     color: theme.palette.text.primary,
+//     '&:hover': {
+//         color: theme.palette.primary.main,
+//     },
 
-    '&.active > div': {
-        backgroundColor: theme.palette.action.selected,
+//     '&.active > div': {
+//         backgroundColor: theme.palette.action.selected,
+//   },
+// }));
+
+
+  //   textDecoration: 'none';
+  // color: #1976d2;
+  // fontFamily : "Poppins", sans-serif;
+  // font-weight: bold;
+  // font-size: 1.2rem;
+  // transition: color 0.3s ease, text-shadow 0.3s ease;
+
+  // &:hover {
+  //   color: #f1356d;
+  //   text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  // }
+export const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  textDecoration: 'none',
+  color: "#1976d2",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: "bold",
+  fontSize: "1.2rem",
+  transition: "color 0.3s ease, text-shadow 0.3s ease",
+  '&:hover': {
+    color: "#f1356d",
+    textShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+  },  
+  '&.active > div': {
+      backgroundColor: theme.palette.action.selected,
   },
 }));
+
+
 
 export function StyledLink({ destination, text }) {
     return (
@@ -127,3 +157,12 @@ export const MainContent = styled.div`
     padding: 1rem;
   }
 `;
+
+export const PostHeader = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: '0.5rem',
+}));

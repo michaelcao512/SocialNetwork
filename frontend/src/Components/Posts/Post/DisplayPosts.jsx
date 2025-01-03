@@ -12,10 +12,15 @@ function DisplayPosts(props) {
             border:"none",
             boxShadow: "none"
         }}>
-            {posts.map(post => (
-                <Post key={post.postId} post={post} user={user} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate}/>
-            ))}
+
+            <>
+                {posts.map(post => (
+                    <Post key={post.postId} post={post} user={user} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate}/>
+                ))}
+            </>
         </StandardContainer>
+
+  
     );
 }
 

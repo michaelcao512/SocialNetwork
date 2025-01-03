@@ -34,7 +34,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findFollowers(Long accountId);
 
     @Query("SELECT a FROM Account a WHERE LOWER(a.username) LIKE LOWER(CONCAT('%', :query, '%')) " +
-       "OR LOWER(a.email) LIKE LOWER(CONCAT('%', :query, '%'))")
+            "OR LOWER(a.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Account> searchUsers(@Param("query") String query);
 
+    @Query(value = "select username from account\n" +
+            "where account_id = :accountId", nativeQuery = true)
+    String findUsernameByAccountId(@Param("accountId") Long accountId);
+    
+    @Query("SELECT a FROM Account a WHERE a.accountId = ?1")
+    Optional<Account> findById(long accountId);
 }
