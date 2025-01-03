@@ -11,14 +11,7 @@ class PostService {
             console.log("error: ", error);});
     }
 
-    createPost(content, accountId) {
-        const createPostRequest = {
-            post: {
-                content: content
-            },
-            accountId: accountId
-        }
-
+    createPost(createPostRequest) {
         return axios.post(api_url, createPostRequest).then(response => {
             return response.data;
         }).catch(error => {

@@ -1,44 +1,84 @@
-import { FormControl, TextField} from "@mui/material";
+import { FormControl, TextField, Button, Box, Typography } from "@mui/material";
 import { useState } from "react";
 import postService from "../../../Services/post.service";
-import { StyledButton, StandardContainer } from "../../../StyledComponents/StyledComponents";
-
+import imageService from "../../../Services/image.service";
+import SelectImage from "../../Image/SelectImage";
 
 function CreatePost(props) {
     const { user, onPostCreated } = props;
     const [content, setContent] = useState("");
+    const [selectedImages, setSelectedImages] = useState([]);
+
+    const handleImageSelect = (file) => {
+        setSelectedImages([...selectedImages, file]);
+        
+        // only let user select one image
+        // setSelectedImages([file]);
+    };
+
+    const handleImageRemove = (index) => {
+        const newSelectedImages = selectedImages.filter((_, i) => i !== index);
+        setSelectedImages(newSelectedImages);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setContent("");
-        
+        console.log("selectedImages: ", selectedImages);
+
         try {
-            await postService.createPost(content, user.id);
+            const uploadedImageIds = [];
+            for (const image of selectedImages) {
+                const formData = new FormData();
+                formData.append('file', image);
+                formData.append('fileName', image.name);
+                formData.append('accountId', user.id);
+                formData.append('imageType', 'POST');
+
+                const response = await imageService.uploadFile(formData);
+                uploadedImageIds.push(response.imageId);
+            }
+
+            const createPostRequest = {
+                accountId: user.id,
+                content: content,
+                imageIds: uploadedImageIds,
+            };
+            await postService.createPost(createPostRequest);
             onPostCreated();
+            setContent("");
+            setSelectedImages([]);
         } catch (error) {
             console.log("createPost error: ", error);
         }
     };
 
-    return ( 
-        <StandardContainer component="form" onSubmit={handleSubmit}
-            style={{
-                marginBottom: "1rem",
-            }}
-        >
-            <FormControl fullWidth>
-                <TextField
-                    label="Content"
-                    multiline
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
-            </FormControl>
+    return (
+        <Box sx={{  maxWidth: '100%' }}>
+            <Typography variant="h6" gutterBottom>
+                Create a New Post
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+                <FormControl fullWidth sx={{ mb: 2 }} >
+                    <TextField
+                        label="Content"
+                        multiline
+                        rows={4}
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        variant="outlined"
+                    />
+                </FormControl>
+                <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove}/>
 
-            <StyledButton
-                type="submit" variant="contained" color="primary">Create Post</StyledButton>
-        </StandardContainer>
-     );
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                    <Button fullWidth variant="contained" color="primary" type="submit">
+                        Create Post
+                    </Button>
+                </Box>
+
+            </Box>
+        </Box>
+    );
 }
 
 export default CreatePost;

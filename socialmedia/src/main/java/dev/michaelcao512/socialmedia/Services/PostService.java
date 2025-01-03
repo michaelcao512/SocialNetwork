@@ -1,43 +1,81 @@
 package dev.michaelcao512.socialmedia.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
+import dev.michaelcao512.socialmedia.Entities.Image;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.Reaction;
 import dev.michaelcao512.socialmedia.Entities.Reaction.ReactionType;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
+import dev.michaelcao512.socialmedia.Repositories.ImageRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
-    public PostService(PostRepository postRepository, AccountRepository accountRepository) {
+    private Logger logger = LoggerFactory.getLogger(PostService.class);
+
+    public PostService(PostRepository postRepository, AccountRepository accountRepository,
+            ImageRepository imageRepository, ImageService imageService) {
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
+        this.imageRepository = imageRepository;
+        this.imageService = imageService;
     }
 
+    @Transactional
     public Post createPost(CreatePostRequest createPostRequest) {
-        Post post = createPostRequest.post();
-        Long accountId = createPostRequest.accountId();
-        if (post == null) {
-            throw new IllegalArgumentException("Post cannot be null");
+        logger.info("CreatePostRequest: " + createPostRequest);
+        if (createPostRequest == null || createPostRequest.accountId() == null) {
+            throw new IllegalArgumentException("CreatePostRequest cannot be null");
         }
-        Account account = accountRepository.findById(accountId).get();
 
+        Long accountId = createPostRequest.accountId();
+        logger.info("accountId: " + accountId);
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + accountId));
+
+        logger.info("Account: " + account);
+        Post post = new Post();
+        post.setContent(createPostRequest.content());
         post.setAccount(account);
 
-        Post p = postRepository.save(post);
+        // Save the post first
+        logger.info("Post: " + post);
+        Post savedPost = postRepository.save(post);
+        logger.info("Saved Post: " + savedPost);
 
-        // accountService.addPost(account, p);
+        List<Long> imageIds = createPostRequest.imageIds();
+        List<Image> images = new ArrayList<>();
+        if (imageIds != null) {
+            for (Long imageId : imageIds) {
+                Image image = imageRepository.findById(imageId)
+                        .orElseThrow(() -> new IllegalArgumentException("Image not found with id: " + imageId));
+                image.setPost(savedPost); // Set the post reference
+                logger.info("Image: " + image);
+                Image savedImage = imageRepository.save(image);
+                logger.info("Saved Image: " + savedImage);
+                images.add(savedImage);
+            }
+        }
+        logger.info("images: " + images);
+        // Update the post with the list of images
+        savedPost.setImages(images);
+        return postRepository.save(savedPost);
 
-        return p;
     }
 
     public Post updatePost(Post post) {
@@ -53,22 +91,27 @@ public class PostService {
         return postRepository.save(existingPost);
     }
 
+    @Transactional
     public void deletePost(Long postId) {
-        Optional<Post> post = postRepository.findById(postId);
-        if (post.isEmpty()) {
-            throw new IllegalArgumentException("Post does not exist");
-        }
-        // accountService.removePost(post.get().getAccount(), post.get());
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + postId));
 
-        postRepository.delete(post.get());
+        // delete all images associated with the post from s3
+        List<Image> images = post.getImages();
+        for (Image image : images) {
+            imageService.deleteImageFromS3(image);
+            // imageRepository.delete(image);
+            // imageService.deleteImage(image.getImageId());
+        }
+
+        post.getImages().clear();
+        postRepository.delete(post);
     }
 
     public Post getPostById(Long postId) {
-        Optional<Post> post = postRepository.findById(postId);
-        if (post.isEmpty()) {
-            throw new IllegalArgumentException("Post does not exist");
-        }
-        return post.get();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + postId));
+        return post;
     }
 
     public List<Post> getAllPosts() {
@@ -88,13 +131,6 @@ public class PostService {
 
     }
 
-    // public Post addReaction(Post post, Reaction reaction) {
-    // List<Reaction> reactions = post.getReactions();
-    // reactions.add(reaction);
-    // post.setReactions(reactions);
-    // return postRepository.save(post);
-    // }
-
     public Post updateReaction(Post post, Reaction reaction, ReactionType updatedReactionType) {
         reaction.setReactionType(updatedReactionType);
         return postRepository.save(post);
@@ -109,26 +145,5 @@ public class PostService {
         List<Post> results = postRepository.searchPosts(query);
         return results;
     }
-
-    // public void removeReaction(Post post, Reaction reaction) {
-    // List<Reaction> reactions = post.getReactions();
-    // reactions.remove(reaction);
-    // post.setReactions(reactions);
-    // postRepository.save(post);
-    // }
-
-    // public Post addComment(Post post, Comment comment) {
-    // List<Comment> comments = post.getComments();
-    // comments.add(comment);
-    // post.setComments(comments);
-    // return postRepository.save(post);
-    // }
-
-    // public void removeComment(Post post, Comment comment) {
-    // List<Comment> comments = post.getComments();
-    // comments.remove(comment);
-    // post.setComments(comments);
-    // postRepository.save(post);
-    // }
 
 }

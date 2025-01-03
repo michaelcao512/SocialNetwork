@@ -37,7 +37,6 @@ public class Comment {
     @JsonBackReference(value = "post-comments")
     private Post post;
 
-    
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "comment-reactions")
     private List<Reaction> reactions;
@@ -55,4 +54,7 @@ public class Comment {
     @JsonManagedReference(value = "parent-replies")
     private List<Comment> replies;
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "comment-images")
+    private List<Image> images;
 }
