@@ -15,7 +15,7 @@ const UserInfoComponent = (props) => {
       }}
     >
       {/* profile picture will replace the letter if there exists a url */}
-      <Avatar src={userInfo.profilePictureUrl || null}>
+      <Avatar src={userInfo.avatarUrl || null}>
         {userInfo.firstName?.charAt(0) || "#"}
       </Avatar>
       <Typography variant="h5">

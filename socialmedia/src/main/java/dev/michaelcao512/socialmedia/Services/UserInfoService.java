@@ -33,6 +33,10 @@ public class UserInfoService {
         if (userInfo.getBiography() != null && !userInfo.getBiography().isEmpty()) {
             existingUserInfo.setBiography(userInfo.getBiography());
         }
+
+        if (userInfo.getAvatarUrl() != null && !userInfo.getAvatarUrl().isEmpty()) {
+            existingUserInfo.setAvatarUrl(userInfo.getAvatarUrl());
+        }
         userInfoRepository.save(existingUserInfo);
         return existingUserInfo;
     }
