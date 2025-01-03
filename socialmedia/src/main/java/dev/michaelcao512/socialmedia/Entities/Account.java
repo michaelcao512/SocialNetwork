@@ -20,9 +20,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+
 @Entity
 @Data
 public class Account implements UserDetails {
+    //@Transient
+    //Logger logger = LoggerFactory.getLogger(Account.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
@@ -38,6 +41,16 @@ public class Account implements UserDetails {
     private LocalDateTime dateCreated = LocalDateTime.now();
     private LocalDateTime dateUpdated = LocalDateTime.now();
 
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
+    @Column(unique = true)
+    private String verificationToken;
+
+
+    private LocalDateTime tokenExpiration; 
+    
+  
     @Column()
     private Collection<? extends GrantedAuthority> authorities = List.of(); // Initialize with an empty list
 
@@ -82,6 +95,24 @@ public class Account implements UserDetails {
         this.dateUpdated = LocalDateTime.now();
     }
 
+
+
+    @Override
+public String toString() {
+    return "Account{" +
+            "accountId=" + accountId +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", emailVerified=" + emailVerified +
+            ", verificationToken='" + verificationToken + '\'' +
+            ", tokenExpiration=" + tokenExpiration +
+            ", dateCreated=" + dateCreated +
+            ", dateUpdated=" + dateUpdated +
+            '}';
+}
+
+
+    /*
     @Override
     public String toString() {
         return "Account [accountId=" + accountId + ", username=" + username + ", email=" + email + ", dateCreated="
@@ -92,16 +123,42 @@ public class Account implements UserDetails {
         ;
     }
 
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
+    
+    // ===== Implementing UserDetails Methods =====
+    */
+    
+
     /*
-     * @Override
-     * public Collection<? extends GrantedAuthority> getAuthorities() {
-     * return authorities.stream()
-     * .map(role -> new SimpleGrantedAuthority(role.getName()))
-     * .collect(Collectors.toList());
-     * }
-     * 
-     * // ===== Implementing UserDetails Methods =====
-     */
+    //public void setVerificationToken(String verificationToken){
+       // logger.info("Generated token: " + token);
+
+      //  this.verificationToken = verificationToken;
+   // }
+   // public String getVerificationToken(){
+        return verificationToken;
+    }
+
+    public void setTokenExpiration(LocalDateTime newDate){
+        this.tokenExpiration = newDate;
+    }
+    
+    public void setEmailVerified(boolean emailVerified){
+        this.emailVerified = emailVerified;
+        }
+
+    public void markVerified(){
+    setEmailVerified(true);    
+    this.verificationToken = null;
+    this.tokenExpiration = null;
+} 
+    */
 
     @Override
     public String getPassword() {
@@ -130,6 +187,6 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return emailVerified;
     }
 }

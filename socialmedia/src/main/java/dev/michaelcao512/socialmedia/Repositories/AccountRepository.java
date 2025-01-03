@@ -43,4 +43,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     
     @Query("SELECT a FROM Account a WHERE a.accountId = ?1")
     Optional<Account> findById(long accountId);
+    Optional<Account> findByVerificationToken(String token);
+
 }
