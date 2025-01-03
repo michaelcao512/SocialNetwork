@@ -84,12 +84,7 @@ function Post(props) {
                     : "No timestamp available"}
                 </Typography>
 
-                {canManagePost && (
-                    <PostActions>
-                        <EditPost post={post} onPostUpdate={onPostUpdate} />
-                        <DeletePost post={post} onPostDelete={onPostDelete} />
-                    </PostActions>
-                )}
+
             </PostHeader>
             <PostContent variant="body1">{post.content}</PostContent>
             <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
@@ -101,7 +96,13 @@ function Post(props) {
                     onCancel={handleCancelComment}
                 />
             )}
-            <DisplayComments user={user} comments={comments} fetchComments={fetchComments}/>
+            <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
+            {canManagePost && (
+                <PostActions>
+                    <EditPost post={post} onPostUpdate={onPostUpdate} />
+                    <DeletePost post={post} onPostDelete={onPostDelete} />
+                </PostActions>
+            )}
         </StandardContainer>
     );
 }

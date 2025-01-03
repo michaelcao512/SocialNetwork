@@ -4,7 +4,7 @@ import App from './App.jsx'
 import axios from 'axios';
 
 
-axios.defaults.baseURL = 'http://localhost:8080/';
+axios.defaults.baseURL = import.meta.env.VITE_BASE_API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 if (localStorage.getItem('user') != null) {
