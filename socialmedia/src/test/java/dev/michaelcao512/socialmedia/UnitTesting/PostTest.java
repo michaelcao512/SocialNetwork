@@ -49,13 +49,13 @@ public class PostTest {
     public void testCreatePost() {
         Post post = new Post();
         post.setPostId(1L);
+        post.setAccount(account);
         post.setContent("Test Post Content");
 
         CreatePostRequest createPostRequest = new CreatePostRequest("test post content", 1L, null);
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-
-        when(postRepository.save(post)).thenReturn(post);
+        when(accountRepository.findById(createPostRequest.accountId())).thenReturn(Optional.of(account));
+        when(postRepository.save(any(Post.class))).thenReturn(post);
 
         // checking for illegal argument exception when post is null
         assertThrows(IllegalArgumentException.class, () -> postService.createPost(null));
@@ -102,10 +102,10 @@ public class PostTest {
         post.setAccount(account);
         post.setContent("Test Post Content");
 
-        when(postRepository.existsById(post.getPostId())).thenReturn(true);
+        when(postRepository.findById(post.getPostId())).thenReturn(Optional.of(post));
         postService.deletePost(post.getPostId());
 
-        verify(postRepository).deleteById(post.getPostId());
+        verify(postRepository).delete(post);
 
         // throws exception when post does not exist
         assertThrows(IllegalArgumentException.class, () -> postService.deletePost(2L), "Post does not exist");

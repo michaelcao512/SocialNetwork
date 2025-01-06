@@ -113,7 +113,7 @@ public class UserInfoTest {
         userInfo.setLastName("LastName");
         userInfo.setGender("Male");
 
-        when(userInfoRepository.findByAccountId(1L)).thenReturn(Optional.of(userInfo));
+        when(userInfoRepository.findById(1L)).thenReturn(Optional.of(userInfo));
 
         UserInfo result = userInfoService.getUserInfo(1L);
 
@@ -121,7 +121,7 @@ public class UserInfoTest {
         assertEquals("LastName", result.getLastName());
         assertEquals("Male", result.getGender());
 
-        verify(userInfoRepository, times(1)).findByAccountId(1L);
+        verify(userInfoRepository, times(1)).findById(1L);
     }
 
 }

@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Entities.Reaction;
+import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.Repositories.ReactionRepository;
 import dev.michaelcao512.socialmedia.Services.ReactionService;
@@ -29,6 +30,8 @@ public class ReactionTest {
     private ReactionRepository reactionRepository;
     @Mock
     private PostRepository postRepository;
+    @Mock
+    private AccountRepository accountRepository;
     @InjectMocks
     private ReactionService reactionService;
 
@@ -47,52 +50,54 @@ public class ReactionTest {
     }
 
     @Test
-public void testCreateReaction() {
-    // Arrange
-    CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L, 1L, null, Reaction.ReactionType.LIKE); // Include commentId as null for post reaction
-    Reaction reaction = new Reaction();
-    reaction.setPost(post);
-    reaction.setReactionType(Reaction.ReactionType.LIKE);
-
-    when(postRepository.findById(createReactionRequest.postId())).thenReturn(Optional.of(post));
-    when(reactionRepository.findByPostIdAndAccountId(createReactionRequest.postId(), createReactionRequest.accountId()))
-        .thenReturn(Optional.empty()); // Simulate no existing reaction
-    when(reactionRepository.save(any(Reaction.class))).thenReturn(reaction);
-
-    // Act
-    Reaction savedReaction = reactionService.createReaction(createReactionRequest);
-
-    // Assert
-    assertNotNull(savedReaction);
-    assertEquals(post, savedReaction.getPost());
-    assertEquals(Reaction.ReactionType.LIKE, savedReaction.getReactionType());
-    verify(postRepository).findById(createReactionRequest.postId());
-    verify(reactionRepository).save(any(Reaction.class));
-}
-
-
-    /*
-    @Test
     public void testCreateReaction() {
-
-        CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L, 1L, Reaction.ReactionType.LIKE);
+        CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L, 1L, null,
+                Reaction.ReactionType.LIKE);
         Reaction reaction = new Reaction();
         reaction.setPost(post);
         reaction.setReactionType(Reaction.ReactionType.LIKE);
-        
+
+        when(accountRepository.findById(createReactionRequest.accountId())).thenReturn(Optional.of(account));
         when(postRepository.findById(createReactionRequest.postId())).thenReturn(Optional.of(post));
-        when(reactionRepository.save(reaction)).thenReturn(reaction);
+        when(reactionRepository.findByPostIdAndAccountId(createReactionRequest.postId(),
+                createReactionRequest.accountId()))
+                .thenReturn(Optional.empty());
+        when(reactionRepository.save(any(Reaction.class))).thenReturn(reaction);
 
         Reaction savedReaction = reactionService.createReaction(createReactionRequest);
 
         assertNotNull(savedReaction);
-        assert (savedReaction.getReactionId() == 1L);
-        assert (savedReaction.getPost().getPostId() == 1L);
-        assert (savedReaction.getReactionType() == Reaction.ReactionType.LIKE);
-        verify(reactionRepository).save(reaction);
+        assertEquals(post, savedReaction.getPost());
+        assertEquals(Reaction.ReactionType.LIKE, savedReaction.getReactionType());
+        verify(postRepository).findById(createReactionRequest.postId());
+        verify(reactionRepository).save(any(Reaction.class));
     }
 
-*/
+    /*
+     * @Test
+     * public void testCreateReaction() {
+     * 
+     * CreateReactionRequest createReactionRequest = new CreateReactionRequest(1L,
+     * 1L, Reaction.ReactionType.LIKE);
+     * Reaction reaction = new Reaction();
+     * reaction.setPost(post);
+     * reaction.setReactionType(Reaction.ReactionType.LIKE);
+     * 
+     * when(postRepository.findById(createReactionRequest.postId())).thenReturn(
+     * Optional.of(post));
+     * when(reactionRepository.save(reaction)).thenReturn(reaction);
+     * 
+     * Reaction savedReaction =
+     * reactionService.createReaction(createReactionRequest);
+     * 
+     * assertNotNull(savedReaction);
+     * assert (savedReaction.getReactionId() == 1L);
+     * assert (savedReaction.getPost().getPostId() == 1L);
+     * assert (savedReaction.getReactionType() == Reaction.ReactionType.LIKE);
+     * verify(reactionRepository).save(reaction);
+     * }
+     * 
+     */
     @Test
     public void testDeleteReaction() {
         Reaction reaction = new Reaction();
@@ -100,7 +105,7 @@ public void testCreateReaction() {
         reaction.setPost(post);
         reaction.setReactionType(Reaction.ReactionType.LIKE);
 
-        when(reactionRepository.existsById(reaction.getReactionId())).thenReturn(true);
+        when(reactionRepository.findById(reaction.getReactionId())).thenReturn(Optional.of(reaction));
         reactionService.deleteReaction(reaction.getReactionId());
         verify(reactionRepository).deleteById(reaction.getReactionId());
 
