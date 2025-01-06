@@ -8,21 +8,26 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.UserInfo;
+import dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.Services.AccountService;
+import dev.michaelcao512.socialmedia.Services.EmailService;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 
 public class RegistrationTest {
-
     @Mock
     private AccountRepository accountRepository;
-
     @Mock
     private UserInfoRepository userInfoRepository;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private EmailService emailService;
     @InjectMocks
     private AccountService accountService;
 
@@ -51,14 +56,15 @@ public class RegistrationTest {
         request.setLastName("User");
         request.setGender("Male");
 
+        when(accountRepository.existsByUsername(request.getUsername())).thenReturn(false);
         when(accountRepository.existsByEmail(request.getEmail())).thenReturn(false);
-
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
         Account result = accountService.registerAccount(request);
 
         assertNotNull(result);
-        assertEquals(request.getEmail(), result.getEmail());
-        assertEquals(request.getPassword(), result.getPassword());
-        assertEquals(request.getUsername(), result.getUsername());
+        assertEquals(result.getEmail(), result.getEmail());
+        assertEquals(result.getPassword(), "encodedPassword");
+        assertEquals(result.getUsername(), result.getUsername());
 
         verify(accountRepository, times(1)).save(any(Account.class));
         verify(userInfoRepository, times(1)).save(any(UserInfo.class));
@@ -111,7 +117,7 @@ public class RegistrationTest {
 
         when(accountRepository.existsByUsername(request.getUsername())).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UsernameAlreadyExistsException.class, () -> {
             accountService.registerAccount(request);
         });
 
@@ -202,6 +208,7 @@ public class RegistrationTest {
 
         when(accountRepository.existsByEmail(request.getEmail())).thenReturn(false);
         when(accountRepository.existsByUsername(request.getUsername())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
 
         Account result = accountService.registerAccount(request);
 
@@ -210,7 +217,7 @@ public class RegistrationTest {
         assertNotNull(result);
         assertNotNull(userInfo);
         assertEquals(request.getEmail(), result.getEmail());
-        assertEquals(request.getPassword(), result.getPassword());
+        assertEquals("encodedPassword", result.getPassword());
         assertEquals(request.getUsername(), result.getUsername());
         assertEquals(request.getFirstName(), userInfo.getFirstName());
         assertEquals(request.getLastName(), userInfo.getLastName());

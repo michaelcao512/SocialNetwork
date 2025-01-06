@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Exceptions.InvalidCredentialsException;
@@ -20,9 +21,10 @@ import dev.michaelcao512.socialmedia.Services.UserInfoService;
 public class LoginTest {
     @Mock
     private AccountRepository accountRepository;
-
     @Mock
     private UserInfoService userInfoService;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AccountService accountService;
@@ -42,15 +44,23 @@ public class LoginTest {
     @Test
     public void testLoginAccount_Success() {
         Account account = new Account();
-        account.setEmail("test@example.com");
-        account.setPassword("password");
+        account.setUsername("test");
+        account.setPassword("encryptedPassword");
 
-        when(accountRepository.findByEmail(account.getEmail())).thenReturn(account);
+        Account storedAccount = new Account();
+        storedAccount.setUsername("test");
+        storedAccount.setPassword("encryptedPassword"); // encrypted password
+
+        when(accountRepository.findByUsername(storedAccount.getUsername())).thenReturn(storedAccount);
+
+        when(accountRepository.findByUsername(account.getUsername())).thenReturn(account);
+
+        when(passwordEncoder.encode(account.getPassword())).thenReturn("encryptedPassword");
 
         Account result = accountService.loginAccount(account);
 
         assertNotNull(result);
-        assertEquals(account.getEmail(), result.getEmail());
+        assertEquals(account.getUsername(), result.getUsername());
         assertEquals(account.getPassword(), result.getPassword());
     }
 
@@ -65,10 +75,10 @@ public class LoginTest {
     @Test
     public void testLoginAccount_Failure_EmailNotFound() {
         Account request = new Account();
-        request.setEmail("test@example.com");
+        request.setUsername("test");
         request.setPassword("password");
 
-        when(accountRepository.findByEmail(request.getEmail())).thenReturn(null);
+        when(accountRepository.findByUsername(request.getUsername())).thenReturn(null);
 
         assertThrows(InvalidCredentialsException.class, () -> accountService.loginAccount(request));
     }
@@ -115,11 +125,11 @@ public class LoginTest {
     @Test
     public void testLoginAccount_Failure_WrongPassword() {
         Account storedAccount = new Account();
-        storedAccount.setEmail("test@example.com");
+        storedAccount.setUsername("test");
         storedAccount.setPassword("password");
 
         Account account = new Account();
-        account.setEmail("test@example.com");
+        account.setUsername("test");
         account.setPassword("wrongPassword");
 
         when(accountRepository.findByEmail(account.getEmail())).thenReturn(storedAccount);
