@@ -1,186 +1,127 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, Box, Typography, IconButton } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import React, {useState} from 'react';
+import {Drawer, List, ListItem, ListItemText, Box, Typography, IconButton} from '@mui/material';
+import {Menu as MenuIcon} from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { NavLink, useLocation } from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
 import LogoutButton from "./LogoutButton";
 import authService from "../../Services/auth.service";
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import "../../StyledComponents/NavBar.css";
-import { StyledNavLink } from '../../StyledComponents/StyledComponents';
+import {StyledNavLink} from '../../StyledComponents/StyledComponents';
 
-const drawerWidth = 180;
+const drawerWidth = 240;
 
-const NavBarContainer = styled(Box)(({ theme }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
+const NavBarContainer = styled(Box)(({theme}) => ({
     width: drawerWidth,
-    boxSizing: 'border-box',
-  },
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+        width: drawerWidth,
+        boxSizing: 'border-box',
+    },
 }));
 
-
 function NavBar() {
-  const location = useLocation();
-  const user = authService.getCurrentUser();
-  const ownProfile = `/profile/${user.id}`;
-  const [mobileOpen, setMobileOpen] = useState(false);
+    const location = useLocation();
+    const user = authService.getCurrentUser();
+    const ownProfile = `/profile/${user.id}`;
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    const handleDrawerToggle = () => {
+        setDrawerOpen(!isDrawerOpen);
+    };
 
-  const drawer = (
-    <div>
-      <Box sx={{ padding: '1rem' }}>
-        <Typography variant="h6" noWrap>
-          Navigation
-        </Typography>
-      </Box>
-      <List>
-        <ListItem
-          component={StyledNavLink}
-          to={ownProfile}
-          className={location.pathname === ownProfile ? 'active' : ''}
-        >
-          <ListItemText primary="My Profile" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/allposts"
-          className={location.pathname === '/allposts' ? 'active' : ''}
-        >
-          <ListItemText primary="All Posts" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/allusers"
-          className={location.pathname === '/allusers' ? 'active' : ''}
-        >
-          <ListItemText primary="All Users" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/searchPost"
-          className={location.pathname === '/searchPost' ? 'active' : ''}
-        >
-          <ListItemText primary="Search Posts" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/searchUser"
-          className={location.pathname === '/searchUser' ? 'active' : ''}
-        >
-          <ListItemText primary="Search User" />
-        </ListItem>
-        <ListItem>
-          <LogoutButton />
-        </ListItem>
-      </List>
-    </div>
-  );
-  /*Animation which only apply to navbar
-  const drawer = (
-    <div>
-      <Box sx={{ padding: '1rem' }}>
-        <Typography variant="h6" noWrap>
-          Navigation
-        </Typography>
-      </Box>
-      <List>
-        <TransitionGroup>
-          <CSSTransition
-            key={location.pathname}
-            timeout={300}
-            classNames="fade"
-          >
-            <div>
-              <ListItem
-                component={StyledNavLink}
-                to={ownProfile}
-                className={location.pathname === ownProfile ? 'active' : ''}
+    const drawer = (
+        <div>
+            <Box sx={{padding: '1rem'}}>
+              <Typography
+                  variant="h4"
+                  sx={{
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 'bold',
+                    color: '#1976d2',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+                  }}
               >
-                <ListItemText primary="My Profile" />
-              </ListItem>
-              <ListItem
-                component={StyledNavLink}
-                to="/allposts"
-                className={location.pathname === '/allposts' ? 'active' : ''}
-              >
-                <ListItemText primary="All Posts" />
-              </ListItem>
-              <ListItem
-                component={StyledNavLink}
-                to="/allusers"
-                className={location.pathname === '/allusers' ? 'active' : ''}
-              >
-                <ListItemText primary="All Users" />
-              </ListItem>
-              <ListItem
-                component={StyledNavLink}
-                to="/searchPost"
-                className={location.pathname === '/searchPost' ? 'active' : ''}
-              >
-                <ListItemText primary="Search Posts" />
-              </ListItem>
-              <ListItem
-                component={StyledNavLink}
-                to="/searchUser"
-                className={location.pathname === '/searchUser' ? 'active' : ''}
-              >
-                <ListItemText primary="Search User" />
-              </ListItem>
-              <ListItem>
-                <LogoutButton />
-              </ListItem>
-            </div>
-          </CSSTransition>
-        </TransitionGroup>
-      </List>
-    </div>
-  );*/
+                Connect.
+              </Typography>
+            </Box>
+            <List>
+                <ListItem
+                    component={StyledNavLink}
+                    to={ownProfile}
+                    className={location.pathname === ownProfile ? 'active' : ''}
+                    onClick={handleDrawerToggle} // Close drawer after clicking
+                >
+                    <ListItemText primary="My Profile"/>
+                </ListItem>
+                <ListItem
+                    component={StyledNavLink}
+                    to="/allposts"
+                    className={location.pathname === '/allposts' ? 'active' : ''}
+                    onClick={handleDrawerToggle}
+                >
+                    <ListItemText primary="All Posts"/>
+                </ListItem>
+                <ListItem
+                    component={StyledNavLink}
+                    to="/allusers"
+                    className={location.pathname === '/allusers' ? 'active' : ''}
+                    onClick={handleDrawerToggle}
+                >
+                    <ListItemText primary="All Users"/>
+                </ListItem>
+                <ListItem
+                    component={StyledNavLink}
+                    to="/searchPost"
+                    className={location.pathname === '/searchPost' ? 'active' : ''}
+                    onClick={handleDrawerToggle}
+                >
+                    <ListItemText primary="Search Posts"/>
+                </ListItem>
+                <ListItem
+                    component={StyledNavLink}
+                    to="/searchUser"
+                    className={location.pathname === '/searchUser' ? 'active' : ''}
+                    onClick={handleDrawerToggle}
+                >
+                    <ListItemText primary="Search User"/>
+                </ListItem>
+                <ListItem>
+                    <LogoutButton/>
+                </ListItem>
+            </List>
+        </div>
+    );
 
-  return (
-    <>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        edge="start"
-        onClick={handleDrawerToggle}
-        sx={{ display: { sm: 'none' } }}
-      >
-        <MenuIcon />
-      </IconButton>
-      <NavBarContainer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, 
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </NavBarContainer>
-    </>
-  );
+    return (
+        <>
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{
+                    position: 'absolute',
+                    top: '1rem',
+                    left: '1rem',
+                }}
+            >
+                <MenuIcon/>
+            </IconButton>
+
+            <Drawer
+                variant="temporary"
+                open={isDrawerOpen}
+                onClose={handleDrawerToggle}
+                ModalProps={{
+                    keepMounted: true,
+                }}
+                sx={{
+                    '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
+                }}
+            >
+                {drawer}
+            </Drawer>
+        </>
+    );
 }
 
 export default NavBar;
