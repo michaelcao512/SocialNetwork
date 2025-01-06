@@ -1,7 +1,9 @@
 package dev.michaelcao512.socialmedia.UnitTesting;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Comment;
 import dev.michaelcao512.socialmedia.Entities.Post;
+import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.Services.CommentService;
@@ -27,6 +30,8 @@ public class CommentTest {
     private CommentRepository commentRepository;
     @Mock
     private PostRepository postRepository;
+    @Mock
+    private AccountRepository accountRepository;
     @InjectMocks
     private CommentService commentService;
 
@@ -46,17 +51,27 @@ public class CommentTest {
 
     @Test
     public void testCreateComment() {
+
         CreateCommentRequest createCommentRequest = new CreateCommentRequest(1L, null, 1L, "Test Comment Content");
 
+        when(accountRepository.findById(createCommentRequest.accountId())).thenReturn(Optional.of(account));
+        when(postRepository.findById(createCommentRequest.postId())).thenReturn(Optional.of(post));
 
+        Comment comment = new Comment();
+        comment.setCommentId(1L);
+        comment.setAccount(account);
+        comment.setPost(post);
+        comment.setContent("Test Comment Content");
 
+        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
         Comment savedComment = commentService.createComment(createCommentRequest);
 
         assertNotNull(savedComment);
-        assert (savedComment.getCommentId() == 1L);
-        // assert (savedComment.getAccount().getAccountId() == 1L);
-        assert (savedComment.getPost().getPostId() == 1L);
+        assertEquals(1L, savedComment.getCommentId());
+        assertEquals(1L, savedComment.getAccount().getAccountId());
+        assertEquals(1L, savedComment.getPost().getPostId());
+        assertEquals("Test Comment Content", savedComment.getContent());
     }
 
     @Test
@@ -119,11 +134,11 @@ public class CommentTest {
     public void testGetCommentsByPostId() {
         Comment comment = new Comment();
         comment.setCommentId(1L);
-        // comment.setAccount(account);
+        comment.setAccount(account);
         comment.setPost(post);
         comment.setContent("Test Comment Content");
 
-        when(postRepository.findById(post.getPostId())).thenReturn(Optional.of(post));
+        when(postRepository.findById(1L)).thenReturn(Optional.of(post));
         when(commentRepository.existsByPost(post)).thenReturn(true);
         when(commentRepository.findByPost(post)).thenReturn(List.of(comment));
         List<Comment> retrievedComments = commentService.getCommentsByPostId(post.getPostId());
@@ -131,7 +146,7 @@ public class CommentTest {
         assertNotNull(retrievedComments);
         assert (retrievedComments.get(0).getCommentId() == 1L);
         assert (retrievedComments.get(0).getContent().equals("Test Comment Content"));
-      
+
         // throws exception when post does not exist
         assertThrows(IllegalArgumentException.class, () -> commentService.getCommentsByPostId(2L),
                 "Post does not exist");

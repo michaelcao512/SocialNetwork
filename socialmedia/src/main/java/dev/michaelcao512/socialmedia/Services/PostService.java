@@ -38,25 +38,20 @@ public class PostService {
 
     @Transactional
     public Post createPost(CreatePostRequest createPostRequest) {
-        logger.info("CreatePostRequest: " + createPostRequest);
         if (createPostRequest == null || createPostRequest.accountId() == null) {
             throw new IllegalArgumentException("CreatePostRequest cannot be null");
         }
 
         Long accountId = createPostRequest.accountId();
-        logger.info("accountId: " + accountId);
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + accountId));
 
-        logger.info("Account: " + account);
         Post post = new Post();
         post.setContent(createPostRequest.content());
         post.setAccount(account);
 
         // Save the post first
-        logger.info("Post: " + post);
         Post savedPost = postRepository.save(post);
-        logger.info("Saved Post: " + savedPost);
 
         List<Long> imageIds = createPostRequest.imageIds();
         List<Image> images = new ArrayList<>();
@@ -65,13 +60,10 @@ public class PostService {
                 Image image = imageRepository.findById(imageId)
                         .orElseThrow(() -> new IllegalArgumentException("Image not found with id: " + imageId));
                 image.setPost(savedPost); // Set the post reference
-                logger.info("Image: " + image);
                 Image savedImage = imageRepository.save(image);
-                logger.info("Saved Image: " + savedImage);
                 images.add(savedImage);
             }
         }
-        logger.info("images: " + images);
         // Update the post with the list of images
         savedPost.setImages(images);
         return postRepository.save(savedPost);
@@ -98,13 +90,15 @@ public class PostService {
 
         // delete all images associated with the post from s3
         List<Image> images = post.getImages();
-        for (Image image : images) {
-            imageService.deleteImageFromS3(image);
-            // imageRepository.delete(image);
-            // imageService.deleteImage(image.getImageId());
+        if (images != null) {
+            for (Image image : images) {
+                imageService.deleteImageFromS3(image);
+                // imageRepository.delete(image);
+                // imageService.deleteImage(image.getImageId());
+            }
+            post.getImages().clear();
         }
 
-        post.getImages().clear();
         postRepository.delete(post);
     }
 

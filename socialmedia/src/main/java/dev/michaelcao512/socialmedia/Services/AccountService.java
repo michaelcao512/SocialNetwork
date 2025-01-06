@@ -30,7 +30,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final UserInfoRepository userInfoRepository;
     private final ApplicationContext applicationContext;
-
+    private final PasswordEncoder passwordEncoder;
     //new emailService class
     private final EmailService emailService;
     
@@ -38,16 +38,12 @@ public class AccountService implements UserDetailsService {
 
 
     public AccountService(AccountRepository accountRepository, UserInfoRepository userInfoRepository,
-                          ApplicationContext applicationContext, EmailService emailService) {
+                          ApplicationContext applicationContext, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.userInfoRepository = userInfoRepository;
         this.applicationContext = applicationContext;
         this.emailService = emailService;
-
-    }
-
-    private PasswordEncoder getPasswordEncoder() {
-        return applicationContext.getBean(PasswordEncoder.class);
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Account registerAccount(RegistrationRequest registrationRequest) {
@@ -83,7 +79,7 @@ public class AccountService implements UserDetailsService {
             throw new EmailAlreadyExistsException();
         }
 
-        password = getPasswordEncoder().encode(password);
+        password = passwordEncoder.encode(password);
 
         Account newAccount = new Account();
 
@@ -169,7 +165,7 @@ public class AccountService implements UserDetailsService {
             throw new InvalidCredentialsException("Account not found.");
         }
 
-        password = getPasswordEncoder().encode(password);
+        password = passwordEncoder.encode(password);
         // checking if password matches
         if (!password.equals(password)) {
             throw new InvalidCredentialsException("Invalid password.");
