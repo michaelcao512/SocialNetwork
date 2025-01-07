@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import { StyledLink } from "../../../StyledComponents/StyledComponents";
 import "./user.css";
 
