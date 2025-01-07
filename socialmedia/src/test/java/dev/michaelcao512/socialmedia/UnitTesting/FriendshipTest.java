@@ -1,222 +1,222 @@
-// package dev.michaelcao512.socialmedia.UnitTesting;
+package dev.michaelcao512.socialmedia.UnitTesting;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertNotNull;
-// import static org.junit.jupiter.api.Assertions.assertThrows;
-// import static org.mockito.ArgumentMatchers.any;
-// import static org.mockito.Mockito.mock;
-// import static org.mockito.Mockito.times;
-// import static org.mockito.Mockito.verify;
-// import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-// import dev.michaelcao512.socialmedia.Entities.Account;
-// import dev.michaelcao512.socialmedia.Entities.Friendship;
-// import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
-// import dev.michaelcao512.socialmedia.Repositories.FriendshipRepository;
-// import dev.michaelcao512.socialmedia.Services.FriendshipService;
-// import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
+import dev.michaelcao512.socialmedia.Entities.Account;
+import dev.michaelcao512.socialmedia.Entities.Friendship;
+import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
+import dev.michaelcao512.socialmedia.Repositories.FriendshipRepository;
+import dev.michaelcao512.socialmedia.Services.FriendshipService;
+import dev.michaelcao512.socialmedia.dto.Requests.FriendshipRequest;
 
-// public class FriendshipTest {
-// @Mock
-// private FriendshipRepository friendshipRepository;
-// @Mock
-// private AccountRepository accountRepository;
+public class FriendshipTest {
+    @Mock
+    private FriendshipRepository friendshipRepository;
+    @Mock
+    private AccountRepository accountRepository;
 
-// @InjectMocks
-// private FriendshipService friendshipService;
+    @InjectMocks
+    private FriendshipService friendshipService;
 
-// @BeforeEach
-// public void setUp() {
-// MockitoAnnotations.openMocks(this);
-// }
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-// @Test
-// public void testAddFriend_Success() {
+    @Test
+    public void testAddFriend_Success() {
 
-// Account account = mock(Account.class);
-// Account friend = mock(Account.class);
+        Account account = new Account();
+        Account friend = new Account();
 
-// when(friendshipRepository.existsByAccountAndFriend(account,
-// friend)).thenReturn(false);
-// when(friendshipRepository.save(any(Friendship.class))).thenAnswer(i ->
-// i.getArguments()[0]);
-// // when(account.getFollowing()).thenReturn(new ArrayList<>());
-// // when(friend.getFollowers()).thenReturn(new ArrayList<>());
+        account.setAccountId(1L);
+        friend.setAccountId(2L);
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
-// friendshipRequest.setFriend(friend);
+        when(accountRepository.findById(account.getAccountId())).thenReturn(Optional.of(account));
+        when(accountRepository.findById(friend.getAccountId())).thenReturn(Optional.of(friend));
 
-// Friendship friendship = friendshipService.addFriend(friendshipRequest);
+        when(friendshipRepository.existsByAccountAndFriend(account,
+                friend)).thenReturn(false);
+        when(friendshipRepository.save(any(Friendship.class))).thenAnswer(i -> i.getArguments()[0]);
 
-// assertNotNull(friendship);
-// assertEquals(account, friendship.getAccount());
-// assertEquals(friend, friendship.getFriend());
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), friend.getAccountId());
 
-// verify(friendshipRepository, times(1)).save(friendship);
-// }
+        Friendship friendship = friendshipService.addFriend(friendshipRequest);
 
-// @Test
-// public void testAddFriend_AlreadyExists() {
-// Account account = mock(Account.class);
-// Account friend = mock(Account.class);
+        assertNotNull(friendship);
+        assertEquals(account, friendship.getAccount());
+        assertEquals(friend, friendship.getFriend());
 
-// when(friendshipRepository.existsByAccountAndFriend(account,
-// friend)).thenReturn(true);
+        verify(friendshipRepository, times(1)).save(friendship);
+    }
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
-// friendshipRequest.setFriend(friend);
+    @Test
+    public void testAddFriend_AlreadyExists() {
+        Account account = new Account();
+        Account friend = new Account();
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.addFriend(friendshipRequest));
+        account.setAccountId(1L);
+        friend.setAccountId(2L);
 
-// verify(friendshipRepository, times(0)).save(any(Friendship.class));
-// }
+        when(friendshipRepository.existsByAccountAndFriend(account,
+                friend)).thenReturn(true);
 
-// @Test
-// public void testAddFriend_NullAccount() {
-// Account friend = mock(Account.class);
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), friend.getAccountId());
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setFriend(friend);
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.addFriend(friendshipRequest));
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.addFriend(friendshipRequest));
+        verify(friendshipRepository, times(0)).save(any(Friendship.class));
+    }
 
-// verify(friendshipRepository, times(0)).save(any(Friendship.class));
-// }
+    @Test
+    public void testAddFriend_NullAccount() {
+        Account account = new Account();
+        account.setAccountId(1L);
 
-// @Test
-// public void testAddFriend_NullFriend() {
-// Account account = mock(Account.class);
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), null);
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.addFriend(friendshipRequest));
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.addFriend(friendshipRequest));
+        verify(friendshipRepository, times(0)).save(any(Friendship.class));
+    }
 
-// verify(friendshipRepository, times(0)).save(any(Friendship.class));
-// }
+    @Test
+    public void testAddFriend_NullFriend() {
+        Account friend = new Account();
+        friend.setAccountId(2L);
+        FriendshipRequest friendshipRequest = new FriendshipRequest(null, friend.getAccountId());
 
-// @Test
-// public void testAddFriend_Self() {
-// Account account = mock(Account.class);
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.addFriend(friendshipRequest));
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
+        verify(friendshipRepository, times(0)).save(any(Friendship.class));
+    }
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.addFriend(friendshipRequest));
+    @Test
+    public void testAddFriend_Self() {
+        Account account = new Account();
+        account.setAccountId(1L);
 
-// verify(friendshipRepository, times(0)).save(any(Friendship.class));
-// }
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), account.getAccountId());
 
-// @Test
-// public void testRemoveFriend_Success() {
-// Account account = mock(Account.class);
-// Account friend = mock(Account.class);
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.addFriend(friendshipRequest));
 
-// Friendship friendship = new Friendship();
-// friendship.setFriendshipId(1L);
-// friendship.setAccount(account);
-// friendship.setFriend(friend);
+        verify(friendshipRepository, times(0)).save(any(Friendship.class));
+    }
 
-// when(friendshipRepository.findByAccountAndFriend(account,
-// friend)).thenReturn(Optional.of(friendship));
+    @Test
+    public void testRemoveFriend_Success() {
+        Account account = new Account();
+        Account friend = new Account();
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
-// friendshipRequest.setFriend(friend);
+        account.setAccountId(1L);
+        friend.setAccountId(2L);
 
-// friendshipService.removeFriend(friendshipRequest);
+        Friendship friendship = new Friendship();
+        friendship.setAccount(account);
+        friendship.setFriend(friend);
 
-// verify(friendshipRepository, times(1)).delete(friendship);
-// }
+        when(accountRepository.findById(account.getAccountId())).thenReturn(Optional.of(account));
+        when(accountRepository.findById(friend.getAccountId())).thenReturn(Optional.of(friend));
 
-// @Test
-// public void testRemoveFriend_NullAccount() {
-// Account friend = mock(Account.class);
+        when(friendshipRepository.existsByAccountAndFriend(account,
+                friend)).thenReturn(true);
 
-// when(friendshipRepository.findByAccountAndFriend(null,
-// friend)).thenReturn(Optional.empty());
+        when(friendshipRepository.findByAccountAndFriend(account,
+                friend)).thenReturn(Optional.of(friendship));
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setFriend(friend);
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), friend.getAccountId());
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.removeFriend(friendshipRequest));
+        friendshipService.removeFriend(friendshipRequest);
 
-// verify(friendshipRepository, times(0)).delete(any(Friendship.class));
-// }
+        verify(friendshipRepository, times(1)).delete(friendship);
+    }
 
-// @Test
-// public void testRemoveFriend_NullFriend() {
-// Account account = mock(Account.class);
+    @Test
+    public void testRemoveFriend_NullAccount() {
+        Account account = new Account();
+        account.setAccountId(1L);
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
+        when(friendshipRepository.findByAccountAndFriend(null,
+                account)).thenReturn(Optional.empty());
 
-// when(friendshipRepository.findByAccountAndFriend(account,
-// null)).thenReturn(Optional.empty());
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), null);
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.removeFriend(friendshipRequest));
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.removeFriend(friendshipRequest));
 
-// verify(friendshipRepository, times(0)).delete(any(Friendship.class));
-// }
+        verify(friendshipRepository, times(0)).delete(any(Friendship.class));
+    }
 
-// @Test
-// public void testRemoveFriend_FriendshipNotFound() {
-// Account account = mock(Account.class);
-// Account friend = mock(Account.class);
+    @Test
+    public void testRemoveFriend_NullFriend() {
+        Account friend = new Account();
+        friend.setAccountId(2L);
 
-// FriendshipRequest friendshipRequest = new FriendshipRequest();
-// friendshipRequest.setAccount(account);
-// friendshipRequest.setFriend(friend);
+        when(friendshipRepository.findByAccountAndFriend(null,
+                friend)).thenReturn(Optional.empty());
 
-// when(friendshipRepository.findByAccountAndFriend(account,
-// friend)).thenReturn(Optional.empty());
+        FriendshipRequest friendshipRequest = new FriendshipRequest(null, friend.getAccountId());
 
-// assertThrows(IllegalArgumentException.class, () ->
-// friendshipService.removeFriend(friendshipRequest));
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.removeFriend(friendshipRequest));
 
-// verify(friendshipRepository, times(0)).delete(any(Friendship.class));
-// }
+        verify(friendshipRepository, times(0)).delete(any(Friendship.class));
+    }
 
-// @Test
-// public void testGetAllFriends() {
-// Account account = mock(Account.class);
+    @Test
+    public void testRemoveFriend_FriendshipNotFound() {
+        Account account = new Account();
+        Account friend = new Account();
 
-// Friendship friendship1 = new Friendship();
-// friendship1.setFriendshipId(1L);
-// friendship1.setAccount(account);
-// Friendship friendship2 = new Friendship();
-// friendship2.setFriendshipId(2L);
-// friendship2.setAccount(account);
+        account.setAccountId(1L);
+        friend.setAccountId(2L);
 
-// when(accountRepository.findById(account.getAccountId())).thenReturn(Optional.of(account));
-// when(friendshipRepository.findAllByAccount(account)).thenReturn(List.of(friendship1,
-// friendship2));
+        FriendshipRequest friendshipRequest = new FriendshipRequest(account.getAccountId(), friend.getAccountId());
 
-// List<Friendship> friends =
-// friendshipService.getAllFriends(account.getAccountId());
+        when(friendshipRepository.findByAccountAndFriend(account,
+                friend)).thenReturn(Optional.empty());
 
-// assertNotNull(friends);
-// assertEquals(2, friends.size());
-// assertEquals(friendship1, friends.get(0));
-// assertEquals(friendship2, friends.get(1));
-// }
+        assertThrows(IllegalArgumentException.class, () -> friendshipService.removeFriend(friendshipRequest));
 
-// }
+        verify(friendshipRepository, times(0)).delete(any(Friendship.class));
+    }
+
+    @Test
+    public void testGetAllFriends() {
+        Account account = mock(Account.class);
+
+        Friendship friendship1 = new Friendship();
+        friendship1.setFriendshipId(1L);
+        friendship1.setAccount(account);
+        Friendship friendship2 = new Friendship();
+        friendship2.setFriendshipId(2L);
+        friendship2.setAccount(account);
+
+        when(accountRepository.findById(account.getAccountId())).thenReturn(Optional.of(account));
+        when(friendshipRepository.findAllByAccount(account)).thenReturn(List.of(friendship1,
+                friendship2));
+
+        List<Friendship> friends = friendshipService.getAllFriends(account.getAccountId());
+
+        assertNotNull(friends);
+        assertEquals(2, friends.size());
+        assertEquals(friendship1, friends.get(0));
+        assertEquals(friendship2, friends.get(1));
+    }
+
+}
