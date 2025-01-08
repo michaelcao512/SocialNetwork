@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import React, { useState } from "react";
+import { TextField, Button, Box } from "@mui/material";
 
-function SearchBar({ onSearch, placeholder }) {
-    const [query, setQuery] = useState("");
+function SearchBar({ onSearch, placeholder, searchLabel }) {
+  const [query, setQuery] = useState("");
 
-    const handleSearch = () => {
+  const handleSearch = () => {
         if (query.trim()) {
-            onSearch(query);
+        onSearch(query);
         }
     };
 
@@ -14,7 +14,7 @@ function SearchBar({ onSearch, placeholder }) {
         if (e.key === "Enter") {
             handleSearch();
         }
-    };
+  };
 
     return (
         <Box display="flex" gap={2} marginBottom={2}>

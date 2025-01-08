@@ -1,15 +1,19 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import DisplayReactions from '../Reactions/DisplayReactions';
-import DeletePost from './DeletePost';
-import EditPost from './EditPost';
-import DisplayComments from '../Comments/DisplayComments';
-import CreateComment from '../Comments/CreateComment';
-import Image from '../../Image/Image';
-import userService from '../../../Services/user.service';
-import commentService from '../../../Services/comment.service';
-import { Box, Typography } from '@mui/material';
-import styled from '@emotion/styled';
-import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledComponents/StyledComponents';
+import React, { useEffect, useState, useCallback } from "react";
+import DisplayReactions from "../Reactions/DisplayReactions";
+import DeletePost from "./DeletePost";
+import EditPost from "./EditPost";
+import DisplayComments from "../Comments/DisplayComments";
+import CreateComment from "../Comments/CreateComment";
+import Image from "../../Image/Image";
+import userService from "../../../Services/user.service";
+import commentService from "../../../Services/comment.service";
+import { Avatar, Box, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import {
+  StandardContainer,
+  StyledNavLink,
+  PostHeader,
+} from "../../../StyledComponents/StyledComponents";
 
 // const StyledNavLink = styled(NavLink)`
 //   text-decoration: none;
@@ -26,105 +30,126 @@ import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledCom
 // `;
 
 const PostActions = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: '0.5rem',
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  gap: "0.5rem",
 }));
 
 const PostContent = styled(Typography)(({ theme }) => ({
-    textAlign: 'left',
-    marginBottom: '1rem',
-    width: '100%',
+  textAlign: "left",
+  marginBottom: "1rem",
+  width: "100%",
 }));
 
 function Post(props) {
-    const { post, user, onPostDelete, onPostUpdate } = props;
-    const [postOwner, setPostOwner] = useState("");
-    const [canManagePost, setCanManagePost] = useState(false);
-    const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
-    const [comments, setComments] = useState([]);
+  const { post, user, onPostDelete, onPostUpdate } = props;
+  const [postOwner, setPostOwner] = useState("");
+  const [canManagePost, setCanManagePost] = useState(false);
+  const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
+  const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        try {
-            userService.getAccountOfPost(post.postId)
-                .then(response => {
-                    setPostOwner(response);
-                    if (response.username === user.username) {
-                        setCanManagePost(true);
-                    }
-                });
-        } catch (error) {
-            console.log("Error fetching post owner: ", error);
+  useEffect(() => {
+    try {
+      userService.getAccountOfPost(post.postId).then((response) => {
+        setPostOwner(response);
+        if (response.username === user.username) {
+          setCanManagePost(true);
         }
-    }, [post.postId, user.username]);
+      });
+    } catch (error) {
+      console.log("Error fetching post owner: ", error);
+    }
+  }, [post.postId, user.username]);
 
-    const fetchComments = useCallback(() => {
-        commentService.getCommentsByPostId(post.postId)
-            .then(response => {
-                setComments(response);
-            });
-    }, [post.postId]);
+  const fetchComments = useCallback(() => {
+    commentService.getCommentsByPostId(post.postId).then((response) => {
+      setComments(response);
+    });
+  }, [post.postId]);
 
-    useEffect(() => {
-        fetchComments();
-    }, [fetchComments]);
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
-    const handleAddCommentClick = () => {
-        setIsCommentInputVisible(() => !(isCommentInputVisible));
-    };
+  const handleAddCommentClick = () => {
+    setIsCommentInputVisible(() => !isCommentInputVisible);
+  };
 
-    const handleCancelComment = () => {
-        setIsCommentInputVisible(false);
-    };
+  const handleCancelComment = () => {
+    setIsCommentInputVisible(false);
+  };
 
-    
-
-    return (
-        <StandardContainer
-            style={
-                {
-                    margin: "0.5rem 0",
-                    backgroundColor: "#f4f9fd",
-                    border: "4px",
-                    boxShadow: "2px 4px 6px #CAE4F6",
-                }
-            }
-        >
-            <PostHeader style={{border: "none",boxShadow: "none"}}>
-                <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-                    <Typography variant="h6">{postOwner.username}</Typography>
-                </StyledNavLink>
-                
-                <Typography variant="caption">
-                     {post.dateCreated
-                     ? new Date(post.dateCreated).toLocaleString()
-                    : "No timestamp available"}
-                </Typography>
-
-
-            </PostHeader>
-            <PostContent variant="body1" style={{border: "none",boxShadow: "none"}}>{post.content}</PostContent>
-            <Image images={post.images} />
-            <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
-            {isCommentInputVisible && (
-                <CreateComment
-                    post={post}
-                    user={user}
-                    fetchComments={fetchComments}
-                    onCancel={handleCancelComment}
-                />
-            )}
-            <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
-            {canManagePost && (
-                <PostActions>
-                    <EditPost post={post} onPostUpdate={onPostUpdate} />
-                    <DeletePost post={post} onPostDelete={onPostDelete} />
-                </PostActions>
-            )}
-        </StandardContainer>
-    );
+  return (
+    <StandardContainer
+      style={{
+        margin: "0.5rem 0",
+        backgroundColor: "#f4f9fd",
+        border: "4px",
+        boxShadow: "2px 4px 6px #CAE4F6",
+      }}
+    >
+      <PostHeader
+        style={{
+          border: "none",
+          boxShadow: "none",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={postOwner?.userInfo?.avatarUrl || null}
+            sx={{ marginRight: "0.5rem" }}
+          >
+            {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
+          </Avatar>
+          <Box style={{display: "flex", flexDirection: "column", justifyContent: "center",}}>
+            <Typography variant="h6">{postOwner.username}</Typography>
+            <Typography variant="caption">
+              {post.dateCreated
+                ? new Date(post.dateCreated).toLocaleString()
+                : "No timestamp available"}
+            </Typography>
+          </Box>
+        </Box>
+      </PostHeader>
+      <PostContent
+        variant="body1"
+        style={{ border: "none", boxShadow: "none" }}
+      >
+        {post.content}
+      </PostContent>
+      <Image images={post.images} />
+      <DisplayReactions
+        entityId={post.postId}
+        entityType="post"
+        user={user}
+        comments={comments}
+        onAddCommentClick={handleAddCommentClick}
+      />
+      {isCommentInputVisible && (
+        <CreateComment
+          post={post}
+          user={user}
+          fetchComments={fetchComments}
+          onCancel={handleCancelComment}
+        />
+      )}
+      <DisplayComments
+        user={user}
+        comments={comments}
+        fetchComments={fetchComments}
+      />
+      {canManagePost && (
+        <PostActions>
+          <EditPost post={post} onPostUpdate={onPostUpdate} />
+          <DeletePost post={post} onPostDelete={onPostDelete} />
+        </PostActions>
+      )}
+    </StandardContainer>
+  );
 }
 
 export default Post;
