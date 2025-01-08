@@ -17,7 +17,7 @@ const CreateCommentContainer = styled(Box)(({ theme }) => ({
     maxWidth: '600px',
     margin: 'auto',
     marginBottom: '2rem',
-    boxSizing: 'border-box', // Include padding and border in the element's total width and height
+    boxSizing: 'border-box', 
 }));
 
 const FullWidthTextField = styled(TextField)(({ theme }) => ({
@@ -36,15 +36,22 @@ const FullWidthButton = styled(Button)(({ theme }) => ({
 function CreateComment(props) {
     const { post, user, parentComment, fetchComments, onCancel } = props;
     const [content, setContent] = useState("");
+    const [error, setError] = useState("");
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (!content.trim()){
+            setError("Comment content cannot be empty.");
+            return;
+        }
         const postId = post ? post.postId : null;
         const parentCommentId = parentComment ? parentComment.commentId : null;
         try {
             await commentService.createComment(content, user.id, postId, parentCommentId);
             fetchComments();
             setContent("");
+            setError("");
             onCancel();
         } catch (error) {
             console.log("createComment error: ", error);
@@ -57,7 +64,9 @@ function CreateComment(props) {
                 label="Add a comment"
                 multiline
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => {setContent(e.target.value); setError("");}}
+                error={!!error}
+                helperText={error}
             />
             <Box display="flex" justifyContent="space-between" width="100%">
                 <FullWidthButton variant="outlined" color="secondary" onClick={onCancel}>

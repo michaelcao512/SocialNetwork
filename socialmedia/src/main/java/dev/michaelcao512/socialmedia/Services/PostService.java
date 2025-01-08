@@ -37,7 +37,7 @@ public class PostService {
 
     @Transactional
     public Post createPost(CreatePostRequest createPostRequest) {
-        if (createPostRequest == null || createPostRequest.accountId() == null) {
+        if (createPostRequest == null || createPostRequest.accountId() == null || createPostRequest.content() == null) {
             throw new IllegalArgumentException("CreatePostRequest cannot be null");
         }
 

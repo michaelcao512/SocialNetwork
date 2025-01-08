@@ -6,6 +6,7 @@ import SelectImage from "../../Image/SelectImage";
 
 function CreatePost(props) {
     const { user, onPostCreated } = props;
+    const [error, setError] = useState("");
     const [content, setContent] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
 
@@ -21,7 +22,10 @@ function CreatePost(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log("selectedImages: ", selectedImages);
-
+        if (!content.trim()){
+            setError("Post content cannot be empty.");
+            return;
+        }
         try {
             const uploadedImageIds = [];
             for (const image of selectedImages) {
@@ -42,6 +46,7 @@ function CreatePost(props) {
             };
             await postService.createPost(createPostRequest);
             onPostCreated();
+            setError("");
             setContent("");
             setSelectedImages([]);
         } catch (error) {
@@ -61,8 +66,13 @@ function CreatePost(props) {
                         multiline
                         rows={4}
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) => {
+                            setContent(e.target.value);
+                            setError("");
+                        }}
                         variant="outlined"
+                        error={!!error}
+                        helperText={error}
                     />
                 </FormControl>
                 <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove}/>

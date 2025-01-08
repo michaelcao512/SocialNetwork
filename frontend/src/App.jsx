@@ -14,6 +14,7 @@ import SearchPage from './Pages/SearchPostPage';
 import SearchUserPage from './Pages/SearchUserPage';
 import RegistrationConfirmation from './Pages/RegistrationConfirmation';
 import EmailVerification from './Pages/EmailVerification';
+import UnifiedSearchPage from './Pages/UnifiedSearchPage';
 
 
 import { ThemeProvider } from '@emotion/react';
@@ -28,25 +29,23 @@ function App() {
         <Routes>
           {/* Unprotected Routes */}
           <Route element={<UnprotectedRoutes />}>
-         
-           <Route path="/register" element={<RegistrationPage />} />
-            
+
+            <Route path="/register" element={<RegistrationPage />} />
+
             <Route path="/verify" element={<EmailVerification />} />
-         
-            <Route path ="/registration-confirmation" element={<RegistrationConfirmation/>}/>
+
+            <Route path="/registration-confirmation" element={<RegistrationConfirmation />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<LoginPage />} />
           </Route>
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
-           
-              <Route path="/searchPost" element={<SearchPage />} />
-              <Route path='/searchUser' element={<SearchUserPage/>}/>
-              <Route path="/allposts" element={<AllPostsPage />} />
-              <Route path="/allusers" element={<AllUsersPage />} />
-              <Route path="/profile/:profileUserId" element={<ProfilePage />} />
-              <Route path="*" element={<Navigate to={`/`} />} />
+            <Route path="/search" element={<UnifiedSearchPage />} />
+            <Route path="/allposts" element={<AllPostsPage />} />
+            <Route path="/allusers" element={<AllUsersPage />} />
+            <Route path="/profile/:profileUserId" element={<ProfilePage />} />
+            <Route path="*" element={<Navigate to={`/`} />} />
           </Route>
         </Routes>
       </Router>

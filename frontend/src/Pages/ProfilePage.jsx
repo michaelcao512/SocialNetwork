@@ -15,8 +15,7 @@ import { useParams } from "react-router-dom";
 import EditUserInfo from "../Components/Profile/UserInfo/EditUserInfo";
 
 function ProfilePage() {
-  const { profileUserId } = useParams();
-  let profileId = parseInt(profileUserId);
+  let { profileUserId } = useParams();
   const user = authService.getCurrentUser();
 
   const [userInfo, setUserInfo] = useState({});
@@ -26,30 +25,35 @@ function ProfilePage() {
 
   const fetchUsername = useCallback(async () => {
     try {
-      const response = await userService.getUsernameByAccountId(profileId);
+      const response = await userService.getUsernameByAccountId(profileUserId);
       setUsername(response);
     } catch (error) {
       console.log("error: ", error);
     }
-  }, [profileId, username]);
+  }, [profileUserId]);
 
   const fetchUserInfo = useCallback(async () => {
     try {
-      const response = await userInfoService.getUserInfoByAccountId(profileId);
+      const response = await userInfoService.getUserInfoByAccountId(
+        profileUserId
+      );
       setUserInfo(response);
     } catch (error) {
       console.log("error: ", error);
     }
-  }, [profileId]);
+  }, [profileUserId]);
 
   const fetchPosts = useCallback(async () => {
     try {
-      const response = await postService.getPostsByAccountId(profileId);
+      const response = await postService.getPostsByAccountId(profileUserId);
       setPosts(response);
     } catch (error) {
       console.log("error: ", error);
     }
-  }, [profileId]);
+  }, [profileUserId]);
+
+  // rerenders without fetching when isOwnProfile changes
+  useEffect(() => {}, [isOwnProfile]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,24 +63,37 @@ function ProfilePage() {
     };
     fetchData();
 
-    if (profileId === user.id) {
+    if (profileUserId == user.id) {
       setIsOwnProfile(true);
+    } else {
+      setIsOwnProfile(false);
     }
-  }, [profileId, user.id, fetchUserInfo, fetchPosts, fetchUsername]);
+    console.log("profileUserId", profileUserId);
+    console.log("user.id", user.id);
+    console.log("is own profile", isOwnProfile);
+  }, [profileUserId, user.id, fetchUserInfo, fetchPosts, fetchUsername]);
 
   async function refreshPostsHandler() {
     await fetchPosts();
   }
   return (
-    <StyledStack style={{ backgroundColor: "#ffffff",border: "none",boxShadow: "none"}}>
+    <StyledStack
+      style={{ backgroundColor: "#ffffff", border: "none", boxShadow: "none" }}
+    >
       <Typography variant="h3" gutterBottom>
         Profile
       </Typography>
-      <StyledCard style={{ backgroundColor: "#f4f9fd",border: "none",boxShadow: "2px 4px 6px #CAE4F6"}}>
+      <StyledCard
+        style={{
+          backgroundColor: "#f4f9fd",
+          border: "none",
+          boxShadow: "2px 4px 6px #CAE4F6",
+        }}
+      >
         <UserInfoComponent
           user={user}
           userInfo={userInfo}
-          profileId={profileId}
+          profileId={profileUserId}
           username={username}
         />
         {isOwnProfile && (
