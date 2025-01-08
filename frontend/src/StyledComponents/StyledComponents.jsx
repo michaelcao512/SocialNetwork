@@ -18,7 +18,7 @@ export const StyledStack = styled(Stack)({
   margin: "auto",
   padding: "1rem",
   boxSizing: "border-box",
-  backgroundColor: "#f3f3f3",
+  backgroundColor: "transparent",
 });
 
 export const StyledCard = styled(CardContent)(({ theme }) => ({

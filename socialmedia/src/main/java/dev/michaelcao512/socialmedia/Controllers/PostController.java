@@ -125,6 +125,9 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    
-
+    @GetMapping("/getHomePosts/{accountId}")
+    public ResponseEntity<List<Post>> getHomePosts(@PathVariable Long accountId) {
+        List<Post> posts = postService.getPostsFromFollowedAccounts(accountId);
+        return ResponseEntity.ok(posts);
+    }
 }
