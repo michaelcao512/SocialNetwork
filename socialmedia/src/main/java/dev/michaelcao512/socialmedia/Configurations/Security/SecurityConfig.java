@@ -35,12 +35,10 @@ public class SecurityConfig {
             public void addCorsMappings(final CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("*") // for temporary use, do not use in prod enviroment
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        
                         .allowCredentials(true);
-                        //.allowedOrigins("*");
             }
         };
     }
