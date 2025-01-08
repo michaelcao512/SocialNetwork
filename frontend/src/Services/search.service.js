@@ -29,6 +29,19 @@ class SearchService {
                 throw error;
             });
     }
+
+    async searchAll(query) {
+        try {
+            const [users, posts] = await Promise.all([
+                this.searchUsers(query),
+                this.searchPosts(query),
+            ]);
+            return {users, posts};
+        } catch (error) {
+            console.error("Error during unified search:", error);
+            throw error;
+        }
+    }
 }
 
 const searchService = new SearchService();
