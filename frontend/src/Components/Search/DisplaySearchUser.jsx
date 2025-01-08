@@ -1,5 +1,17 @@
 import React from 'react';
-import { Box, Typography,Divider  } from '@mui/material';
+import { Box, Typography, Divider } from '@mui/material';
+import { NavLink } from 'react-router-dom';
+import styled from '@emotion/styled';
+
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    fontWeight: 'bold',
+    '&:hover': {
+        textDecoration: 'underline',
+        color: theme.palette.primary.dark,
+    },
+}));
 
 function DisplaySearchUser({ users, error }) {
     return (
@@ -22,9 +34,9 @@ function DisplaySearchUser({ users, error }) {
                             boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                         }}
                     >
-                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>
-                            {user.username}
-                        </Typography>
+                        <StyledNavLink to={`/profile/${user.accountId}`}>
+                            <Typography variant="h6">{user.username}</Typography>
+                        </StyledNavLink>
                         <Typography variant="body1">
                             Name: {user.userInfo.firstName} {user.userInfo.lastName}
                         </Typography>
@@ -61,6 +73,5 @@ function DisplaySearchUser({ users, error }) {
         </Box>
     );
 }
-
 
 export default DisplaySearchUser;
