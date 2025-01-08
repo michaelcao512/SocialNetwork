@@ -35,7 +35,7 @@ public class SecurityConfig {
             public void addCorsMappings(final CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("*") // for temporary use, do not use in prod enviroment
+                        .allowedOrigins("http://localhost:5173", "http://webappfrontendbucket.s3-website-us-east-1.amazonaws.com/") // for temp use, do not use in prod env
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);
