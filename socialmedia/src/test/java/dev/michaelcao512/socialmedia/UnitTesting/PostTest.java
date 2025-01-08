@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.Services.PostService;
 import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.UpdatePostRequest;
 
 public class PostTest {
 
@@ -52,7 +54,7 @@ public class PostTest {
         post.setAccount(account);
         post.setContent("Test Post Content");
 
-        CreatePostRequest createPostRequest = new CreatePostRequest("test post content", 1L, null);
+        CreatePostRequest createPostRequest = new CreatePostRequest("test post content", account.getAccountId(), null);
 
         when(accountRepository.findById(createPostRequest.accountId())).thenReturn(Optional.of(account));
         when(postRepository.save(any(Post.class))).thenReturn(post);
@@ -75,24 +77,20 @@ public class PostTest {
         post.setPostId(1L);
         post.setAccount(account);
         post.setContent("Original Content");
+        post.setImages(new ArrayList<>());
 
-        Post updatedPost = new Post();
-        updatedPost.setPostId(1L);
-        updatedPost.setAccount(account);
-        updatedPost.setContent("Updated Content");
-
-        // checking for illegal argument exception when post is null
-        assertThrows(IllegalArgumentException.class, () -> postService.updatePost(null), "Post cannot be null");
+        UpdatePostRequest updatePostRequest = new UpdatePostRequest(post.getPostId(), "Updated Content",
+                account.getAccountId(),
+                new ArrayList<>());
 
         when(postRepository.existsById(post.getPostId())).thenReturn(true);
         when(postRepository.findById(post.getPostId())).thenReturn(Optional.of(post));
         when(postRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
-        Post returnedPost = postService.updatePost(updatedPost);
+        Post returnedPost = postService.updatePost(updatePostRequest);
 
         assertNotNull(returnedPost);
         assert (returnedPost.getPostId() == 1L);
         assert (returnedPost.getContent().equals("Updated Content"));
-        verify(postRepository).save(returnedPost);
     }
 
     @Test

@@ -25,7 +25,7 @@ export const StyledCard = styled(CardContent)(({ theme }) => ({
     padding: "2rem",
     borderRadius: "1rem",
     boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.main,
     color: theme.palette.text.primary,
     boxSizing: "border-box",
     "&:hover": {
@@ -42,7 +42,7 @@ export const StandardContainer = styled(Box)(({ theme }) => ({
     padding: '1rem',
     borderRadius: '1rem',
     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.main,
     color: theme.palette.text.primary,
     width: '100%',
     margin: 'auto',

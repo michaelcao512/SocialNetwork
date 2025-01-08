@@ -28,7 +28,6 @@ function ProfilePage() {
     try {
       const response = await userService.getUsernameByAccountId(profileId);
       setUsername(response);
-      console.log(username);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -38,7 +37,6 @@ function ProfilePage() {
     try {
       const response = await userInfoService.getUserInfoByAccountId(profileId);
       setUserInfo(response);
-      console.log("response", response);
     } catch (error) {
       console.log("error: ", error);
     }

@@ -2,7 +2,6 @@ package dev.michaelcao512.socialmedia.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,7 +28,7 @@ public class Image {
     @JsonBackReference(value = "account-images")
     private Account account;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne // (cascade = CascadeType.ALL)
     @JoinColumn(name = "postId")
     @JsonBackReference(value = "post-images")
     private Post post;

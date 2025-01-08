@@ -6,6 +6,7 @@ import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
 import dev.michaelcao512.socialmedia.Repositories.ImageRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
+import dev.michaelcao512.socialmedia.dto.Requests.UpdateImageRequest;
 import dev.michaelcao512.socialmedia.dto.Requests.UploadFileRequest;
 import jakarta.transaction.Transactional;
 
@@ -59,12 +60,9 @@ public class ImageService {
 
     Logger logger = LoggerFactory.getLogger(ImageService.class);
 
-    public Image uploadFile(UploadFileRequest uploadFileRequest) {
-        logger.info(uploadFileRequest.toString());
-        MultipartFile file = uploadFileRequest.file();
+    public PutObjectResponse uploadFileToS3(MultipartFile file, String bucketKey) {
 
         Path filePath = null;
-        String bucketKey = UUID.randomUUID().toString();
 
         // Create a temp file to store the file
         try {
@@ -81,6 +79,21 @@ public class ImageService {
                 .build();
         PutObjectResponse response = s3Client.putObject(request, filePath);
 
+        // Delete the file from the local filesystem
+        try {
+            Files.delete(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file", e);
+        }
+
+        return response;
+    }
+
+    public Image uploadFile(UploadFileRequest uploadFileRequest) {
+        logger.info(uploadFileRequest.toString());
+        String bucketKey = UUID.randomUUID().toString();
+        PutObjectResponse response = uploadFileToS3(uploadFileRequest.file(), bucketKey);
+
         Image image = new Image();
         image.setFileName(uploadFileRequest.fileName());
         image.setETag(response.eTag());
@@ -95,8 +108,8 @@ public class ImageService {
 
         switch (uploadFileRequest.imageType()) {
             case PROFILE:
-            // to do
-                
+                // to do
+
                 break;
             case POST:
                 if (uploadFileRequest.postId() != null) {
@@ -117,13 +130,6 @@ public class ImageService {
         }
 
         Image savedImage = imageRepository.save(image);
-
-        // Delete the file from the local filesystem
-        try {
-            Files.delete(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to delete file", e);
-        }
 
         return savedImage;
     }
@@ -169,5 +175,24 @@ public class ImageService {
         logger.info("Presigned URL: " + presignedRequest.url().toExternalForm());
         logger.info("HTTP Method: " + presignedRequest.httpRequest().method());
         return presignedRequest.url().toExternalForm();
+    }
+
+    public Image updateImage(Long imageId, UpdateImageRequest updateImageRequest) {
+        Optional<Image> imageOpt = imageRepository.findById(imageId);
+        // reuploading the image to s3 if image id already exists
+        if (imageOpt.isPresent()) {
+            Image image = imageOpt.get();
+            deleteImageFromS3(image);
+
+            String bucketKey = UUID.randomUUID().toString();
+            PutObjectResponse response = uploadFileToS3(updateImageRequest.file(), bucketKey);
+            image.setBucketKey(bucketKey);
+            image.setETag(response.eTag());
+            image.setFileName(updateImageRequest.fileName());
+
+            return imageRepository.save(image);
+        } else {
+            throw new RuntimeException("Image not found with id: " + imageId);
+        }
     }
 }

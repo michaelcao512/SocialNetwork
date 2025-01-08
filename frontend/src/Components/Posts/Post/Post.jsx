@@ -11,20 +11,6 @@ import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { StandardContainer, StyledNavLink, PostHeader } from '../../../StyledComponents/StyledComponents';
 
-// const StyledNavLink = styled(NavLink)`
-//   text-decoration: none;
-//   color: #1976d2;
-//   font-family: "Poppins", sans-serif;
-//   font-weight: bold;
-//   font-size: 1.2rem;
-//   transition: color 0.3s ease, text-shadow 0.3s ease;
-
-//   &:hover {
-//     color: #f1356d;
-//     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-//   }
-// `;
-
 const PostActions = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
@@ -79,8 +65,6 @@ function Post(props) {
         setIsCommentInputVisible(false);
     };
 
-    
-
     return (
         <StandardContainer
             style={
@@ -106,7 +90,7 @@ function Post(props) {
 
             </PostHeader>
             <PostContent variant="body1" style={{border: "none",boxShadow: "none"}}>{post.content}</PostContent>
-            <Image images={post.images} />
+            <Image images={post.images} deleteOption={false} />
             <DisplayReactions  entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && (
                 <CreateComment
@@ -119,7 +103,7 @@ function Post(props) {
             <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
             {canManagePost && (
                 <PostActions>
-                    <EditPost post={post} onPostUpdate={onPostUpdate} />
+                    <EditPost user={user} post={post} onPostUpdate={onPostUpdate} />
                     <DeletePost post={post} onPostDelete={onPostDelete} />
                 </PostActions>
             )}

@@ -10,10 +10,7 @@ function CreatePost(props) {
     const [selectedImages, setSelectedImages] = useState([]);
 
     const handleImageSelect = (file) => {
-        setSelectedImages([...selectedImages, file]);
-        
-        // only let user select one image
-        // setSelectedImages([file]);
+        setSelectedImages((selectedImages) => [...selectedImages, file]);
     };
 
     const handleImageRemove = (index) => {
