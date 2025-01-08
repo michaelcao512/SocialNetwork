@@ -90,19 +90,30 @@ function Post(props) {
         boxShadow: "2px 4px 6px #CAE4F6",
       }}
     >
-      <PostHeader style={{ border: "none", boxShadow: "none" }}>
-        <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-          <Avatar src={postOwner?.userInfo?.avatarUrl || null}>
+      <PostHeader
+        style={{
+          border: "none",
+          boxShadow: "none",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={postOwner?.userInfo?.avatarUrl || null}
+            sx={{ marginRight: "0.5rem" }}
+          >
             {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
           </Avatar>
-          <Typography variant="h6">{postOwner.username}</Typography>
-        </StyledNavLink>
-
-        <Typography variant="caption">
-          {post.dateCreated
-            ? new Date(post.dateCreated).toLocaleString()
-            : "No timestamp available"}
-        </Typography>
+          <Box style={{display: "flex", flexDirection: "column", justifyContent: "center",}}>
+            <Typography variant="h6">{postOwner.username}</Typography>
+            <Typography variant="caption">
+              {post.dateCreated
+                ? new Date(post.dateCreated).toLocaleString()
+                : "No timestamp available"}
+            </Typography>
+          </Box>
+        </Box>
       </PostHeader>
       <PostContent
         variant="body1"

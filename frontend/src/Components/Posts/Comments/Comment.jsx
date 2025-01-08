@@ -85,17 +85,37 @@ function Comment({ user, comment, fetchComments }) {
   return (
     <CommentContainer style={{ backgroundColor: "#f4f9fd", boxShadow: "none" }}>
       <PostHeader>
-        <StyledNavLink to={`/profile/${commentOwner.accountId}`}>
-          <Avatar src={commentOwner?.userInfo?.avatarUrl || null}>
-            {commentOwner?.userInfo?.firstName?.charAt(0) || "#"}
-          </Avatar>
-          <Typography variant="h6">{commentOwner.username}</Typography>
-        </StyledNavLink>
-        <Typography variant="caption">
-          {comment.dateCreated
-            ? new Date(comment.dateCreated).toLocaleString()
-            : "No timestamp available"}
-        </Typography>
+        <Box style={{ display: "flex", alignItems: "center" }}>
+          <StyledNavLink
+            to={`/profile/${commentOwner.accountId}`}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Avatar
+              src={commentOwner?.userInfo?.avatarUrl || null}
+              sx={{ marginRight: "0.25rem" }}
+            >
+              {commentOwner?.userInfo?.firstName?.charAt(0) || "#"}
+            </Avatar>
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="h6">{commentOwner.username}</Typography>
+              <Typography variant="caption">
+                {comment.dateCreated
+                  ? new Date(comment.dateCreated).toLocaleString()
+                  : "No timestamp available"}
+              </Typography>
+            </Box>
+          </StyledNavLink>
+        </Box>
       </PostHeader>
 
       <Typography variant="body2">{content}</Typography>
