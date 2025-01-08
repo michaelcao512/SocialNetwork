@@ -10,19 +10,20 @@ import {
   PostHeader,
   StyledNavLink,
 } from "../../../StyledComponents/StyledComponents";
+import { Delete } from "@mui/icons-material";
 const CommentContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
   justifyContent: "center",
   padding: "0.5rem",
-  borderRadius: "0.5rem",
-  boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)",
-  backgroundColor: theme.palette.background.paper,
+  paddingRight: 0,
+  backgroundColor: theme.palette.background.main,
+  boxShadow: "none",
   color: theme.palette.text.primary,
   width: "100%",
   marginBottom: "1rem",
-  boxSizing: "border-box", // Include padding and border in the element's total width and height
+  boxSizing: "border-box",
 }));
 
 const CommentActions = styled(Box)(({ theme }) => ({
@@ -38,9 +39,8 @@ const RepliesContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  width: "calc(100% - 1rem)", // Ensure it takes the full width minus the left margin
+  width: "calc(100% - 1rem)",
   marginLeft: "1rem",
-  marginTop: "0.5rem",
 }));
 
 function Comment({ user, comment, fetchComments }) {
@@ -83,37 +83,22 @@ function Comment({ user, comment, fetchComments }) {
   };
 
   return (
-    <CommentContainer style={{ backgroundColor: "#f4f9fd", boxShadow: "none" }}>
+    <CommentContainer>
       <PostHeader>
         <Box style={{ display: "flex", alignItems: "center" }}>
-          <StyledNavLink
-            to={`/profile/${commentOwner.accountId}`}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
+          <Avatar
+            src={commentOwner?.userInfo?.avatarUrl || null}
+            sx={{ marginRight: "0.25rem" }}
           >
-            <Avatar
-              src={commentOwner?.userInfo?.avatarUrl || null}
-              sx={{ marginRight: "0.25rem" }}
-            >
-              {commentOwner?.userInfo?.firstName?.charAt(0) || "#"}
-            </Avatar>
-            <Box
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <Typography variant="h6">{commentOwner.username}</Typography>
-              <Typography variant="caption">
-                {comment.dateCreated
-                  ? new Date(comment.dateCreated).toLocaleString()
-                  : "No timestamp available"}
-              </Typography>
-            </Box>
+            {commentOwner?.userInfo?.firstName?.charAt(0) || "#"}
+          </Avatar>
+          <StyledNavLink to={`/profile/${commentOwner.accountId}`}>
+            <Typography variant="h6">{commentOwner.username}</Typography>
+            <Typography variant="caption">
+              {comment.dateCreated
+                ? new Date(comment.dateCreated).toLocaleString()
+                : "No timestamp available"}
+            </Typography>
           </StyledNavLink>
         </Box>
       </PostHeader>
@@ -145,9 +130,10 @@ function Comment({ user, comment, fetchComments }) {
             </Button>
           </EditComment>
           <Button
+            startIcon={<Delete />}
             variant="outlined"
             size="small"
-            color="secondary"
+            color="error"
             onClick={handleDelete}
           >
             Delete

@@ -8,7 +8,7 @@ const CommentsContainer = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     padding: '1rem',
     width: '100%',
-    boxSizing: 'border-box', // Include padding and border in the element's total width and height
+    boxSizing: 'border-box', 
 }));
 
 function DisplayComments({ fetchComments, user, comments }) {

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import imageService from "../../Services/image.service";
+import { IconButton, Box, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function Image({ images }) {
+function Image({ images, deleteOption, handleImageRemove }) {
     const [imageUrls, setImageUrls] = useState([]);
 
     useEffect(() => {
-        console.log("images", images);
         const fetchImages = async () => {
             try {
                 const urls = await Promise.all(
@@ -15,7 +16,6 @@ function Image({ images }) {
                     })
                 );
                 setImageUrls(urls);
-                console.log("imageUrls", urls);
             } catch (error) {
                 console.error('Error fetching images:', error);
             }
@@ -24,11 +24,21 @@ function Image({ images }) {
     }, [images]);
 
     return (
-        <div>
+        
+        <>
             {imageUrls.map((url, index) => (
-                <img key={index} src={url} alt="Post" style={{ maxWidth: '100%' }} />
+                <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                    <img key={index} src={url} alt="Post" style={{ maxWidth: '100%' }} />
+                    {deleteOption && (
+                        <IconButton onClick={() => handleImageRemove(index)} color="secondary">
+                            <DeleteIcon />
+                        </IconButton>
+                    )}
+                </Box>
             ))}
-        </div>
+
+        </>
+
     );
 }
 

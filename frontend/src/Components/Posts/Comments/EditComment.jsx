@@ -1,7 +1,7 @@
 import { useState } from "react";
 import commentService from "../../../Services/comment.service";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
-
+import { Edit } from "@mui/icons-material";
 function EditComment(props) {  
     const { comment, onCommentUpdate } = props;
     const [content, setContent] = useState(comment.content);
@@ -30,7 +30,13 @@ function EditComment(props) {
 
     return (  
         <>
-            <Button onClick={() => setIsEditOpen(true)}>Edit</Button>
+            <Button
+                onClick={() => setIsEditOpen(true)}
+                startIcon={<Edit />}
+                color="primary"
+                size="small"
+                variant="outlined"
+            >Edit</Button>
             <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
                 <DialogTitle>Edit Comment</DialogTitle>
                 <DialogContent>

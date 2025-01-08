@@ -17,7 +17,7 @@ const CreateCommentContainer = styled(Box)(({ theme }) => ({
     maxWidth: '600px',
     margin: 'auto',
     marginBottom: '2rem',
-    boxSizing: 'border-box', // Include padding and border in the element's total width and height
+    boxSizing: 'border-box', 
 }));
 
 const FullWidthTextField = styled(TextField)(({ theme }) => ({

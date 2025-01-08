@@ -15,20 +15,6 @@ import {
   PostHeader,
 } from "../../../StyledComponents/StyledComponents";
 
-// const StyledNavLink = styled(NavLink)`
-//   text-decoration: none;
-//   color: #1976d2;
-//   font-family: "Poppins", sans-serif;
-//   font-weight: bold;
-//   font-size: 1.2rem;
-//   transition: color 0.3s ease, text-shadow 0.3s ease;
-
-//   &:hover {
-//     color: #f1356d;
-//     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-//   }
-// `;
-
 const PostActions = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
@@ -82,22 +68,8 @@ function Post(props) {
   };
 
   return (
-    <StandardContainer
-      style={{
-        margin: "0.5rem 0",
-        backgroundColor: "#f4f9fd",
-        border: "4px",
-        boxShadow: "2px 4px 6px #CAE4F6",
-      }}
-    >
-      <PostHeader
-        style={{
-          border: "none",
-          boxShadow: "none",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <StandardContainer style={{ marginBottom: "1rem" }}>
+      <PostHeader>
         <Box style={{ display: "flex", alignItems: "center" }}>
           <Avatar
             src={postOwner?.userInfo?.avatarUrl || null}
@@ -105,14 +77,14 @@ function Post(props) {
           >
             {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
           </Avatar>
-          <Box style={{display: "flex", flexDirection: "column", justifyContent: "center",}}>
+          <StyledNavLink to={`/profile/${postOwner.accountId}`}>
             <Typography variant="h6">{postOwner.username}</Typography>
             <Typography variant="caption">
               {post.dateCreated
                 ? new Date(post.dateCreated).toLocaleString()
                 : "No timestamp available"}
             </Typography>
-          </Box>
+          </StyledNavLink>
         </Box>
       </PostHeader>
       <PostContent

@@ -9,7 +9,6 @@ class ImageService {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(response => {
-            console.log('Image uploaded successfully:', response.data);
             return response.data;
         }).catch(error => {
             throw error;
@@ -17,7 +16,6 @@ class ImageService {
     }
     deleteImage(imageId) {
         return axios.delete(`${api_url}/${imageId}`).then(response => {
-            console.log('Image deleted successfully:', response.data);
             return response.data;
         }).catch(error => {
             throw error;
@@ -25,7 +23,14 @@ class ImageService {
     }
     getPresignedUrl(key) {
         return axios.get(`${api_url}/getPresignedUrl/${key}`).then(response => {
-            console.log('Presigned URL fetched successfully:', response.data);
+            return response.data;
+        }).catch(error => {
+            throw error;
+        });
+    }
+    
+    updateImage(imageId, updateImageRequest) {
+        return axios.put(`${api_url}/${imageId}`, updateImageRequest).then(response => {
             return response.data;
         }).catch(error => {
             throw error;

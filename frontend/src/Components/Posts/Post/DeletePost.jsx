@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import postService from "../../../Services/post.service";
-
+import { Delete } from "@mui/icons-material";
 
 function DeletePost(props) {
     const { post, onPostDelete } = props;
@@ -13,7 +13,12 @@ function DeletePost(props) {
     }
 
     return ( 
-        <Button variant="contained" color="error" onClick={() => hadnleClick()}>
+        <Button
+            onClick={() => hadnleClick()}
+            startIcon={<Delete />}
+            color="error"
+            size="small"
+            variant="outlined">
             Delete
         </Button>
      );
