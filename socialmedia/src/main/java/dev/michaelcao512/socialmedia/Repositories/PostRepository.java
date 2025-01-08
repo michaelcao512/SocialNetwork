@@ -27,4 +27,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.postId = ?1")
     Optional<Post> findById(long postId);
 
+    @Query("SELECT p FROM Post p WHERE p.account.accountId IN (:followingIds) ORDER BY p.dateCreated DESC")
+    List<Post> findPostsByFollowingAccounts(@Param("followingIds") List<Long> followingIds);
 }

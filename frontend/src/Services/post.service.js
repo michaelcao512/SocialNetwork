@@ -60,6 +60,15 @@ class PostService {
             console.log("error: ", error);
         });
     }
+
+    getHomePosts(accountId) {
+        return axios
+          .get(`${api_url}/getHomePosts/${accountId}`)
+          .then((response) => response.data)
+          .catch((error) => {
+            console.error("Error fetching home posts: ", error);
+          });
+      }
 }
 
 const postService = new PostService();

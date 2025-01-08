@@ -21,7 +21,7 @@ function LoginForm() {
         authService.login(loginRequest)
             .then(response => {
                 console.log("login response: ", response);
-                        navigate(`/profile/${response.id}`);
+                        navigate(`/feed`);
             })
             .catch(error => {
                 console.log("login error: ", error);

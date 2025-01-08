@@ -25,15 +25,17 @@ public class PostService {
     private final AccountRepository accountRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
+    private final AccountService accountService;
 
     private Logger logger = LoggerFactory.getLogger(PostService.class);
 
     public PostService(PostRepository postRepository, AccountRepository accountRepository,
-            ImageRepository imageRepository, ImageService imageService) {
+            ImageRepository imageRepository, ImageService imageService, AccountService accountService) {
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
         this.imageRepository = imageRepository;
         this.imageService = imageService;
+        this.accountService = accountService;
     }
 
     @Transactional
@@ -140,4 +142,13 @@ public class PostService {
         return results;
     }
 
+    public List<Post> getPostsFromFollowedAccounts(Long accountId){
+        List<Account> followingAccounts = accountService.getFollowing(accountId);
+
+        List<Long> followingIds = followingAccounts.stream()
+                .map(Account::getAccountId)
+                .toList();
+        
+        return postRepository.findPostsByFollowingAccounts(followingIds);
+    }
 }
