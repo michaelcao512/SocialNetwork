@@ -68,9 +68,6 @@ function ProfilePage() {
     } else {
       setIsOwnProfile(false);
     }
-    console.log("profileUserId", profileUserId);
-    console.log("user.id", user.id);
-    console.log("is own profile", isOwnProfile);
   }, [profileUserId, user.id, fetchUserInfo, fetchPosts, fetchUsername]);
 
   async function refreshPostsHandler() {
