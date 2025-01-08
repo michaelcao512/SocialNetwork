@@ -15,6 +15,7 @@ import SearchUserPage from './Pages/SearchUserPage';
 import RegistrationConfirmation from './Pages/RegistrationConfirmation';
 import EmailVerification from './Pages/EmailVerification';
 import UnifiedSearchPage from './Pages/UnifiedSearchPage';
+import FeedPage from './Pages/FeedPage';
 
 
 import { ThemeProvider } from '@emotion/react';
@@ -41,6 +42,7 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
+            <Route path="/feed" element={<FeedPage />} />
             <Route path="/search" element={<UnifiedSearchPage />} />
             <Route path="/allposts" element={<AllPostsPage />} />
             <Route path="/allusers" element={<AllUsersPage />} />
