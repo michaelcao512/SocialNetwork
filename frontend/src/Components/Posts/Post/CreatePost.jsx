@@ -79,7 +79,7 @@ function CreatePost(props) {
                         }}
                         variant="outlined"
                         error={!!error}
-                        helperText={error}
+                        helperText={ error || `${content.length}/${MAX_CONTENT_LENGTH} characters` }
                     />
                 </FormControl>
                 <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove}/>
