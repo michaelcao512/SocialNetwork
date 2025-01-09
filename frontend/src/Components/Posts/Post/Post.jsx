@@ -9,11 +9,11 @@ import PostHeader from "../PostHeader";
 import PostContent from "../PostContent";
 
 function Post(props) {
-    const { post, user, onPostDelete, onPostUpdate } = props;
-    const [postOwner, setPostOwner] = useState("");
-    const [canManagePost, setCanManagePost] = useState(false);
-    const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
-    const [comments, setComments] = useState([]);
+  const { post, user, onPostDelete, onPostUpdate } = props;
+  const [postOwner, setPostOwner] = useState("");
+  const [canManagePost, setCanManagePost] = useState(false);
+  const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
+  const [comments, setComments] = useState([]);
 
     useEffect(() => {
         try {
@@ -34,9 +34,9 @@ function Post(props) {
         });
     }, [post.postId]);
 
-    useEffect(() => {
-        fetchComments();
-    }, [fetchComments]);
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
     const handleAddCommentClick = () => {
         setIsCommentInputVisible(() => !isCommentInputVisible);

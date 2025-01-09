@@ -5,7 +5,6 @@ import authService from "../../../Services/auth.service";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography } from "@mui/material";
 import SelectImage from "../../Image/SelectImage";
 import Image from "../../Image/Image";
-import { Edit } from "@mui/icons-material";
 function EditPost({ post, onPostUpdate, onClose }) {
     const user = authService.getCurrentUser();
     const [content, setContent] = useState(post.content);

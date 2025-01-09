@@ -54,9 +54,9 @@ function Comment({ user, comment, fetchComments }) {
         setIsCommentInputVisible((prev) => !prev);
     };
 
-    const handleCancelComment = () => {
-        setIsCommentInputVisible(false);
-    };
+  const handleCancelComment = () => {
+    setIsCommentInputVisible(false);
+  };
 
     return (
         <CommentContainer style={{ backgroundColor: "#f4f9fd", boxShadow: "none" }}>
