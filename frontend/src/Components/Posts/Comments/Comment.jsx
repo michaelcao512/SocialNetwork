@@ -59,9 +59,9 @@ function Comment({ user, comment, fetchComments }) {
         });
     };
 
-    const handleAddCommentClick = () => {
-        setIsCommentInputVisible(() => !isCommentInputVisible);
-    };
+  const handleAddCommentClick = () => {
+    setIsCommentInputVisible((prev) => !prev);
+  };
 
     const handleCancelComment = () => {
         setIsCommentInputVisible(false);

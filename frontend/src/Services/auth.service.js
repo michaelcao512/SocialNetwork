@@ -35,9 +35,25 @@ class AuthService {
     }
   }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
-  }
+    getCurrentUser() {
+        const user = localStorage.getItem("user");
+        if (!user) {
+            console.error("No user found in localStorage.");
+            return null;
+        }
+        try {
+            const parsedUser = JSON.parse(user);
+            if (!parsedUser.id) {
+                console.error("User object is missing ID:", parsedUser);
+                return null;
+            }
+            return parsedUser;
+        } catch (error) {
+            console.error("Error parsing user from localStorage:", error);
+            return null;
+        }
+    }
+
 }
 
 const authService = new AuthService();

@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import postService from "../../../Services/post.service";
 import imageService from "../../../Services/image.service";
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Input, Typography, IconButton } from "@mui/material";
+import authService from "../../../Services/auth.service";
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography } from "@mui/material";
 import SelectImage from "../../Image/SelectImage";
 import Image from "../../Image/Image";
-function EditPost({ user, post, onPostUpdate, onClose }) {
+import { Edit } from "@mui/icons-material";
+function EditPost({ post, onPostUpdate, onClose }) {
+    const user = authService.getCurrentUser();
     const [content, setContent] = useState(post.content);
+    const [error, setError] = useState("");
     const [existingImages, setExistingImages] = useState(post.images || []);
     const [selectedImages, setSelectedImages] = useState([]);
+
+    const MAX_CONTENT_LENGTH = 255;
 
     useEffect(() => {
         setContent(post.content);
@@ -30,26 +36,41 @@ function EditPost({ user, post, onPostUpdate, onClose }) {
     const handleCancel = () => {
         onClose();
         setSelectedImages([]);
-        setContent(post.content);
+        setContent(post.content || "");
+        setError("");
     };
+
     const handleSave = async () => {
+        if (!user || !user.id) {
+            setError("Error: User is not authenticated.");
+            console.error("Error: User is undefined or missing ID.");
+            return;
+        }
+
+        if (!content.trim()) {
+            setError("Post content cannot be empty.");
+            return;
+        }
+
+        if (content.length > MAX_CONTENT_LENGTH) {
+            setError(`Post content cannot exceed ${MAX_CONTENT_LENGTH} characters.`);
+            return;
+        }
+
         try {
-            console.log("user", user);
             // handle content and imageIds didn't change and cancel edit if necessary
             if (content === post.content && selectedImages.length === 0 && existingImages.length === post.images.length) {
-                onClose();
+                handleCancel();
                 return;
             }
-
             const newImageIds = [];
             for (const image of selectedImages) {
                 const formData = new FormData();
                 formData.append("file", image);
                 formData.append("fileName", image.name);
-                formData.append("accountId", user.accountId);
+                formData.append("accountId", user.id);
                 formData.append("imageType", "POST");
                 const imageResponse = await imageService.uploadFile(formData);
-
                 newImageIds.push(imageResponse.imageId);
             }
 
@@ -61,11 +82,13 @@ function EditPost({ user, post, onPostUpdate, onClose }) {
                 content: content,
                 imageIds: allImageIds,
             };
+
             await postService.updatePost(updatePostRequest);
             onPostUpdate();
-            onClose();
+            handleCancel();
         } catch (error) {
             console.error("Error updating post: ", error);
+            setError("Failed to update the post. Please try again later.");
         }
     };
 
@@ -82,9 +105,22 @@ function EditPost({ user, post, onPostUpdate, onClose }) {
                         label="Content"
                         type="text"
                         fullWidth
-                        variant="standard"
+                        variant="outlined"
                         value={content}
-                        onChange={(event) => setContent(event.target.value)}
+                        onChange={(event) => {
+                            const value = event.target.value;
+                            setContent(value);
+
+                            if (!value.trim()) {
+                                setError("Post content cannot be empty.");
+                            } else if (value.length > MAX_CONTENT_LENGTH) {
+                                setError(`Post content cannot exceed ${MAX_CONTENT_LENGTH} characters.`);
+                            } else {
+                                setError("");
+                            }
+                        }}
+                        error={!!error}
+                        helperText={error || `${content.length}/${MAX_CONTENT_LENGTH} characters`}
                     />
 
                     {existingImages.length > 0 && (
@@ -100,7 +136,9 @@ function EditPost({ user, post, onPostUpdate, onClose }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancel}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={handleSave} color="primary" variant="contained">
+                        Save
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

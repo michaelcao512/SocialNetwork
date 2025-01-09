@@ -11,8 +11,8 @@ const CommentsContainer = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
 }));
 
-function DisplayComments({ fetchComments, user, comments }) {
-    if (comments.length === 0) {
+function DisplayComments({ fetchComments = () => {}, user = {}, comments = [] }) {
+    if (!Array.isArray(comments) || comments.length === 0) {
         return (
             <CommentsContainer>
                 <Typography variant="body1" align="center">
@@ -21,6 +21,7 @@ function DisplayComments({ fetchComments, user, comments }) {
             </CommentsContainer>
         );
     }
+
     return (
         <CommentsContainer>
             <Divider textAlign="left">Replies</Divider>

@@ -1,16 +1,15 @@
-
-import { Box, Button, FormControl, FormLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import authService from '../../Services/auth.service';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, FormControl, FormLabel, MenuItem, Select, TextField, } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import authService from '../../Services/auth.service';
 import userService from '../../Services/user.service';
-import axios from 'axios';
-
 
 function RegistrationForm() {
     const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -20,257 +19,147 @@ function RegistrationForm() {
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [usernameError, setUsernameError] = useState(false);
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const [buttonDisabled, setButtonDisabled] = useState(true);
-    
-    useEffect(() => {
-        // button disabled if any required fields not there
-        // or email or username is invalid
-        setButtonDisabled(
-            email.length == 0 ||
-            password.length == 0 ||
-            username.length == 0 ||
-            firstName.length == 0 ||
-            emailError ||
-            usernameError
-        );
-    }, [emailError, usernameError, email, password, username, firstName]);
-    
 
-/*
+    const emailTimeoutRef = useRef(null);
+    const usernameTimeoutRef = useRef(null);
+
+    useEffect(() => {
+        setButtonDisabled(
+            !email ||
+            !password ||
+            !confirmPassword ||
+            !username ||
+            !firstName ||
+            !lastName ||
+            !gender ||
+            emailError ||
+            usernameError ||
+            passwordError ||
+            password !== confirmPassword
+        );
+    }, [
+        email,
+        password,
+        confirmPassword,
+        username,
+        firstName,
+        lastName,
+        gender,
+        emailError,
+        usernameError,
+        passwordError,
+    ]);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8080/api/auth/register', {
-                email: email,
-                password: password,
-                username: username,
-                firstName: firstName,
-                lastName: lastName,
-                gender: gender,
-            });
-    
-            // Axios already parses JSON, so no need to call response.json()
-            console.log('Registration successful:', response.data);
-    
-            if (response.data.success) {
-                alert('Registration successful!');
-            } else {
-                alert('Registration failed.');
-            }
-        } catch (error) {
-            console.error('Registration error:', error);
-            alert('An error occurred. Please try again.');
-        }
-    };
-    */
 
-
-        const handleSubmit = async (event) => {
-        event.preventDefault();
-        
         const registrationRequest = {
-            email: email,
-            password: password,
-            username: username,
-            firstName: firstName,
-            lastName: lastName,
-            gender: gender
+            email,
+            password,
+            username,
+            firstName,
+            lastName,
+            gender,
         };
 
         try {
             const response = await authService.register(registrationRequest);
-           
-            // Check the response structure
             if (response.accountId) {
                 navigate('/registration-confirmation');
             } else {
-                
                 alert(response.message || 'Registration failed');
             }
         } catch (error) {
             console.error('Registration error:', error);
-            
-            // Handle the error response properly
-            if (error.response && error.response.data) {
-                alert(error.response.data.message || 'Registration failed. Please try again.');
-            } else {
-                alert(error.message || 'An unexpected error occurred. Please try again.');
-            }
+            alert(
+                error.response?.data?.message ||
+                error.message ||
+                'An unexpected error occurred. Please try again.'
+            );
         }
     };
-        
 
-        /*
-        try{
-            const response = await authService.register(registrationRequest);
-            if (response.ok) {
-                navigate('/registration-confirmation');
-            } else{
-                const error = await response.json();
-                alert(error.message || 'Registration failed')
-            }
-        }catch (error){
-            console.error('Registration error:', error);
-            alert(error.message || 'Registration failed.  Please try again.');
-        }
+    const handleEmailValidation = (email) => {
+        clearTimeout(emailTimeoutRef.current);
 
-    };
-
-        /*
-        authService.register(registrationRequest)
-            .then(response => {
-                console.log("registration response: ", response);
-                if(response.ok){
-                    navigate("/registration-confirmation");
-                }
-                else{
-                    const error = response.json();
-                    alert(error.message || "Registration failed.")
-                }
-
-
-/*
-
-                authService.login({ username: username, password: password })
-                    .then(response => {
-                        console.log("login response: ", response);
-                        navigate(`/profile/${response.id}`);
-                    })
-                    .catch(error => {
-                        console.log("login error: ", error);
-                    });
-            })
-            .catch(error => {
-                console.log("registration error: ", error);
-
-                
-            });
-    };
-
-*/
-
-const handleEmailValidation = async (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Reset error state at the beginning
-    setEmailError(false);
-    setEmailErrorMessage('');
-
-    // Check email format
-    if (!emailRegex.test(email)) {
-        setEmailError(true);
-        setEmailErrorMessage('Invalid email format');
-        return; // Stop further execution
-    }
-
-    try {
-        // Call backend to check if the email exists
-        const exists = await userService.checkEmailExists(email);
-
-        if (exists) {
-            setEmailError(true);
-            setEmailErrorMessage('Email already exists');
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
-        }
-    } catch (error) {
-        console.error('Error checking email:', error);
-        setEmailError(true);
-        setEmailErrorMessage('Unable to validate email');
-    }
-};
-
-
-/*
-    const handleEmailValidation = async (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setEmailError(true);
             setEmailErrorMessage('Invalid email format');
+            return;
         }
-        
-        try{
-            const exists = await userService.checkEmailExists(email);
-            if (exists) {
-                setEmailError(true);
-                setEmailErrorMessage('Email already exists')
-            }else {
-                setEmailError(false);
-                setEmailErrorMessage('');
-            }
 
-        } catch (error) {
-            console.error('Error checking email:', error);
-            setEmailError(true);
-            setEmailErrorMessage('Unable to validate email')
-        }
-    };
-
-/*
-        userService.checkEmailExists(email)
-            .then(response => {
-
-                if (response) {
+        emailTimeoutRef.current = setTimeout(async () => {
+            try {
+                const exists = await userService.checkEmailExists(email);
+                if (exists) {
                     setEmailError(true);
                     setEmailErrorMessage('Email already exists');
                 } else {
                     setEmailError(false);
                     setEmailErrorMessage('');
                 }
-            })
-            .catch(error => {
-                console.log("error: ", error);
-            })
-    };
-*/
-
-
-    const handleUsernameValidation = async (username) => {
-        try{
-            const exists = await userService.checkUsernameExists(username);
-            if (exists) {
-                setUsernameError(true);
-                setUsernameErrorMessage('Username already exists');
-            }else{
-                setUsernameError(false);
-                setUsernameErrorMessage('');
+            } catch (error) {
+                console.error('Error checking email:', error);
+                setEmailError(true);
+                setEmailErrorMessage('Unable to validate email');
             }
-        } catch (error) {
-            console.error('Error checking username:', error);
-            setUsernameError(true);
-            setUsernameErrorMessage('Unable to validate username');
-        }
+        }, 500);
     };
-    /* 
+
     const handleUsernameValidation = (username) => {
-        userService.checkUsernameExists(username)
-            .then(response => {
-                if (response) {
+        clearTimeout(usernameTimeoutRef.current);
+
+        usernameTimeoutRef.current = setTimeout(async () => {
+            try {
+                const exists = await userService.checkUsernameExists(username);
+                if (exists) {
                     setUsernameError(true);
-                    setUsernameErrorMessage('Username already exists');
+                    setUsernameErrorMessage('Username not available');
                 } else {
                     setUsernameError(false);
                     setUsernameErrorMessage('');
                 }
-            })
-            .catch(error => {
-                console.log("error: ", error);
-            }); 
-        
+            } catch (error) {
+                console.error('Error checking username:', error);
+                setUsernameError(true);
+                setUsernameErrorMessage('Unable to validate username');
+            }
+        }, 500);
     };
-*/
-    return ( 
-        <Box component="form" onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: '400px', margin: 'auto' }}>
-            
+
+    const handlePasswordValidation = (password) => {
+        if (password.length < 8) {
+            setPasswordError(true);
+            setPasswordErrorMessage('Password must be at least 8 characters long');
+        } else {
+            setPasswordError(false);
+            setPasswordErrorMessage('');
+        }
+    };
+
+    return (
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                width: '100%',
+                maxWidth: '400px',
+                margin: 'auto',
+            }}
+        >
             <FormControl>
                 <FormLabel htmlFor="email">Email *</FormLabel>
                 <TextField
                     id="email"
                     name="email"
                     type="email"
-                    autoComplete="email"
                     required
                     fullWidth
                     placeholder="your@email.com"
@@ -278,8 +167,8 @@ const handleEmailValidation = async (email) => {
                     value={email}
                     error={emailError}
                     helperText={emailErrorMessage}
-                    onBlur={(event) => handleEmailValidation(event.target.value)}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onBlur={(e) => handleEmailValidation(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
             </FormControl>
 
@@ -289,19 +178,40 @@ const handleEmailValidation = async (email) => {
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="password"
                     required
                     fullWidth
                     placeholder="password"
                     size="small"
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    error={passwordError}
+                    helperText={passwordErrorMessage}
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                        handlePasswordValidation(e.target.value);
+                    }}
+                />
+            </FormControl>
+
+            <FormControl>
+                <FormLabel htmlFor="confirmPassword">Confirm Password *</FormLabel>
+                <TextField
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    fullWidth
+                    placeholder="Confirm Password"
+                    size="small"
+                    value={confirmPassword}
+                    error={password !== confirmPassword}
+                    helperText={password !== confirmPassword ? 'Passwords do not match' : ''}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                 />
             </FormControl>
 
             <FormControl>
                 <FormLabel htmlFor="username">Username *</FormLabel>
-                <TextField  
+                <TextField
                     id="username"
                     name="username"
                     type="text"
@@ -312,14 +222,14 @@ const handleEmailValidation = async (email) => {
                     value={username}
                     error={usernameError}
                     helperText={usernameErrorMessage}
-                    onBlur={(event) => handleUsernameValidation(event.target.value)}
-                    onChange={(event) => setUsername(event.target.value)}
-                />  
+                    onBlur={(e) => handleUsernameValidation(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
             </FormControl>
 
             <FormControl>
                 <FormLabel htmlFor="firstName">First Name *</FormLabel>
-                <TextField  
+                <TextField
                     id="firstName"
                     name="firstName"
                     type="text"
@@ -328,48 +238,46 @@ const handleEmailValidation = async (email) => {
                     placeholder="First Name"
                     size="small"
                     value={firstName}
-                    onChange={(event) => setFirstName(event.target.value)}
-                />  
-            </FormControl>
-
-            <FormControl>
-                <FormLabel htmlFor="lastName">Last Name</FormLabel>
-                <TextField  
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    fullWidth
-                    placeholder="Last Name"
-                    size="small"
-                    value={lastName}
-                    onChange={(event) => setLastName(event.target.value)}
+                    onChange={(e) => setFirstName(e.target.value)}
                 />
             </FormControl>
 
             <FormControl>
-                <FormLabel htmlFor="gender">Gender</FormLabel>
-                <Select 
+                <FormLabel htmlFor="lastName">Last Name *</FormLabel>
+                <TextField
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required
+                    fullWidth
+                    placeholder="Last Name"
+                    size="small"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+            </FormControl>
+
+            <FormControl>
+                <FormLabel htmlFor="gender">Gender *</FormLabel>
+                <Select
                     id="gender"
                     name="gender"
+                    required
                     fullWidth
                     size="small"
                     value={gender}
-                    onChange={(event) => setGender(event.target.value)}
+                    onChange={(e) => setGender(e.target.value)}
                 >
                     <MenuItem value="male">Male</MenuItem>
                     <MenuItem value="female">Female</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
                 </Select>
             </FormControl>
 
-            <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={buttonDisabled}
-            >Register</Button>
+            <Button type="submit" variant="contained" color="primary" disabled={buttonDisabled}>
+                Register
+            </Button>
         </Box>
-     );
+    );
 }
 
 export default RegistrationForm;

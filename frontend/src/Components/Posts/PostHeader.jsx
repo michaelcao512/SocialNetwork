@@ -42,8 +42,8 @@ function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete
                         {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
                     </Avatar>
                     <Box style={{ display: "flex", flexDirection: "column" }}>
-                        <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-                            <Typography variant="h6">{postOwner.username}</Typography>
+                        <StyledNavLink to={`/profile/${postOwner.accountId || ""}`}>
+                            <Typography variant="h6">{postOwner.username || "Unknown User"}</Typography>
                         </StyledNavLink>
                         <Typography variant="caption">
                             {post.dateCreated
@@ -80,7 +80,7 @@ function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete
                     </Menu>
                 </Box>
             </Box>
-            {isEditOpen && <EditPost user={postOwner} post={post} onPostUpdate={onPostUpdate} onClose={handleEditClose} />}
+            {isEditOpen && <EditPost post={post} onPostUpdate={onPostUpdate} onClose={handleEditClose} />}
         </>
     );
 }

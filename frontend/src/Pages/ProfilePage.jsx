@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-
 import { StyledStack, StyledCard } from "../StyledComponents/StyledComponents";
 import { Typography, Divider } from "@mui/material";
 
@@ -15,13 +14,13 @@ import { useParams } from "react-router-dom";
 import EditUserInfo from "../Components/Profile/UserInfo/EditUserInfo";
 
 function ProfilePage() {
-  let { profileUserId } = useParams();
+  const { profileUserId } = useParams();
   const user = authService.getCurrentUser();
 
   const [userInfo, setUserInfo] = useState({});
   const [posts, setPosts] = useState([]);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState("");
 
   const fetchUsername = useCallback(async () => {
     try {
@@ -34,9 +33,7 @@ function ProfilePage() {
 
   const fetchUserInfo = useCallback(async () => {
     try {
-      const response = await userInfoService.getUserInfoByAccountId(
-        profileUserId
-      );
+      const response = await userInfoService.getUserInfoByAccountId(profileUserId);
       setUserInfo(response);
     } catch (error) {
       console.log("error: ", error);
@@ -52,9 +49,6 @@ function ProfilePage() {
     }
   }, [profileUserId]);
 
-  // rerenders without fetching when isOwnProfile changes
-  useEffect(() => {}, [isOwnProfile]);
-
   useEffect(() => {
     const fetchData = async () => {
       await fetchUserInfo();
@@ -62,61 +56,55 @@ function ProfilePage() {
       await fetchUsername();
     };
     fetchData();
-
-    if (profileUserId == user.id) {
-      setIsOwnProfile(true);
-    } else {
-      setIsOwnProfile(false);
-    }
-  }, [profileUserId, user.id, fetchUserInfo, fetchPosts, fetchUsername]);
+    setIsOwnProfile(user?.id?.toString() === profileUserId);
+  }, [profileUserId, user?.id, fetchUserInfo, fetchPosts, fetchUsername]);
 
   async function refreshPostsHandler() {
     await fetchPosts();
   }
+
   return (
-    <StyledStack
-      style={{ backgroundColor: "#ffffff", border: "none", boxShadow: "none" }}
-    >
-      <Typography variant="h3" gutterBottom>
-        Profile
-      </Typography>
-      <StyledCard
-        style={{
-          backgroundColor: "#f4f9fd",
-          border: "none",
-          boxShadow: "2px 4px 6px #CAE4F6",
-        }}
-      >
-        <UserInfoComponent
-          user={user}
-          userInfo={userInfo}
-          profileId={profileUserId}
-          username={username}
-        />
-        {isOwnProfile && (
-          <>
-            <EditUserInfo
+      <StyledStack style={{ backgroundColor: "#ffffff", border: "none", boxShadow: "none" }}>
+        <Typography variant="h3" gutterBottom>
+          Profile
+        </Typography>
+        <StyledCard
+            style={{
+              backgroundColor: "#f4f9fd",
+              border: "none",
+              boxShadow: "2px 4px 6px #CAE4F6",
+            }}
+        >
+          <UserInfoComponent
               user={user}
               userInfo={userInfo}
-              onUserInfoUpdate={fetchUserInfo}
-            />
-          </>
-        )}
-        <Divider sx={{ my: 2 }} />
-        <Typography variant="h5" gutterBottom>
-          Posts
-        </Typography>
-        {isOwnProfile && (
-          <CreatePost user={user} onPostCreated={refreshPostsHandler} />
-        )}
-        <DisplayPosts
-          user={user}
-          posts={posts}
-          onPostDelete={refreshPostsHandler}
-          onPostUpdate={refreshPostsHandler}
-        />
-      </StyledCard>
-    </StyledStack>
+              profileId={profileUserId}
+              username={username}
+          />
+          {isOwnProfile && (
+              <>
+                <EditUserInfo
+                    user={user}
+                    userInfo={userInfo}
+                    onUserInfoUpdate={fetchUserInfo}
+                />
+              </>
+          )}
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="h5" gutterBottom>
+            Posts
+          </Typography>
+          {isOwnProfile && (
+              <CreatePost user={user} onPostCreated={refreshPostsHandler} />
+          )}
+          <DisplayPosts
+              user={user}
+              posts={posts}
+              onPostDelete={refreshPostsHandler}
+              onPostUpdate={refreshPostsHandler}
+          />
+        </StyledCard>
+      </StyledStack>
   );
 }
 
