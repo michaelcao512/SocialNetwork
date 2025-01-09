@@ -3,7 +3,6 @@ import { Box, Typography, Avatar, IconButton, Menu, MenuItem, ListItemIcon, List
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { StyledNavLink } from "../../../StyledComponents/StyledComponents";
 import EditPost from "./EditPost";
-import DeletePost from "./DeletePost";
 import { Edit, Delete } from "@mui/icons-material";
 import postService from "../../../Services/post.service";
 
@@ -29,7 +28,8 @@ function PostHeader({ user, postOwner, post, canManagePost, onPostUpdate, onPost
     };
 
     const handleDeleteClick = () => {
-        postService.deletePost(post.postId)
+        postService
+            .deletePost(post.postId)
             .then(() => onPostDelete())
             .catch((error) => console.log("Delete post error: ", error));
         handleMenuClose();
@@ -45,7 +45,17 @@ function PostHeader({ user, postOwner, post, canManagePost, onPostUpdate, onPost
                         <StyledNavLink to={`/profile/${postOwner.accountId}`}>
                             <Typography variant="h6">{postOwner.username}</Typography>
                         </StyledNavLink>
-                        <Typography variant="caption">{post.dateCreated ? new Date(post.dateCreated).toLocaleString() : "No timestamp available"}</Typography>
+                        <Typography variant="caption">
+                            {post.dateCreated
+                                ? new Intl.DateTimeFormat("en-US", {
+                                      year: "numeric",
+                                      month: "2-digit",
+                                      day: "2-digit",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                  }).format(new Date(post.dateCreated))
+                                : "No timestamp available"}
+                        </Typography>{" "}
                     </Box>
                 </Box>
                 <Box style={{ alignSelf: "flex-end" }}>
