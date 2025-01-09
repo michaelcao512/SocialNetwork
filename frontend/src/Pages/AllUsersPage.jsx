@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography, Grid, Card, CardContent, Avatar, Box, Grid2 } from "@mui/material";
+import { Typography, Card, CardContent, Avatar, Box, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import userService from "../Services/user.service";
 

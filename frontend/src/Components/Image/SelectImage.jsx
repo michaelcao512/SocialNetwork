@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box, Typography, IconButton, Button, Input } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import React from "react";
+import { Box, IconButton, Button, Grid2, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 function SelectImage({ selectedImages, onImageSelect, handleImageRemove }) {
     const handleFileChange = (event) => {
@@ -21,33 +21,25 @@ function SelectImage({ selectedImages, onImageSelect, handleImageRemove }) {
     return (
         <Box>
             {selectedImages.length > 0 && (
-                <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" color="textSecondary">
-                        Selected Images:
-                    </Typography>
-                    {selectedImages.map((image, index) => (
-                        <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                            <img src={URL.createObjectURL(image)} alt="Selected" />
-                            <IconButton onClick={() => handleImageRemove(index)} color="secondary">
+                <Typography variant="body2" color="textSecondary">
+                    Images to Upload
+                </Typography>
+            )}
+            <Grid2 container spacing={2}>
+                {selectedImages.map((image, index) => (
+                    <Grid2 item size={{ xs: 6, sm: 4, md: 3 }} key={index}>
+                        <Box sx={{ position: "relative" }}>
+                            <img src={URL.createObjectURL(image)} alt="Selected" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
+                            <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
-                    ))}
-                </Box>
-            )}
-            <Button
-                component="label"
-                variant="outline"
-                color="primary"
-                startIcon={<UploadFileIcon />}
-                >
+                    </Grid2>
+                ))}
+            </Grid2>
+            <Button component="label" variant="outline" color="primary" startIcon={<UploadFileIcon />}>
                 Upload Images
-                <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    multiple
-                    onChange={handleFileChange} />
+                <input type="file" accept="image/*" hidden multiple onChange={handleFileChange} />
             </Button>
         </Box>
     );
