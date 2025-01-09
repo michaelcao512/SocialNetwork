@@ -5,7 +5,6 @@ import authService from "../../../Services/auth.service";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography } from "@mui/material";
 import SelectImage from "../../Image/SelectImage";
 import Image from "../../Image/Image";
-import { Edit } from "@mui/icons-material";
 function EditPost({ post, onPostUpdate, onClose }) {
     const user = authService.getCurrentUser();
     const [content, setContent] = useState(post.content);
@@ -33,7 +32,7 @@ function EditPost({ post, onPostUpdate, onClose }) {
         setExistingImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
 
-    const handleCancel = () => {
+    const handleClose = () => {
         onClose();
         setSelectedImages([]);
         setContent(post.content || "");
@@ -60,7 +59,7 @@ function EditPost({ post, onPostUpdate, onClose }) {
         try {
             // handle content and imageIds didn't change and cancel edit if necessary
             if (content === post.content && selectedImages.length === 0 && existingImages.length === post.images.length) {
-                handleCancel();
+                handleClose();
                 return;
             }
             const newImageIds = [];
@@ -85,7 +84,7 @@ function EditPost({ post, onPostUpdate, onClose }) {
 
             await postService.updatePost(updatePostRequest);
             onPostUpdate();
-            handleCancel();
+            handleClose();
         } catch (error) {
             console.error("Error updating post: ", error);
             setError("Failed to update the post. Please try again later.");
@@ -94,7 +93,7 @@ function EditPost({ post, onPostUpdate, onClose }) {
 
     return (
         <>
-            <Dialog open={true} onClose={handleCancel} maxWidth="sm" fullWidth>
+            <Dialog open={true} onClose={handleClose} maxWidth="sm" fullWidth>
                 <DialogTitle>Edit Post</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -135,7 +134,7 @@ function EditPost({ post, onPostUpdate, onClose }) {
                     <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCancel}>Cancel</Button>
+                    <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSave} color="primary" variant="contained">
                         Save
                     </Button>

@@ -9,14 +9,14 @@ const theme = createTheme({
             primary: '#333', 
         },
         primary: {
-            main: '#1976d2',
+            main: '#334E71',
         },
         secondary: {
-            main: '#f50057',
+            main: '#B9314F',
         },
         third:{
-            main:'#CAE4F6',
-        }
+            main:'#B9314F',
+        },
     },
 });
 

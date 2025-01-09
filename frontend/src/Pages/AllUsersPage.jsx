@@ -1,6 +1,6 @@
-import {useState, useEffect} from "react";
-import {Typography, Grid, Card, CardContent, Avatar, Box} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Typography, Grid, Card, CardContent, Avatar, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import userService from "../Services/user.service";
 
 function AllUsersPage() {
@@ -12,7 +12,7 @@ function AllUsersPage() {
     }, []);
 
     return (
-        <Box sx={{padding: "1rem", maxWidth: "1200px", margin: "auto"}}>
+        <Box sx={{ padding: "1rem", maxWidth: "1200px", margin: "auto" }}>
             <Typography variant="h5" gutterBottom>
                 Discover Users
             </Typography>
@@ -41,15 +41,9 @@ function AllUsersPage() {
                                 }}
                                 onClick={() => navigate(`/profile/${user.accountId}`)}
                             >
-                                <Avatar
-                                    src={user.avatar || "/default-avatar.png"}
-                                    alt={user.username}
-                                    sx={{width: 56, height: 56, marginBottom: "0.5rem"}}
-                                />
-                                <CardContent sx={{padding: "0"}}>
-                                    <Typography variant="body1">
-                                        {user.username}
-                                    </Typography>
+                                <Avatar src={user.avatar || "/default-avatar.png"} alt={user.username} sx={{ width: 56, height: 56, marginBottom: "0.5rem" }} />
+                                <CardContent sx={{ padding: "0" }}>
+                                    <Typography variant="body1">{user.username}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>

@@ -50,26 +50,24 @@ function Comment({ user, comment, fetchComments }) {
             });
     }, [comment.commentId, user.username]);
 
-    const handleUpdate = () => {
-        fetchComments();
-    };
-    const handleDelete = () => {
-        commentService.deleteComment(comment.commentId).then(() => {
-            fetchComments();
-        });
+    const handleAddCommentClick = () => {
+        setIsCommentInputVisible((prev) => !prev);
     };
 
-  const handleAddCommentClick = () => {
-    setIsCommentInputVisible((prev) => !prev);
+  const handleCancelComment = () => {
+    setIsCommentInputVisible(false);
   };
-
-    const handleCancelComment = () => {
-        setIsCommentInputVisible(false);
-    };
 
     return (
         <CommentContainer style={{ backgroundColor: "#f4f9fd", boxShadow: "none" }}>
-            <PostHeader postOwner={commentOwner} post={comment} canManagePost={canManageComment} onPostUpdate={handleUpdate} onPostDelete={handleDelete} />
+            <PostHeader
+                entityOwner={commentOwner}
+                entity={comment}
+                canManage={canManageComment}
+                onEntityUpdate={fetchComments}
+                onEntityDelete={fetchComments}
+                entityType="comment"
+            />
             <PostContent entity={comment} />
             <PostReactions entityId={comment.commentId} entityType="comment" user={user} comments={comment.replies} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && <CreateComment user={user} parentComment={comment} fetchComments={fetchComments} onCancel={handleCancelComment} />}

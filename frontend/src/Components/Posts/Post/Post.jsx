@@ -9,11 +9,11 @@ import PostHeader from "../PostHeader";
 import PostContent from "../PostContent";
 
 function Post(props) {
-    const { post, user, onPostDelete, onPostUpdate } = props;
-    const [postOwner, setPostOwner] = useState("");
-    const [canManagePost, setCanManagePost] = useState(false);
-    const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
-    const [comments, setComments] = useState([]);
+  const { post, user, onPostDelete, onPostUpdate } = props;
+  const [postOwner, setPostOwner] = useState("");
+  const [canManagePost, setCanManagePost] = useState(false);
+  const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
+  const [comments, setComments] = useState([]);
 
     useEffect(() => {
         try {
@@ -34,9 +34,9 @@ function Post(props) {
         });
     }, [post.postId]);
 
-    useEffect(() => {
-        fetchComments();
-    }, [fetchComments]);
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
     const handleAddCommentClick = () => {
         setIsCommentInputVisible(() => !isCommentInputVisible);
@@ -48,7 +48,7 @@ function Post(props) {
 
     return (
         <StandardContainer style={{ marginBottom: "1rem" }}>
-            <PostHeader user={user} postOwner={postOwner} post={post} canManagePost={canManagePost} onPostUpdate={onPostUpdate} onPostDelete={onPostDelete} />
+            <PostHeader entityOwner={postOwner} entity={post} canManage={canManagePost} onEntityUpdate={onPostUpdate} onEntityDelete={onPostDelete} entityType="post" />
             <PostContent entity={post} />
             <PostReactions entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && <CreateComment post={post} user={user} fetchComments={fetchComments} onCancel={handleCancelComment} />}
