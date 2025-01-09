@@ -5,8 +5,10 @@ import { StyledNavLink } from "../../StyledComponents/StyledComponents";
 import EditPost from "./Post/EditPost";
 import { Edit, Delete } from "@mui/icons-material";
 import postService from "../../Services/post.service";
+import commentService from "../../Services/comment.service";
+import EditComment from "./Comments/EditComment";
 
-function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete }) {
+function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDelete, entityType }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -28,38 +30,45 @@ function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete
     };
 
     const handleDeleteClick = () => {
-        postService
-            .deletePost(post.postId)
-            .then(() => onPostDelete())
-            .catch((error) => console.log("Delete post error: ", error));
-        handleMenuClose();
+        if (entityType === "post") {
+            postService.deletePost(entity.postId)
+                .then(() => onEntityDelete())
+                .catch((error) => console.log("Delete post error: ", error));
+            handleMenuClose();
+        } else if (entityType === "comment") {
+            commentService.deleteComment(entity.commentId)
+                .then(() => onEntityDelete())
+                .catch((error) => console.log("Delete comment error: ", error));
+        } else {
+            console.error("Invalid entity type for deletion: ", entityType);
+        }
     };
     return (
         <>
             <Box style={{ display: "flex", flexDirection: "row" }} width={"100%"} justifyContent={"space-between"} marginBottom={"1rem"}>
                 <Box style={{ display: "flex", alignItems: "center" }}>
-                    <Avatar src={postOwner?.userInfo?.avatarUrl || null} sx={{ marginRight: "0.5rem" }}>
-                        {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
+                    <Avatar src={entityOwner?.userInfo?.avatarUrl || null} sx={{ marginRight: "0.5rem" }}>
+                        {entityOwner?.userInfo?.firstName?.charAt(0) || "#"}
                     </Avatar>
                     <Box style={{ display: "flex", flexDirection: "column" }}>
-                        <StyledNavLink to={`/profile/${postOwner.accountId || ""}`}>
-                            <Typography variant="h6">{postOwner.username || "Unknown User"}</Typography>
+                        <StyledNavLink to={`/profile/${entityOwner.accountId || ""}`}>
+                            <Typography variant="h6">{entityOwner.username || "Unknown User"}</Typography>
                         </StyledNavLink>
                         <Typography variant="caption">
-                            {post.dateCreated
+                            {entity.dateCreated
                                 ? new Intl.DateTimeFormat("en-US", {
                                       year: "numeric",
                                       month: "2-digit",
                                       day: "2-digit",
                                       hour: "2-digit",
                                       minute: "2-digit",
-                                  }).format(new Date(post.dateCreated))
+                                  }).format(new Date(entity.dateCreated))
                                 : "No timestamp available"}
                         </Typography>{" "}
                     </Box>
                 </Box>
                 <Box style={{ alignSelf: "flex-end" }}>
-                    {canManagePost && (
+                    {canManage && (
                         <IconButton onClick={handleMenuOpen} style={{ marginLeft: "auto" }}>
                             <MoreVertIcon />
                         </IconButton>
@@ -80,7 +89,13 @@ function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete
                     </Menu>
                 </Box>
             </Box>
-            {isEditOpen && <EditPost post={post} onPostUpdate={onPostUpdate} onClose={handleEditClose} />}
+
+            {isEditOpen &&
+                (entityType === "post" ? (
+                    <EditPost post={entity} onPostUpdate={onEntityUpdate} onClose={handleEditClose} />
+                ) : (
+                    <EditComment comment={entity} onCommentUpdate={onEntityUpdate} onClose={handleEditClose} />
+                ))}
         </>
     );
 }

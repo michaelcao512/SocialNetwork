@@ -48,7 +48,7 @@ function Post(props) {
 
     return (
         <StandardContainer style={{ marginBottom: "1rem" }}>
-            <PostHeader user={user} postOwner={postOwner} post={post} canManagePost={canManagePost} onPostUpdate={onPostUpdate} onPostDelete={onPostDelete} />
+            <PostHeader entityOwner={postOwner} entity={post} canManage={canManagePost} onEntityUpdate={onPostUpdate} onEntityDelete={onPostDelete} entityType="post" />
             <PostContent entity={post} />
             <PostReactions entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
             {isCommentInputVisible && <CreateComment post={post} user={user} fetchComments={fetchComments} onCancel={handleCancelComment} />}
