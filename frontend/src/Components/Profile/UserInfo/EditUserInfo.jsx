@@ -38,7 +38,6 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         biography,
         avatarUrl,
       };
-      console.log(updatedUserInfo);
       await userInfoService.updateUserInfo(updatedUserInfo);
       onUserInfoUpdate();
       setIsEditOpen(false);

@@ -65,7 +65,7 @@ function ProfilePage() {
     }
 
     return (
-        <StyledStack style={{ backgroundColor: "#ffffff", border: "none", boxShadow: "none" }}>
+        <StyledStack>
             <Typography variant="h3" gutterBottom>
                 Profile
             </Typography>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography, Grid, Card, CardContent, Avatar, Box } from "@mui/material";
+import { Typography, Card, CardContent, Avatar, Box, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import userService from "../Services/user.service";
 
@@ -21,9 +21,9 @@ function AllUsersPage() {
                     No users to display.
                 </Typography>
             ) : (
-                <Grid container spacing={2}>
+                <Grid2 container spacing={2}>
                     {users.map((user) => (
-                        <Grid item xs={6} sm={4} md={3} key={user.accountId}>
+                        <Grid2 item size={{ xs: 6, sm: 4, md: 3 }} key={user.accountId}>
                             <Card
                                 sx={{
                                     display: "flex",
@@ -41,14 +41,18 @@ function AllUsersPage() {
                                 }}
                                 onClick={() => navigate(`/profile/${user.accountId}`)}
                             >
-                                <Avatar src={user.avatar || "/default-avatar.png"} alt={user.username} sx={{ width: 56, height: 56, marginBottom: "0.5rem" }} />
+                                <Avatar
+                                    src={user.userInfo?.avatarUrl || "/default-avatar.png"}
+                                    alt={user.username}
+                                    sx={{ width: 56, height: 56, marginBottom: "0.5rem" }}
+                                />
                                 <CardContent sx={{ padding: "0" }}>
                                     <Typography variant="body1">{user.username}</Typography>
                                 </CardContent>
                             </Card>
-                        </Grid>
+                        </Grid2>
                     ))}
-                </Grid>
+                </Grid2>
             )}
         </Box>
     );

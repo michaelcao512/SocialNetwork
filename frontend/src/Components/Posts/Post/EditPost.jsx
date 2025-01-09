@@ -125,9 +125,8 @@ function EditPost({ post, onPostUpdate, onClose }) {
                     {existingImages.length > 0 && (
                         <Box sx={{ mt: 2 }}>
                             <Typography variant="body2" color="textSecondary">
-                                Existing Images:
+                                Existing Images
                             </Typography>
-
                             <Image images={existingImages} deleteOption={true} handleImageRemove={handleExistingImageRemove} />
                         </Box>
                     )}

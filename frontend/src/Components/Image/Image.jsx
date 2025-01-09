@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import imageService from "../../Services/image.service";
-import { IconButton, Box } from "@mui/material";
+import { IconButton, Box, Grid2 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function Image({ images, deleteOption, handleImageRemove }) {
@@ -17,28 +17,42 @@ function Image({ images, deleteOption, handleImageRemove }) {
                 );
                 setImageUrls(urls);
             } catch (error) {
-                console.error('Error fetching images:', error);
+                console.error("Error fetching images:", error);
             }
         };
         fetchImages();
     }, [images]);
 
+    // single image
+    if (imageUrls.length === 1) {
+        return (
+            <Box sx={{ position: "relative", width: "60%", margin: "auto" }}>
+                <img src={imageUrls[0]} alt="Post" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
+                {deleteOption && (
+                    <IconButton onClick={() => handleImageRemove(0)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
+                        <DeleteIcon />
+                    </IconButton>
+                )}
+            </Box>
+        );
+    }
     return (
-        
         <>
-            {imageUrls.map((url, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                    <img key={index} src={url} alt="Post" style={{ maxWidth: '100%' }} />
-                    {deleteOption && (
-                        <IconButton onClick={() => handleImageRemove(index)} color="secondary">
-                            <DeleteIcon />
-                        </IconButton>
-                    )}
-                </Box>
-            ))}
-
+            <Grid2 container spacing={2}>
+                {imageUrls.map((url, index) => (
+                    <Grid2 item size={{ xs: 6, sm: 6, md: 6 }} key={index}>
+                        <Box sx={{ position: "relative" }}>
+                            <img src={url} alt="Post" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
+                            {deleteOption && (
+                                <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
+                        </Box>
+                    </Grid2>
+                ))}
+            </Grid2>
         </>
-
     );
 }
 

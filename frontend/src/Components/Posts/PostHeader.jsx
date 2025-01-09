@@ -31,12 +31,14 @@ function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDe
 
     const handleDeleteClick = () => {
         if (entityType === "post") {
-            postService.deletePost(entity.postId)
+            postService
+                .deletePost(entity.postId)
                 .then(() => onEntityDelete())
                 .catch((error) => console.log("Delete post error: ", error));
             handleMenuClose();
         } else if (entityType === "comment") {
-            commentService.deleteComment(entity.commentId)
+            commentService
+                .deleteComment(entity.commentId)
                 .then(() => onEntityDelete())
                 .catch((error) => console.log("Delete comment error: ", error));
         } else {
