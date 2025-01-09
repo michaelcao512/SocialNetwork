@@ -6,7 +6,7 @@ function DeletePost(props) {
     const { post, onPostDelete } = props;
     
 
-    function hadnleClick() {
+    function handleClick() {
         postService.deletePost(post.postId)
             .then(() => onPostDelete())
             .catch((error) => console.log("Delete post error: ", error));
@@ -14,7 +14,7 @@ function DeletePost(props) {
 
     return ( 
         <Button
-            onClick={() => hadnleClick()}
+            onClick={() => handleClick()}
             startIcon={<Delete />}
             color="error"
             size="small"

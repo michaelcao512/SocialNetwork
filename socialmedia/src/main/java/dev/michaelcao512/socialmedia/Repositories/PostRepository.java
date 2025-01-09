@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     boolean existsByAccount(Account account);
 
-    @Query("SELECT p FROM Post p WHERE p.account.accountId != ?1")
+    @Query("SELECT p FROM Post p WHERE p.account.accountId != ?1 ORDER BY p.dateCreated DESC")
     List<Post> findAllPostsBesidesOwn(Long accountId);
 
     @Query("SELECT p FROM Post p WHERE LOWER(p.content) LIKE LOWER(CONCAT('%', :query, '%'))")

@@ -10,6 +10,8 @@ function CreatePost(props) {
     const [content, setContent] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
 
+    const MAX_CONTENT_LENGTH = 255;
+
     const handleImageSelect = (file) => {
         setSelectedImages((selectedImages) => [...selectedImages, file]);
     };
@@ -24,6 +26,11 @@ function CreatePost(props) {
         console.log("selectedImages: ", selectedImages);
         if (!content.trim()){
             setError("Post content cannot be empty.");
+            return;
+        }
+
+        if (content.length > MAX_CONTENT_LENGTH){
+            setError(`Post content cannot exceed ${MAX_CONTENT_LENGTH} characters.`);
             return;
         }
         try {
@@ -45,6 +52,7 @@ function CreatePost(props) {
                 imageIds: uploadedImageIds,
             };
             await postService.createPost(createPostRequest);
+
             onPostCreated();
             setError("");
             setContent("");
