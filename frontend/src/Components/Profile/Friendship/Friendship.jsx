@@ -30,7 +30,6 @@ function Friendship(props) {
     const fetchFriendship = useCallback(() => {
         fetchFollowing();
         fetchFollowers();
-        console.log("userid and profile id", user.id, profileId);
         if (user.id !== profileId) {
             friendshipService.canFollow(user.id, profileId).then((response) => {
                 setCanFollow(response);
