@@ -64,7 +64,7 @@ function Comment({ user, comment, fetchComments }) {
     }, [comment.commentId, user.username]);
 
     const handleUpdate = (updatedContent) => {
-        setContent(updatedContent);
+        setContent(updatedContent.content);
         fetchComments();
     };
 

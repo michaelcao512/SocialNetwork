@@ -1,33 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Box } from "@mui/material";
 import DisplayReactions from "../Reactions/DisplayReactions";
-import DeletePost from "./DeletePost";
-import EditPost from "./EditPost";
 import DisplayComments from "../Comments/DisplayComments";
 import CreateComment from "../Comments/CreateComment";
 import Image from "../../Image/Image";
 import userService from "../../../Services/user.service";
 import commentService from "../../../Services/comment.service";
-import { Avatar, Box, Typography } from "@mui/material";
-import styled from "@emotion/styled";
-import {
-    StandardContainer,
-    StyledNavLink,
-    PostHeader,
-} from "../../../StyledComponents/StyledComponents";
+import { StandardContainer } from "../../../StyledComponents/StyledComponents";
+import PostHeader from "./PostHeader";
+import PostContent from "./PostContent";
 
-const PostActions = styled(Box)(({ theme }) => ({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: "0.5rem",
-}));
-
-const PostContent = styled(Typography)(({ theme }) => ({
-    textAlign: "left",
-    marginBottom: "1rem",
-    width: "100%",
-}));
 
 function Post(props) {
     const { post, user, onPostDelete, onPostUpdate } = props;
@@ -69,32 +51,15 @@ function Post(props) {
 
     return (
         <StandardContainer style={{ marginBottom: "1rem" }}>
-            <PostHeader>
-                <Box style={{ display: "flex", alignItems: "center" }}>
-                    <Avatar
-                        src={postOwner?.userInfo?.avatarUrl || null}
-                        sx={{ marginRight: "0.5rem" }}
-                    >
-                        {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
-                    </Avatar>
-                    <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-                        <Typography variant="h6">
-                            {postOwner.username}
-                        </Typography>
-                        <Typography variant="caption">
-                            {post.dateCreated
-                                ? new Date(post.dateCreated).toLocaleString()
-                                : "No timestamp available"}
-                        </Typography>
-                    </StyledNavLink>
-                </Box>
-            </PostHeader>
-            <PostContent
-                variant="body1"
-                style={{ border: "none", boxShadow: "none" }}
-            >
-                {post.content}
-            </PostContent>
+            <PostHeader
+                user={user}
+                postOwner={postOwner}
+                post={post}
+                canManagePost={canManagePost}
+                onPostUpdate={onPostUpdate}
+                onPostDelete={onPostDelete}
+            />
+            <PostContent content={post.content} />
             <Image images={post.images} />
             <DisplayReactions
                 entityId={post.postId}
@@ -116,12 +81,6 @@ function Post(props) {
                 comments={comments}
                 fetchComments={fetchComments}
             />
-            {canManagePost && (
-                <PostActions>
-                    <EditPost post={post} onPostUpdate={onPostUpdate} />
-                    <DeletePost post={post} onPostDelete={onPostDelete} />
-                </PostActions>
-            )}
         </StandardContainer>
     );
 }
