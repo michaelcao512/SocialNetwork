@@ -1,61 +1,62 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import {  Typography, List, ListItem } from '@mui/material';
-import authService from '../Services/auth.service';
-import userService from '../Services/user.service';
-import User from '../Components/Profile/User/User';
-import { StandardContainer, StyledStack } from '../StyledComponents/StyledComponents';
+import {useState, useEffect} from "react";
+import {Typography, Grid, Card, CardContent, Avatar, Box} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import userService from "../Services/user.service";
 
 function AllUsersPage() {
     const [users, setUsers] = useState([]);
-    const currentUser = authService.getCurrentUser();
-
-    const fetchAccount = useCallback(() => {
-        userService.getAllUsers()
-            .then(response => {
-                const filteredUsers = response.filter(user => user.username !== currentUser.username);
-                setUsers(filteredUsers);
-            });
-    }, [currentUser.username]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAccount();
-    }, [fetchAccount]);
-
-    if (users.length === 0) {
-        return (
-            <StyledStack>
-                <Typography variant="h4" gutterBottom>
-                    All Users
-                </Typography>
-                <Typography variant="body1" align="center">
-                    No users to display
-                </Typography>
-            </StyledStack>
-        );
-    }
+        userService.getAllUsers().then(setUsers).catch(console.error);
+    }, []);
 
     return (
-        <StyledStack 
-        style={{ backgroundColor: "#ffffff",boxShadow: "none" ,textAlign: "left",alignItems: "flex-start",padding: "1rem",}}>
-            <Typography variant="h4" gutterBottom 
-            style={{ textAlign: "left", width: "100%" }}>
-                All Users
+        <Box sx={{padding: "1rem", maxWidth: "1200px", margin: "auto"}}>
+            <Typography variant="h5" gutterBottom>
+                Discover Users
             </Typography>
-            <StandardContainer 
-            style={{ backgroundColor: "#ffffff",boxShadow: "none", textAlign: "left",width: "100%",}}>
-                    <List 
-                    style={{ width: "100%",padding: 0 }}>
-                        {users.map(user => (
-                            <ListItem key={user.accountId} 
-                                style={{ display: "flex",justifyContent: "flex-start",textAlign: "left", alignItems: "center",
-                                justifyContent: "flex-start", padding: "0.5rem 0",width: "100%",}}>
-                                <User user={user} />
-                            </ListItem>
-                        ))}
-                    </List>
-            </StandardContainer>
-        </StyledStack>
-
+            {users.length === 0 ? (
+                <Typography variant="body1" align="center">
+                    No users to display.
+                </Typography>
+            ) : (
+                <Grid container spacing={2}>
+                    {users.map((user) => (
+                        <Grid item xs={6} sm={4} md={3} key={user.accountId}>
+                            <Card
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: "1rem",
+                                    cursor: "pointer",
+                                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                    "&:hover": {
+                                        boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.15)",
+                                        transform: "translateY(-5px)",
+                                    },
+                                    textAlign: "center",
+                                }}
+                                onClick={() => navigate(`/profile/${user.accountId}`)}
+                            >
+                                <Avatar
+                                    src={user.avatar || "/default-avatar.png"}
+                                    alt={user.username}
+                                    sx={{width: 56, height: 56, marginBottom: "0.5rem"}}
+                                />
+                                <CardContent sx={{padding: "0"}}>
+                                    <Typography variant="body1">
+                                        {user.username}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
+        </Box>
     );
 }
 
