@@ -56,7 +56,6 @@ function ProfilePage() {
       await fetchUsername();
     };
     fetchData();
-
     setIsOwnProfile(user?.id?.toString() === profileUserId);
   }, [profileUserId, user?.id, fetchUserInfo, fetchPosts, fetchUsername]);
 

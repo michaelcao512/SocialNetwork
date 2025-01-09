@@ -1,127 +1,60 @@
-import React, { useEffect, useState, useCallback } from "react";
-import DisplayReactions from "../Reactions/DisplayReactions";
-import DeletePost from "./DeletePost";
-import EditPost from "./EditPost";
+import React, { useState, useEffect, useCallback } from "react";
+import PostReactions from "../PostReactions";
 import DisplayComments from "../Comments/DisplayComments";
 import CreateComment from "../Comments/CreateComment";
-import Image from "../../Image/Image";
 import userService from "../../../Services/user.service";
 import commentService from "../../../Services/comment.service";
-import { Avatar, Box, Typography } from "@mui/material";
-import styled from "@emotion/styled";
-import {
-  StandardContainer,
-  StyledNavLink,
-  PostHeader,
-} from "../../../StyledComponents/StyledComponents";
-
-const PostActions = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  gap: "0.5rem",
-}));
-
-const PostContent = styled(Typography)(({ theme }) => ({
-  textAlign: "left",
-  marginBottom: "1rem",
-  width: "100%",
-}));
+import { StandardContainer } from "../../../StyledComponents/StyledComponents";
+import PostHeader from "../PostHeader";
+import PostContent from "../PostContent";
 
 function Post(props) {
-  const { post, user, onPostDelete, onPostUpdate } = props;
-  const [postOwner, setPostOwner] = useState("");
-  const [canManagePost, setCanManagePost] = useState(false);
-  const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
-  const [comments, setComments] = useState([]);
+    const { post, user, onPostDelete, onPostUpdate } = props;
+    const [postOwner, setPostOwner] = useState("");
+    const [canManagePost, setCanManagePost] = useState(false);
+    const [isCommentInputVisible, setIsCommentInputVisible] = useState(false);
+    const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    try {
-      userService.getAccountOfPost(post.postId).then((response) => {
-        setPostOwner(response);
-        if (response.username === user.username) {
-          setCanManagePost(true);
+    useEffect(() => {
+        try {
+            userService.getAccountOfPost(post.postId).then((response) => {
+                setPostOwner(response);
+                if (response.username === user.username) {
+                    setCanManagePost(true);
+                }
+            });
+        } catch (error) {
+            console.log("Error fetching post owner: ", error);
         }
-      });
-    } catch (error) {
-      console.log("Error fetching post owner: ", error);
-    }
-  }, [post.postId, user.username]);
+    }, [post.postId, user.username]);
 
-  const fetchComments = useCallback(() => {
-    commentService.getCommentsByPostId(post.postId).then((response) => {
-      setComments(response);
-    });
-  }, [post.postId]);
+    const fetchComments = useCallback(() => {
+        commentService.getCommentsByPostId(post.postId).then((response) => {
+            setComments(response);
+        });
+    }, [post.postId]);
 
-  useEffect(() => {
-    fetchComments();
-  }, [fetchComments]);
+    useEffect(() => {
+        fetchComments();
+    }, [fetchComments]);
 
-  const handleAddCommentClick = () => {
-    setIsCommentInputVisible(() => !isCommentInputVisible);
-  };
+    const handleAddCommentClick = () => {
+        setIsCommentInputVisible(() => !isCommentInputVisible);
+    };
 
-  const handleCancelComment = () => {
-    setIsCommentInputVisible(false);
-  };
+    const handleCancelComment = () => {
+        setIsCommentInputVisible(false);
+    };
 
-  return (
-    <StandardContainer style={{ marginBottom: "1rem" }}>
-      <PostHeader>
-        <Box style={{ display: "flex", alignItems: "center" }}>
-          <Avatar
-            src={postOwner?.userInfo?.avatarUrl || null}
-            sx={{ marginRight: "0.5rem" }}
-          >
-            {postOwner?.userInfo?.firstName?.charAt(0) || "#"}
-          </Avatar>
-          <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-            <Typography variant="h6">{postOwner.username}</Typography>
-            <Typography variant="caption">
-              {post.dateCreated
-                ? new Date(post.dateCreated).toLocaleString()
-                : "No timestamp available"}
-            </Typography>
-          </StyledNavLink>
-        </Box>
-      </PostHeader>
-      <PostContent
-        variant="body1"
-        style={{ border: "none", boxShadow: "none" }}
-      >
-        {post.content}
-      </PostContent>
-      <Image images={post.images} />
-      <DisplayReactions
-        entityId={post.postId}
-        entityType="post"
-        user={user}
-        comments={comments}
-        onAddCommentClick={handleAddCommentClick}
-      />
-      {isCommentInputVisible && (
-        <CreateComment
-          post={post}
-          user={user}
-          fetchComments={fetchComments}
-          onCancel={handleCancelComment}
-        />
-      )}
-      <DisplayComments
-        user={user}
-        comments={comments}
-        fetchComments={fetchComments}
-      />
-      {canManagePost && (
-        <PostActions>
-          <EditPost post={post} onPostUpdate={onPostUpdate} />
-          <DeletePost post={post} onPostDelete={onPostDelete} />
-        </PostActions>
-      )}
-    </StandardContainer>
-  );
+    return (
+        <StandardContainer style={{ marginBottom: "1rem" }}>
+            <PostHeader user={user} postOwner={postOwner} post={post} canManagePost={canManagePost} onPostUpdate={onPostUpdate} onPostDelete={onPostDelete} />
+            <PostContent entity={post} />
+            <PostReactions entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
+            {isCommentInputVisible && <CreateComment post={post} user={user} fetchComments={fetchComments} onCancel={handleCancelComment} />}
+            <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
+        </StandardContainer>
+    );
 }
 
 export default Post;

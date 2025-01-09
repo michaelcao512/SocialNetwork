@@ -32,7 +32,6 @@ class ReactionsService {
     }
 
     createReaction(createReactionRequest) {
-        console.log("createReactionRequest:", createReactionRequest); 
         return axios.post(api_url, createReactionRequest)
             .then(response => response.data)
             .catch(error => {

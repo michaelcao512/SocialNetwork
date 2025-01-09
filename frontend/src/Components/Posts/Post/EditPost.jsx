@@ -1,25 +1,14 @@
 import { useEffect, useState } from "react";
 import postService from "../../../Services/post.service";
 import imageService from "../../../Services/image.service";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    TextField,
-    DialogActions,
-    Button,
-    Box,
-    Typography,
-} from "@mui/material";
-import SelectImage from "../../Image/SelectImage";
-import { Edit } from "@mui/icons-material";
-import Image from "../../Image/Image";
 import authService from "../../../Services/auth.service";
-
-function EditPost({ post, onPostUpdate }) {
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography } from "@mui/material";
+import SelectImage from "../../Image/SelectImage";
+import Image from "../../Image/Image";
+import { Edit } from "@mui/icons-material";
+function EditPost({ post, onPostUpdate, onClose }) {
     const user = authService.getCurrentUser();
     const [content, setContent] = useState(post.content);
-    const [isEditOpen, setIsEditOpen] = useState(false);
     const [error, setError] = useState("");
     const [existingImages, setExistingImages] = useState(post.images || []);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -32,8 +21,20 @@ function EditPost({ post, onPostUpdate }) {
         setSelectedImages([]);
     }, [post]);
 
-    const handleClose = () => {
-        setIsEditOpen(false);
+    const handleImageSelect = (file) => {
+        setSelectedImages((selectedImages) => [...selectedImages, file]);
+    };
+
+    const handleImageRemove = (index) => {
+        const newSelectedImages = selectedImages.filter((_, i) => i !== index);
+        setSelectedImages(newSelectedImages);
+    };
+    const handleExistingImageRemove = (index) => {
+        setExistingImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+
+    const handleCancel = () => {
+        onClose();
         setSelectedImages([]);
         setContent(post.content || "");
         setError("");
@@ -57,6 +58,11 @@ function EditPost({ post, onPostUpdate }) {
         }
 
         try {
+            // handle content and imageIds didn't change and cancel edit if necessary
+            if (content === post.content && selectedImages.length === 0 && existingImages.length === post.images.length) {
+                handleCancel();
+                return;
+            }
             const newImageIds = [];
             for (const image of selectedImages) {
                 const formData = new FormData();
@@ -68,21 +74,18 @@ function EditPost({ post, onPostUpdate }) {
                 newImageIds.push(imageResponse.imageId);
             }
 
-            const allImageIds = [
-                ...existingImages.map((img) => img.imageId),
-                ...newImageIds,
-            ];
+            const allImageIds = [...existingImages.map((img) => img.imageId), ...newImageIds];
 
             const updatePostRequest = {
                 postId: post.postId,
-                accountId: user.id,
+                accountId: user.accountId,
                 content: content,
                 imageIds: allImageIds,
             };
 
             await postService.updatePost(updatePostRequest);
-            onPostUpdate({ ...post, content, images: allImageIds });
-            handleClose();
+            onPostUpdate();
+            handleCancel();
         } catch (error) {
             console.error("Error updating post: ", error);
             setError("Failed to update the post. Please try again later.");
@@ -91,16 +94,7 @@ function EditPost({ post, onPostUpdate }) {
 
     return (
         <>
-            <Button
-                onClick={() => setIsEditOpen(true)}
-                startIcon={<Edit />}
-                color="primary"
-                size="small"
-                variant="outlined"
-            >
-                Edit
-            </Button>
-            <Dialog open={isEditOpen} onClose={handleClose}>
+            <Dialog open={true} onClose={handleCancel} maxWidth="sm" fullWidth>
                 <DialogTitle>Edit Post</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -134,26 +128,14 @@ function EditPost({ post, onPostUpdate }) {
                             <Typography variant="body2" color="textSecondary">
                                 Existing Images:
                             </Typography>
-                            <Image
-                                images={existingImages}
-                                deleteOption={true}
-                                handleImageRemove={(index) =>
-                                    setExistingImages((prev) => prev.filter((_, i) => i !== index))
-                                }
-                            />
+
+                            <Image images={existingImages} deleteOption={true} handleImageRemove={handleExistingImageRemove} />
                         </Box>
                     )}
-
-                    <SelectImage
-                        onImageSelect={(file) => setSelectedImages((prev) => [...prev, file])}
-                        selectedImages={selectedImages}
-                        handleImageRemove={(index) =>
-                            setSelectedImages((prev) => prev.filter((_, i) => i !== index))
-                        }
-                    />
+                    <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleCancel}>Cancel</Button>
                     <Button onClick={handleSave} color="primary" variant="contained">
                         Save
                     </Button>

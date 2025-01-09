@@ -27,7 +27,7 @@ function DisplayComments({ fetchComments = () => {}, user = {}, comments = [] })
             <Divider textAlign="left">Replies</Divider>
             {comments.map((comment) => (
                 <Comment
-                    key={comment.commentId || Math.random()}
+                    key={comment.commentId}
                     user={user}
                     comment={comment}
                     fetchComments={fetchComments}
