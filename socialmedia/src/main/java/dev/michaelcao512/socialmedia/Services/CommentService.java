@@ -104,9 +104,18 @@ public class CommentService {
         }
         return commentRepository.countByPost(post.get());
     }
+    public int getCommentsCountByCommentId(Long commentId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (comment.isEmpty()) {
+            return 0;
+        }
+        return commentRepository.countByParentComment(comment.get());
+    }
 
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
+
+
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.michaelcao512.socialmedia.Entities.Post;
 import dev.michaelcao512.socialmedia.Services.PostService;
 import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.UpdatePostRequest;
 
 @RestController
 @RequestMapping("/api/post")
@@ -87,8 +88,8 @@ public class PostController {
      */
 
     @PutMapping("/{postId}")
-    public ResponseEntity<Post> updatePost(@RequestBody Post post) {
-        Post updatedPost = postService.updatePost(post);
+    public ResponseEntity<Post> updatePost(@RequestBody UpdatePostRequest updatePostRequest) {
+        Post updatedPost = postService.updatePost(updatePostRequest);
         return ResponseEntity.ok(updatedPost);
     }
 
@@ -124,6 +125,9 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    
-
+    @GetMapping("/getHomePosts/{accountId}")
+    public ResponseEntity<List<Post>> getHomePosts(@PathVariable Long accountId) {
+        List<Post> posts = postService.getPostsFromFollowedAccounts(accountId);
+        return ResponseEntity.ok(posts);
+    }
 }

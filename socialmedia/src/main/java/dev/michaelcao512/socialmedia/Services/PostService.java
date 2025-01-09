@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
@@ -17,6 +15,8 @@ import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.ImageRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
+import dev.michaelcao512.socialmedia.dto.Requests.UpdatePostRequest;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,20 +25,21 @@ public class PostService {
     private final AccountRepository accountRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
+    private final AccountService accountService;
 
-    private Logger logger = LoggerFactory.getLogger(PostService.class);
 
     public PostService(PostRepository postRepository, AccountRepository accountRepository,
-            ImageRepository imageRepository, ImageService imageService) {
+            ImageRepository imageRepository, ImageService imageService, AccountService accountService) {
         this.postRepository = postRepository;
         this.accountRepository = accountRepository;
         this.imageRepository = imageRepository;
         this.imageService = imageService;
+        this.accountService = accountService;
     }
 
     @Transactional
     public Post createPost(CreatePostRequest createPostRequest) {
-        if (createPostRequest == null || createPostRequest.accountId() == null) {
+        if (createPostRequest == null || createPostRequest.accountId() == null || createPostRequest.content() == null) {
             throw new IllegalArgumentException("CreatePostRequest cannot be null");
         }
 
@@ -70,17 +71,44 @@ public class PostService {
 
     }
 
-    public Post updatePost(Post post) {
-        if (post == null) {
-            throw new IllegalArgumentException("Post cannot be null");
-        }
-        if (!postRepository.existsById(post.getPostId())) {
-            throw new IllegalArgumentException("Post does not exist");
-        }
-        Post existingPost = postRepository.findById(post.getPostId()).get();
-        existingPost.setContent(post.getContent());
+    @Transactional
+    public Post updatePost(UpdatePostRequest updatePostRequest) {
 
-        return postRepository.save(existingPost);
+        Post post = postRepository.findById(updatePostRequest.postId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Post not found with id: " + updatePostRequest.postId()));
+
+        if (updatePostRequest.imageIds().size() == post.getImages().size()
+                && updatePostRequest.content().equals(post.getContent())) {
+            throw new IllegalArgumentException("No changes detected");
+        }
+
+        post.setContent(updatePostRequest.content());
+
+        List<Image> existingImages = new ArrayList<>(post.getImages());
+        List<Long> newImageIds = updatePostRequest.imageIds();
+
+        // delete images that are not in the new list
+        for (Image image : existingImages) {
+            if (!newImageIds.contains(image.getImageId())) {
+                imageService.deleteImageFromS3(image);
+                imageRepository.delete(image);
+                post.getImages().remove(image);
+            }
+
+        }
+
+        // Add new images
+        for (Long imageId : newImageIds) {
+            if (existingImages.stream().noneMatch(img -> img.getImageId().equals(imageId))) {
+                Image image = imageRepository.findById(imageId)
+                        .orElseThrow(() -> new EntityNotFoundException("Image not found with id: " + imageId));
+                image.setPost(post);
+                post.getImages().add(image);
+            }
+        }
+
+        return post;
     }
 
     @Transactional
@@ -93,8 +121,7 @@ public class PostService {
         if (images != null) {
             for (Image image : images) {
                 imageService.deleteImageFromS3(image);
-                // imageRepository.delete(image);
-                // imageService.deleteImage(image.getImageId());
+                imageRepository.delete(image);
             }
             post.getImages().clear();
         }
@@ -140,4 +167,13 @@ public class PostService {
         return results;
     }
 
+    public List<Post> getPostsFromFollowedAccounts(Long accountId){
+        List<Account> followingAccounts = accountService.getFollowing(accountId);
+
+        List<Long> followingIds = followingAccounts.stream()
+                .map(Account::getAccountId)
+                .toList();
+        
+        return postRepository.findPostsByFollowingAccounts(followingIds);
+    }
 }

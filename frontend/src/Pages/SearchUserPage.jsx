@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import SearchBar from "../Components/Search/SearchBar";
 import searchService from "../Services/search.service";
 import DisplaySearchUser from "../Components/Search/DisplaySearchUser";
-import { Card } from "@mui/material";
-import "./searchpages.css";
 
 function SearchUserPage() {
   const [users, setUsers] = useState([]);
@@ -25,15 +23,9 @@ function SearchUserPage() {
 
   return (
     <div>
-      <Card
-        className="search-card"
-        variant="outlined"
-        sx={{ backgroundColor: "background.paper" }}
-      >
-        <h1>Search Users</h1>
-        <SearchBar onSearch={handleSearch} />
-        <DisplaySearchUser users={users} error={error} />
-      </Card>
+      <h1>Search Users</h1>
+      <SearchBar onSearch={handleSearch} searchLabel={"Users"} />
+      <DisplaySearchUser users={users} error={error} />
     </div>
   );
 }

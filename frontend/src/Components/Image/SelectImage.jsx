@@ -1,54 +1,54 @@
-import { Box } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React from 'react';
+import { Box, Typography, IconButton, Button, Input } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Typography, IconButton} from '@mui/material';
-function SelectImage({ onImageSelect, selectedImages, handleImageRemove }) {
-    const fileInputRef = useRef(null);
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
-    const handleButtonClick = (event) => {
-        event.preventDefault();
-        fileInputRef.current.click();
-    };
-
+function SelectImage({ selectedImages, onImageSelect, handleImageRemove }) {
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                onImageSelect(file);
-                fileInputRef.current.value = '';
-            };
-            reader.readAsDataURL(file);
+        const files = Array.from(event.target.files);
+        if (files.length > 0) {
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    onImageSelect(file);
+                };
+                reader.readAsDataURL(file);
+            });
         }
+        event.target.value = null;
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-                accept="image/*"
-            />
-
-                {selectedImages.length > 0 && (
-                    <Box sx={{ mt: 2 }}>
-                        <Typography variant="body2" color="textSecondary">
-                            Selected Images:
-                        </Typography>
-                        {selectedImages.map((image, index) => (
-                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <img src={URL.createObjectURL(image)} alt="Selected" style={{ maxWidth: '100px', marginRight: '10px' }} />
-                                <IconButton onClick={() => handleImageRemove(index)} color="secondary">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Box>
-                        ))}
-                    </Box>
-                )}
-            <button onClick={handleButtonClick}>Select Image</button>
-
+        <Box>
+            {selectedImages.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2" color="textSecondary">
+                        Selected Images:
+                    </Typography>
+                    {selectedImages.map((image, index) => (
+                        <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                            <img src={URL.createObjectURL(image)} alt="Selected" />
+                            <IconButton onClick={() => handleImageRemove(index)} color="secondary">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
+                    ))}
+                </Box>
+            )}
+            <Button
+                component="label"
+                variant="outline"
+                color="primary"
+                startIcon={<UploadFileIcon />}
+                >
+                Upload Images
+                <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    multiple
+                    onChange={handleFileChange} />
+            </Button>
         </Box>
     );
 }

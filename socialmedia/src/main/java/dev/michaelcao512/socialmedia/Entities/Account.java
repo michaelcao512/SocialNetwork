@@ -86,9 +86,6 @@ public class Account implements UserDetails {
     @JsonManagedReference(value = "account-images")
     private List<Image> images;
 
-    // @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    // @JsonManagedReference(value = "profile-image")
-    // private Image profileImage;
 
     @PreUpdate
     public void onUpdate() {

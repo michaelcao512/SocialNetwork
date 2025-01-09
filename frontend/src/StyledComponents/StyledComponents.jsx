@@ -18,8 +18,8 @@ export const StyledStack = styled(Stack)(({ theme }) => ({
   margin: "auto",
   padding: "1rem",
   boxSizing: "border-box",
-  backgroundColor: theme.palette.background.paper,
-}));
+  backgroundColor: "transparent",
+});
 
 export const StyledCard = styled(CardContent)(({ theme }) => ({
   display: "flex",
@@ -32,7 +32,7 @@ export const StyledCard = styled(CardContent)(({ theme }) => ({
   padding: "2rem",
   borderRadius: "1rem",
   boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.main,
   color: theme.palette.text.primary,
   boxSizing: "border-box",
   "&:hover": {
@@ -48,47 +48,24 @@ export const StandardContainer = styled(Box)(({ theme }) => ({
   padding: "1rem",
   borderRadius: "1rem",
   boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.main,
   color: theme.palette.text.primary,
   width: "100%",
   margin: "auto",
   boxSizing: "border-box",
 }));
 
-// export const StyledNavLink = styled(Link)(({ theme }) => ({
-//     textDecoration: 'none',
-//     color: theme.palette.text.primary,
-//     '&:hover': {
-//         color: theme.palette.primary.main,
-//     },
-
-//     '&.active > div': {
-//         backgroundColor: theme.palette.action.selected,
-//   },
-// }));
-
-//   textDecoration: 'none';
-// color: #1976d2;
-// fontFamily : "Poppins", sans-serif;
-// font-weight: bold;
-// font-size: 1.2rem;
-// transition: color 0.3s ease, text-shadow 0.3s ease;
-
-// &:hover {
-//   color: #f1356d;
-//   text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-// }
-
-// user and navbar hrefs
 export const StyledNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
-  color: theme.palette.secondary.main,
+  color: "#1976d2",
   fontFamily: "Poppins, sans-serif",
   fontWeight: "bold",
   fontSize: "1.2rem",
   transition: "color 0.3s ease, text-shadow 0.3s ease",
+  backgroundColor: theme.palette.background.main,
+  color: theme.palette.text.primary,
   "&:hover": {
-    color: theme.palette.secondary.dark,
+    color: "#f1356d",
     textShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
   },
   "&.active > div": {
@@ -96,7 +73,6 @@ export const StyledNavLink = styled(NavLink)(({ theme }) => ({
   },
 }));
 
-// all users page
 export function StyledLink({ destination, text }) {
   return (
     <Button
@@ -105,8 +81,6 @@ export function StyledLink({ destination, text }) {
       color="third"
       variant="contained"
       sx={{
-        backgroundColor: "primary.main",
-        color: "white",
         textTransform: "none",
         fontSize: "1rem",
         padding: "0.5rem 1.5rem",
@@ -114,7 +88,7 @@ export function StyledLink({ destination, text }) {
         transition: "background-color 0.3s ease, transform 0.2s ease",
         margin: "5px",
         "&:hover": {
-          backgroundColor: "secondary.dark",
+          backgroundColor: "#1E8EAB",
           color: "white",
           transform: "scale(1.05)",
           boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
@@ -172,4 +146,6 @@ export const PostHeader = styled(Box)(({ theme }) => ({
   justifyContent: "space-between",
   width: "100%",
   marginBottom: "0.5rem",
+  backgroundColor: theme.palette.background.main,
+  color: theme.palette.text.primary,
 }));

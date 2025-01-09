@@ -7,12 +7,21 @@ import {
   Box,
   Typography,
   IconButton,
+  ListItemIcon,
 } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import {
+  Menu as MenuIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
+  Explore as ExploreIcon,
+  People as PeopleIcon,
+  Person as PersonIcon,
+} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { NavLink, useLocation } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import authService from "../../Services/auth.service";
+import PropTypes from "prop-types"; // For type checking
 import { StyledNavLink } from "../../StyledComponents/StyledComponents";
 
 const drawerWidth = 240;
@@ -25,6 +34,47 @@ const NavBarContainer = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
   },
 }));
+
+const NavItem = ({ to, icon: Icon, label, isActive, onClick }) => (
+  <ListItem
+    component={StyledNavLink}
+    to={to}
+    className={isActive ? "active" : ""}
+    onClick={onClick}
+    aria-current={isActive ? "page" : undefined}
+  >
+    <ListItemIcon
+      sx={{
+        minWidth: "36px",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <Icon fontSize="medium" />
+    </ListItemIcon>
+    <ListItemText
+      primary={label}
+      primaryTypographyProps={{
+        fontSize: "1.2rem",
+        lineHeight: "1.5",
+        fontWeight: "bold",
+      }}
+      sx={{
+        margin: 0,
+        display: "flex",
+        alignItems: "center",
+      }}
+    />
+  </ListItem>
+);
+
+NavItem.propTypes = {
+  to: PropTypes.string.isRequired,
+  icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+  onClick: PropTypes.func,
+};
 
 function NavBar() {
   const location = useLocation();
@@ -44,7 +94,7 @@ function NavBar() {
           sx={{
             fontFamily: "Roboto, sans-serif",
             fontWeight: "bold",
-            color: "white",
+            color: "primary.main",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
           }}
         >
@@ -52,46 +102,41 @@ function NavBar() {
         </Typography>
       </Box>
       <List>
-        <ListItem
-          component={StyledNavLink}
-          to={ownProfile}
-          className={location.pathname === ownProfile ? "active" : ""}
-          onClick={handleDrawerToggle} // Close drawer after clicking
-        >
-          <ListItemText sx={{ color: "white" }} primary="My Profile" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
+        <NavItem
+          to="/feed"
+          icon={HomeIcon}
+          label="Home"
+          isActive={location.pathname === "/feed"}
+          onClick={handleDrawerToggle}
+        />
+        <NavItem
+          to="/search"
+          icon={SearchIcon}
+          label="Search"
+          isActive={location.pathname === "/search"}
+          onClick={handleDrawerToggle}
+        />
+        <NavItem
           to="/allposts"
-          className={location.pathname === "/allposts" ? "active" : ""}
+          icon={ExploreIcon}
+          label="Explore"
+          isActive={location.pathname === "/allposts"}
           onClick={handleDrawerToggle}
-        >
-          <ListItemText sx={{ color: "white" }} primary="All Posts" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
+        />
+        <NavItem
           to="/allusers"
-          className={location.pathname === "/allusers" ? "active" : ""}
+          icon={PeopleIcon}
+          label="All Users"
+          isActive={location.pathname === "/allusers"}
           onClick={handleDrawerToggle}
-        >
-          <ListItemText sx={{ color: "white" }} primary="All Users" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/searchPost"
-          className={location.pathname === "/searchPost" ? "active" : ""}
+        />
+        <NavItem
+          to={ownProfile}
+          icon={PersonIcon}
+          label="My Profile"
+          isActive={location.pathname === ownProfile}
           onClick={handleDrawerToggle}
-        >
-          <ListItemText sx={{ color: "white" }} primary="Search Posts" />
-        </ListItem>
-        <ListItem
-          component={StyledNavLink}
-          to="/searchUser"
-          className={location.pathname === "/searchUser" ? "active" : ""}
-          onClick={handleDrawerToggle}
-        >
-          <ListItemText sx={{ color: "white" }} primary="Search User" />
-        </ListItem>
+        />
         <ListItem>
           <LogoutButton />
         </ListItem>
@@ -101,19 +146,22 @@ function NavBar() {
 
   return (
     <>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        edge="start"
-        onClick={handleDrawerToggle}
-        sx={{
-          position: "absolute",
-          top: "1rem",
-          left: "1rem",
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
+      {!isDrawerOpen && (
+        <IconButton
+          color="inherit"
+          aria-label="open navigation drawer"
+          aria-expanded={isDrawerOpen}
+          onClick={handleDrawerToggle}
+          sx={{
+            position: "fixed",
+            top: "1rem",
+            left: "1rem",
+            zIndex: 1300,
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
 
       <Drawer
         variant="temporary"
@@ -126,7 +174,8 @@ function NavBar() {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
-            backgroundColor: "primary.main",
+            zIndex: 1400,
+            transition: "transform 0.3s ease", // Smooth transition
           },
         }}
       >
