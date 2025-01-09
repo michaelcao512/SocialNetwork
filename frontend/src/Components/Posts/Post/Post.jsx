@@ -92,7 +92,9 @@ function Post(props) {
     >
       <PostHeader style={{ border: "none", boxShadow: "none" }}>
         <StyledNavLink to={`/profile/${postOwner.accountId}`}>
-          <Typography variant="h6">{postOwner.username}</Typography>
+          <Typography sx={{ fontWeight: "bold", fontSize: "1.3rem" }}>
+            {postOwner.username}
+          </Typography>
         </StyledNavLink>
 
         <Typography variant="caption">

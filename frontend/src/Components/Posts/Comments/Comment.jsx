@@ -86,7 +86,9 @@ function Comment({ user, comment, fetchComments }) {
     <CommentContainer style={{ backgroundColor: "#ffffff", boxShadow: "none" }}>
       <PostHeader>
         <StyledNavLink to={`/profile/${commentOwner.accountId}`}>
-          <Typography variant="h6">{commentOwner.username}</Typography>
+          <Typography sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+            {commentOwner.username}
+          </Typography>
         </StyledNavLink>
         <Typography variant="caption">
           {comment.dateCreated

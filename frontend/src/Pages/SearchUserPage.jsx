@@ -28,7 +28,7 @@ function SearchUserPage() {
       <Card
         className="search-card"
         variant="outlined"
-        sx={{ backgroundColor: "white" }}
+        sx={{ backgroundColor: "background.paper" }}
       >
         <h1>Search Users</h1>
         <SearchBar onSearch={handleSearch} />

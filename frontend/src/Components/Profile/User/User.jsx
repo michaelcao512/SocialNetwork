@@ -3,7 +3,7 @@ import { StyledLink } from "../../../StyledComponents/StyledComponents";
 
 function User(props) {
   const { user } = props;
-    
+
   return (
     <>
       <StyledLink

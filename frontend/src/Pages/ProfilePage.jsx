@@ -70,11 +70,11 @@ function ProfilePage() {
     await fetchPosts();
   }
   return (
-    <StyledStack style={{ backgroundColor: "#ffffff",border: "none",boxShadow: "none"}}>
+    <StyledStack>
       <Typography variant="h3" gutterBottom>
         Profile
       </Typography>
-      <StyledCard style={{ backgroundColor: "#f4f9fd",border: "none",boxShadow: "2px 4px 6px #CAE4F6"}}>
+      <StyledCard>
         <UserInfoComponent
           user={user}
           userInfo={userInfo}

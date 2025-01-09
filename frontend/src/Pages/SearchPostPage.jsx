@@ -24,11 +24,7 @@ function SearchPage() {
 
   return (
     <div>
-      <Card
-        className="search-card"
-        variant="outlined"
-        sx={{ backgroundColor: "white" }}
-      >
+      <Card className="search-card" variant="outlined">
         <h1>Search Posts</h1>
         <SearchBar onSearch={handleSearch} />
         {error && <p style={{ color: "red" }}>{error}</p>}
