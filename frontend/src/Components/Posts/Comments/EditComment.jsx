@@ -1,20 +1,11 @@
-import {useState} from "react";
+import { useState } from "react";
 import commentService from "../../../Services/comment.service";
 import authService from "../../../Services/auth.service";
-import {
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    TextField,
-    DialogActions,
-} from "@mui/material";
-import {Edit} from "@mui/icons-material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 
-function EditComment({comment, onCommentUpdate}) {
+function EditComment({ comment, onCommentUpdate, onClose }) {
     const user = authService.getCurrentUser();
     const [content, setContent] = useState(comment.content || "");
-    const [isEditOpen, setIsEditOpen] = useState(false);
     const [error, setError] = useState("");
 
     const MAX_CONTENT_LENGTH = 255;
@@ -37,11 +28,9 @@ function EditComment({comment, onCommentUpdate}) {
         }
 
         try {
-            const updatedComment = {...comment, content};
+            const updatedComment = { ...comment, content };
             await commentService.updateComment(updatedComment);
-
-            // Pass the entire updated comment object back to the parent
-            onCommentUpdate(updatedComment);
+            onCommentUpdate();
 
             handleClose();
         } catch (error) {
@@ -51,23 +40,14 @@ function EditComment({comment, onCommentUpdate}) {
     };
 
     const handleClose = () => {
-        setIsEditOpen(false);
+        onClose();
         setError("");
         setContent(comment.content || "");
     };
 
     return (
         <>
-            <Button
-                onClick={() => setIsEditOpen(true)}
-                startIcon={<Edit/>}
-                color="primary"
-                size="small"
-                variant="outlined"
-            >
-                Edit
-            </Button>
-            <Dialog open={isEditOpen} onClose={handleClose}>
+            <Dialog open={true} onClose={handleClose} fullWidth maxWidth="sm">
                 <DialogTitle>Edit Comment</DialogTitle>
                 <DialogContent>
                     <TextField
