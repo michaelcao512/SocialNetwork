@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import imageService from "../../Services/image.service";
-import { IconButton, Box, Typography } from "@mui/material";
+import { IconButton, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function Image({ images, deleteOption, handleImageRemove }) {

@@ -62,7 +62,7 @@ function EditPost({ user, post, onPostUpdate, onClose }) {
                 imageIds: allImageIds,
             };
             await postService.updatePost(updatePostRequest);
-            onPostUpdate({ ...post, content, images: allImageIds });
+            onPostUpdate();
             onClose();
         } catch (error) {
             console.error("Error updating post: ", error);

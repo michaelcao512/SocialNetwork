@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { StyledNavLink } from "../../../StyledComponents/StyledComponents";
-import EditPost from "./EditPost";
+import { StyledNavLink } from "../../StyledComponents/StyledComponents";
+import EditPost from "./Post/EditPost";
 import { Edit, Delete } from "@mui/icons-material";
-import postService from "../../../Services/post.service";
+import postService from "../../Services/post.service";
 
-function PostHeader({ user, postOwner, post, canManagePost, onPostUpdate, onPostDelete }) {
+function PostHeader({ postOwner, post, canManagePost, onPostUpdate, onPostDelete }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -69,13 +69,13 @@ function PostHeader({ user, postOwner, post, canManagePost, onPostUpdate, onPost
                             <ListItemIcon>
                                 <Edit color="primary" fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText primary="Edit post" />
+                            <ListItemText primary="Edit" />
                         </MenuItem>
                         <MenuItem onClick={handleDeleteClick}>
                             <ListItemIcon>
                                 <Delete color="error" fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText primary="Delete post" />
+                            <ListItemText primary="Delete" />
                         </MenuItem>
                     </Menu>
                 </Box>

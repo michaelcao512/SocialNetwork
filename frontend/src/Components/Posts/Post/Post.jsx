@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Box } from "@mui/material";
-import DisplayReactions from "../Reactions/DisplayReactions";
+import PostReactions from "../PostReactions";
 import DisplayComments from "../Comments/DisplayComments";
 import CreateComment from "../Comments/CreateComment";
-import Image from "../../Image/Image";
 import userService from "../../../Services/user.service";
 import commentService from "../../../Services/comment.service";
 import { StandardContainer } from "../../../StyledComponents/StyledComponents";
-import PostHeader from "./PostHeader";
-import PostContent from "./PostContent";
-
+import PostHeader from "../PostHeader";
+import PostContent from "../PostContent";
 
 function Post(props) {
     const { post, user, onPostDelete, onPostUpdate } = props;
@@ -51,36 +48,11 @@ function Post(props) {
 
     return (
         <StandardContainer style={{ marginBottom: "1rem" }}>
-            <PostHeader
-                user={user}
-                postOwner={postOwner}
-                post={post}
-                canManagePost={canManagePost}
-                onPostUpdate={onPostUpdate}
-                onPostDelete={onPostDelete}
-            />
-            <PostContent content={post.content} />
-            <Image images={post.images} />
-            <DisplayReactions
-                entityId={post.postId}
-                entityType="post"
-                user={user}
-                comments={comments}
-                onAddCommentClick={handleAddCommentClick}
-            />
-            {isCommentInputVisible && (
-                <CreateComment
-                    post={post}
-                    user={user}
-                    fetchComments={fetchComments}
-                    onCancel={handleCancelComment}
-                />
-            )}
-            <DisplayComments
-                user={user}
-                comments={comments}
-                fetchComments={fetchComments}
-            />
+            <PostHeader user={user} postOwner={postOwner} post={post} canManagePost={canManagePost} onPostUpdate={onPostUpdate} onPostDelete={onPostDelete} />
+            <PostContent entity={post} />
+            <PostReactions entityId={post.postId} entityType="post" user={user} comments={comments} onAddCommentClick={handleAddCommentClick} />
+            {isCommentInputVisible && <CreateComment post={post} user={user} fetchComments={fetchComments} onCancel={handleCancelComment} />}
+            <DisplayComments user={user} comments={comments} fetchComments={fetchComments} />
         </StandardContainer>
     );
 }

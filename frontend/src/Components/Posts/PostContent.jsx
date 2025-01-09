@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import styled from "@emotion/styled";
+import Image from "../Image/Image";
 
 const StyledPostContent = styled(Typography)(({ theme }) => ({
     textAlign: "left",
@@ -10,8 +11,13 @@ const StyledPostContent = styled(Typography)(({ theme }) => ({
     boxShadow: "none",
 }));
 
-function PostContent({ content }) {
-    return <StyledPostContent variant="body1">{content}</StyledPostContent>;
+function PostContent({ entity }) {
+    return (
+        <>
+            <StyledPostContent variant="body1">{entity.content}</StyledPostContent>
+            <Image images={entity.images} />
+        </>
+    );
 }
 
 export default PostContent;
