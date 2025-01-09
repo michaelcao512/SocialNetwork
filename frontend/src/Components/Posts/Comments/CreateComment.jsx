@@ -26,19 +26,11 @@ const FullWidthTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const FullWidthButtonCancel = styled(Button)(({ theme }) => ({
-  width: "48%",
-  "&:hover": {
-    backgroundColor: theme.palette.secondary.dark,
-    color: theme.palette.secondary.contrastText,
-  },
-}));
-
-const FullWidthButtonPost = styled(Button)(({ theme }) => ({
-  width: "48%",
-  "&:hover": {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
-  },
+    width: "48%",
+    "&:hover": {
+        backgroundColor: theme.palette.secondary.dark,
+        color: theme.palette.secondary.contrastText,
+    },
 }));
 
 function CreateComment(props) {
