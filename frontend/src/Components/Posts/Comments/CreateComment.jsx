@@ -25,7 +25,7 @@ const FullWidthTextField = styled(TextField)(({ theme }) => ({
     width: "100%",
 }));
 
-const FullWidthButtonCancel = styled(Button)(({ theme }) => ({
+const FullWidthButton = styled(Button)(({ theme }) => ({
     width: "48%",
     "&:hover": {
         backgroundColor: theme.palette.secondary.dark,
