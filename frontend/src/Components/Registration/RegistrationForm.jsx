@@ -1,26 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, FormControl, FormLabel, MenuItem, Select, TextField, } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import authService from '../../Services/auth.service';
-import userService from '../../Services/user.service';
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, FormControl, TextField, InputAdornment, Button, MenuItem, Typography } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
+import WcIcon from "@mui/icons-material/Wc";
+import authService from "../../Services/auth.service";
+import userService from "../../Services/user.service";
 
 function RegistrationForm() {
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [username, setUsername] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [gender, setGender] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
 
     const [emailError, setEmailError] = useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = useState('');
+    const [emailErrorMessage, setEmailErrorMessage] = useState("");
     const [usernameError, setUsernameError] = useState(false);
-    const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
+    const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
     const [passwordError, setPasswordError] = useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
     const [buttonDisabled, setButtonDisabled] = useState(true);
 
     const emailTimeoutRef = useRef(null);
@@ -29,29 +33,18 @@ function RegistrationForm() {
     useEffect(() => {
         setButtonDisabled(
             !email ||
-            !password ||
-            !confirmPassword ||
-            !username ||
-            !firstName ||
-            !lastName ||
-            !gender ||
-            emailError ||
-            usernameError ||
-            passwordError ||
-            password !== confirmPassword
+                !password ||
+                !confirmPassword ||
+                !username ||
+                !firstName ||
+                !lastName ||
+                !gender ||
+                emailError ||
+                usernameError ||
+                passwordError ||
+                password !== confirmPassword
         );
-    }, [
-        email,
-        password,
-        confirmPassword,
-        username,
-        firstName,
-        lastName,
-        gender,
-        emailError,
-        usernameError,
-        passwordError,
-    ]);
+    }, [email, password, confirmPassword, username, firstName, lastName, gender, emailError, usernameError, passwordError]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -68,17 +61,13 @@ function RegistrationForm() {
         try {
             const response = await authService.register(registrationRequest);
             if (response.accountId) {
-                navigate('/registration-confirmation');
+                navigate("/registration-confirmation");
             } else {
-                alert(response.message || 'Registration failed');
+                alert(response.message || "Registration failed");
             }
         } catch (error) {
-            console.error('Registration error:', error);
-            alert(
-                error.response?.data?.message ||
-                error.message ||
-                'An unexpected error occurred. Please try again.'
-            );
+            console.error("Registration error:", error);
+            alert(error.response?.data?.message || error.message || "An unexpected error occurred. Please try again.");
         }
     };
 
@@ -88,7 +77,7 @@ function RegistrationForm() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setEmailError(true);
-            setEmailErrorMessage('Invalid email format');
+            setEmailErrorMessage("Invalid email format");
             return;
         }
 
@@ -97,15 +86,15 @@ function RegistrationForm() {
                 const exists = await userService.checkEmailExists(email);
                 if (exists) {
                     setEmailError(true);
-                    setEmailErrorMessage('Email already exists');
+                    setEmailErrorMessage("Email already exists");
                 } else {
                     setEmailError(false);
-                    setEmailErrorMessage('');
+                    setEmailErrorMessage("");
                 }
             } catch (error) {
-                console.error('Error checking email:', error);
+                console.error("Error checking email:", error);
                 setEmailError(true);
-                setEmailErrorMessage('Unable to validate email');
+                setEmailErrorMessage("Unable to validate email");
             }
         }, 500);
     };
@@ -118,15 +107,15 @@ function RegistrationForm() {
                 const exists = await userService.checkUsernameExists(username);
                 if (exists) {
                     setUsernameError(true);
-                    setUsernameErrorMessage('Username not available');
+                    setUsernameErrorMessage("Username not available");
                 } else {
                     setUsernameError(false);
-                    setUsernameErrorMessage('');
+                    setUsernameErrorMessage("");
                 }
             } catch (error) {
-                console.error('Error checking username:', error);
+                console.error("Error checking username:", error);
                 setUsernameError(true);
-                setUsernameErrorMessage('Unable to validate username');
+                setUsernameErrorMessage("Unable to validate username");
             }
         }, 500);
     };
@@ -134,10 +123,10 @@ function RegistrationForm() {
     const handlePasswordValidation = (password) => {
         if (password.length < 8) {
             setPasswordError(true);
-            setPasswordErrorMessage('Password must be at least 8 characters long');
+            setPasswordErrorMessage("Password must be at least 8 characters long");
         } else {
             setPasswordError(false);
-            setPasswordErrorMessage('');
+            setPasswordErrorMessage("");
         }
     };
 
@@ -146,132 +135,161 @@ function RegistrationForm() {
             component="form"
             onSubmit={handleSubmit}
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                width: '100%',
-                maxWidth: '400px',
-                margin: 'auto',
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                width: "100%",
+                maxWidth: "400px",
+                margin: "auto",
             }}
         >
-            <FormControl>
-                <FormLabel htmlFor="email">Email *</FormLabel>
-                <TextField
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    fullWidth
-                    placeholder="your@email.com"
-                    size="small"
-                    value={email}
-                    error={emailError}
-                    helperText={emailErrorMessage}
-                    onBlur={(e) => handleEmailValidation(e.target.value)}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </FormControl>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <EmailIcon />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Email"
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        fullWidth
+                        placeholder="Email"
+                        size="small"
+                        value={email}
+                        error={emailError}
+                        helperText={emailErrorMessage}
+                        onBlur={(e) => handleEmailValidation(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </FormControl>
+            </Box>
 
-            <FormControl>
-                <FormLabel htmlFor="password">Password *</FormLabel>
-                <TextField
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    fullWidth
-                    placeholder="password"
-                    size="small"
-                    value={password}
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
-                    onChange={(e) => {
-                        setPassword(e.target.value);
-                        handlePasswordValidation(e.target.value);
-                    }}
-                />
-            </FormControl>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <PersonIcon />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Username"
+                        id="username"
+                        name="username"
+                        type="text"
+                        required
+                        fullWidth
+                        placeholder="Username"
+                        size="small"
+                        value={username}
+                        error={usernameError}
+                        helperText={usernameErrorMessage}
+                        onBlur={(e) => handleUsernameValidation(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </FormControl>
+            </Box>
 
-            <FormControl>
-                <FormLabel htmlFor="confirmPassword">Confirm Password *</FormLabel>
-                <TextField
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    required
-                    fullWidth
-                    placeholder="Confirm Password"
-                    size="small"
-                    value={confirmPassword}
-                    error={password !== confirmPassword}
-                    helperText={password !== confirmPassword ? 'Passwords do not match' : ''}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-            </FormControl>
+            <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
+                    <PersonIcon />
+                    <FormControl sx={{ flex: 1 }}>
+                        <TextField
+                            label="First Name"
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            required
+                            fullWidth
+                            placeholder="First Name"
+                            size="small"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </FormControl>
+                </Box>
 
-            <FormControl>
-                <FormLabel htmlFor="username">Username *</FormLabel>
-                <TextField
-                    id="username"
-                    name="username"
-                    type="text"
-                    required
-                    fullWidth
-                    placeholder="username"
-                    size="small"
-                    value={username}
-                    error={usernameError}
-                    helperText={usernameErrorMessage}
-                    onBlur={(e) => handleUsernameValidation(e.target.value)}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </FormControl>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
+                    <PersonIcon />
 
-            <FormControl>
-                <FormLabel htmlFor="firstName">First Name *</FormLabel>
-                <TextField
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required
-                    fullWidth
-                    placeholder="First Name"
-                    size="small"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-            </FormControl>
+                    <FormControl sx={{ flex: 1 }}>
+                        <TextField
+                            label="Last Name"
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            required
+                            fullWidth
+                            placeholder="Last Name"
+                            size="small"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </FormControl>
+                </Box>
+            </Box>
 
-            <FormControl>
-                <FormLabel htmlFor="lastName">Last Name *</FormLabel>
-                <TextField
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    fullWidth
-                    placeholder="Last Name"
-                    size="small"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </FormControl>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <WcIcon />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Gender"
+                        id="gender"
+                        name="gender"
+                        select
+                        required
+                        fullWidth
+                        placeholder="Gender"
+                        size="small"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                    >
+                        <MenuItem value="male">Male</MenuItem>
+                        <MenuItem value="female">Female</MenuItem>
+                    </TextField>
+                </FormControl>
+            </Box>
 
-            <FormControl>
-                <FormLabel htmlFor="gender">Gender *</FormLabel>
-                <Select
-                    id="gender"
-                    name="gender"
-                    required
-                    fullWidth
-                    size="small"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                >
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
-                </Select>
-            </FormControl>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LockIcon />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Password"
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        fullWidth
+                        placeholder="Password"
+                        size="small"
+                        value={password}
+                        error={passwordError}
+                        helperText={passwordErrorMessage}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            handlePasswordValidation(e.target.value);
+                        }}
+                    />
+                </FormControl>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LockIcon />
+
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Confirm Password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        required
+                        fullWidth
+                        placeholder="Confirm Password"
+                        size="small"
+                        value={confirmPassword}
+                        error={password !== confirmPassword}
+                        helperText={password !== confirmPassword ? "Passwords do not match" : ""}
+                        onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                        }}
+                    />
+                </FormControl>
+            </Box>
 
             <Button type="submit" variant="contained" color="primary" disabled={buttonDisabled}>
                 Register
