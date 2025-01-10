@@ -93,7 +93,18 @@ function EditPost({ post, onPostUpdate, onClose }) {
 
     return (
         <>
-            <Dialog open={true} onClose={handleClose} maxWidth="sm" fullWidth>
+            <Dialog
+                open={true}
+                onClose={handleClose}
+                maxWidth="md"
+                fullWidth
+                sx={{
+                    "& .MuiDialog-paper": {
+                        width: "80%",
+                        maxWidth: "800px",
+                    },
+                }}
+            >
                 <DialogTitle>Edit Post</DialogTitle>
                 <DialogContent>
                     <TextField
