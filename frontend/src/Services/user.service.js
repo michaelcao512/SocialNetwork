@@ -1,15 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api_url = "api/account";
 
-
-//this page has been reworked.  I was getting some weird random errors with the email and username checks these changes seemed to fix. 
-
+//this page has been reworked.  I was getting some weird random errors with the email and username checks these changes seemed to fix.
 
 class UserService {
-
-    
-
     async getAllUsers() {
         try {
             const response = await axios.get(api_url);
@@ -73,7 +68,6 @@ class UserService {
     async checkEmailExists(email) {
         try {
             const response = await axios.get(`${api_url}/existsByEmail/${email}`);
-            console.log("Email exists response:", response.data);
             return response.data;
         } catch (error) {
             console.error(`Error checking if email exists (${email}):`, error);
@@ -84,7 +78,6 @@ class UserService {
     async checkUsernameExists(username) {
         try {
             const response = await axios.get(`${api_url}/existsByUsername/${username}`);
-            console.log("Username exists response:", response.data);
             return response.data;
         } catch (error) {
             console.error(`Error checking if username exists (${username}):`, error);
@@ -93,11 +86,14 @@ class UserService {
     }
 
     getUsernameByAccountId(accountId) {
-        return axios.get(`${api_url}/getUsername/${accountId}`).then(response => {
-            return response.data;
-        }).catch(error => {
-            throw error;
-        });
+        return axios
+            .get(`${api_url}/getUsername/${accountId}`)
+            .then((response) => {
+                return response.data;
+            })
+            .catch((error) => {
+                throw error;
+            });
     }
 }
 

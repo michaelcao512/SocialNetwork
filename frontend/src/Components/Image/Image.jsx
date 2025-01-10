@@ -23,36 +23,29 @@ function Image({ images, deleteOption, handleImageRemove }) {
         fetchImages();
     }, [images]);
 
-    // single image
-    if (imageUrls.length === 1) {
-        return (
-            <Box sx={{ position: "relative", width: "60%", margin: "auto" }}>
-                <img src={imageUrls[0]} alt="Post" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
-                {deleteOption && (
-                    <IconButton onClick={() => handleImageRemove(0)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
-                        <DeleteIcon />
-                    </IconButton>
-                )}
-            </Box>
-        );
-    }
+    const imageStyle = {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderColor: "black",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        aspectRatio: "1/1",
+    };
+
     return (
-        <>
-            <Grid2 container spacing={2}>
-                {imageUrls.map((url, index) => (
-                    <Grid2 item size={{ xs: 6, sm: 6, md: 6 }} key={index}>
-                        <Box sx={{ position: "relative" }}>
-                            <img src={url} alt="Post" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
-                            {deleteOption && (
-                                <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            )}
-                        </Box>
-                    </Grid2>
-                ))}
-            </Grid2>
-        </>
+        <Grid2 container spacing={0} sx={{ height: "auto" }}>
+            {imageUrls.map((url, index) => (
+                <Box sx={{ position: "relative" }}>
+                    <img src={url} alt="Post" style={imageStyle} />
+                    {deleteOption && (
+                        <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
+                            <DeleteIcon />
+                        </IconButton>
+                    )}
+                </Box>
+            ))}
+        </Grid2>
     );
 }
 

@@ -38,7 +38,7 @@ class AuthService {
     getCurrentUser() {
         const user = localStorage.getItem("user");
         if (!user) {
-            console.error("No user found in localStorage.");
+            // console.error("No user found in localStorage.");
             return null;
         }
         try {
