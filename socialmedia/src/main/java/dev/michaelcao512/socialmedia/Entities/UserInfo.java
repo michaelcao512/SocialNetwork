@@ -21,7 +21,7 @@ public class UserInfo {
     private String lastName;
     private String biography;
     private String gender;
-    @Column(columnDefinition = "TEXT", nullable = true)
+    @Column(columnDefinition = "TEXT")
     private String avatarUrl;
 
 }

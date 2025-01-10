@@ -23,14 +23,14 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [biography, setBiography] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState("placeholder");
 
   useEffect(() => {
     setFirstName(userInfo.firstName || "");
     setLastName(userInfo.lastName || "");
     setGender(userInfo.gender || "");
     setBiography(userInfo.biography || "");
-    setAvatarUrl(userInfo.avatarUrl || null);
+    setAvatarUrl(userInfo.avatarUrl || "placeholder");
   }, [userInfo]);
 
   const handleSave = async () => {
@@ -56,12 +56,12 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     setLastName(userInfo.lastName || "");
     setGender(userInfo.gender || "");
     setBiography(userInfo.biography || "");
-    setAvatarUrl(userInfo.avatarUrl || null);
+    setAvatarUrl(userInfo.avatarUrl || "placeholder");
     setIsEditOpen(false);
   };
 
   const handleDeleteAvatar = () => {
-    setAvatarUrl(null);
+    setAvatarUrl("placeholder");
   };
 
   useEffect(() => {
@@ -89,9 +89,13 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => setAvatarUrl(e.target.result);
-                reader.readAsDataURL(file);
+                if (!file.type.startsWith("image/")) {
+                  alert("Please select a valid image.");
+                } else {
+                  const reader = new FileReader();
+                  reader.onload = (e) => setAvatarUrl(e.target.result);
+                  reader.readAsDataURL(file);
+                }
               }
             }}
           />
@@ -111,7 +115,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
               {userInfo.firstName?.charAt(0) || "#"}
             </Avatar>
 
-            {avatarUrl && (
+            {avatarUrl && avatarUrl !== "placeholder" && (
               <Close
                 onClick={handleDeleteAvatar}
                 sx={{
@@ -122,6 +126,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                   borderRadius: "50%",
                   cursor: "pointer",
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  display: "hidden",
                 }}
                 className="delete-avatar-icon"
               />
