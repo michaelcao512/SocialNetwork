@@ -28,53 +28,52 @@ function LoginForm() {
             });
     };
     return (
-        <>
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{ display: "flex", flexDirection: "column", gap: 1, width: "100%", maxWidth: "400px", margin: "auto" }}
-            >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <PersonIcon fontSize="small" />
-                    <FormControl sx={{ flex: 1 }}>
-                        <TextField
-                            label="Username"
-                            id="username"
-                            name="username"
-                            type="text"
-                            required
-                            fullWidth
-                            placeholder="Username"
-                            size="small"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </FormControl>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <LockIcon fontSize="small" />
-                    <FormControl sx={{ flex: 1 }}>
-                        <TextField
-                            label="Password"
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
-                            fullWidth
-                            placeholder="Password"
-                            size="small"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                        />
-                    </FormControl>
-                </Box>
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ display: "flex", flexDirection: "column", gap: 1, width: "100%", maxWidth: "400px", margin: "auto" }}
+        >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <PersonIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Username"
+                        id="username"
+                        name="username"
+                        type="text"
+                        required
+                        fullWidth
+                        placeholder="Username"
+                        size="small"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </FormControl>
             </Box>
-            <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2, width: "50%" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LockIcon />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Password"
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        fullWidth
+                        placeholder="Password"
+                        size="small"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                    />
+                </FormControl>
+            </Box>
+
+            <Button type="submit" variant="contained" color="primary" sx={{ width: "60%", alignSelf: "center", mt: 1 }}>
                 Log in
             </Button>
-        </>
+        </Box>
     );
 }
 

@@ -131,168 +131,167 @@ function RegistrationForm() {
     };
 
     return (
-        <>
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    width: "100%",
-                    maxWidth: "400px",
-                    margin: "auto",
-                }}
-            >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <EmailIcon fontSize="small" />
-                    <FormControl sx={{ flex: 1 }}>
-                        <TextField
-                            label="Email"
-                            id="email"
-                            name="email"
-                            type="email"
-                            required
-                            fullWidth
-                            placeholder="Email"
-                            size="small"
-                            value={email}
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            onBlur={(e) => handleEmailValidation(e.target.value)}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </FormControl>
-                </Box>
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                width: "100%",
+                maxWidth: "400px",
+                margin: "auto",
+            }}
+        >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <EmailIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Email"
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        fullWidth
+                        placeholder="Email"
+                        size="small"
+                        value={email}
+                        error={emailError}
+                        helperText={emailErrorMessage}
+                        onBlur={(e) => handleEmailValidation(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </FormControl>
+            </Box>
 
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <PersonIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Username"
+                        id="username"
+                        name="username"
+                        type="text"
+                        required
+                        fullWidth
+                        placeholder="Username"
+                        size="small"
+                        value={username}
+                        error={usernameError}
+                        helperText={usernameErrorMessage}
+                        onBlur={(e) => handleUsernameValidation(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </FormControl>
+            </Box>
+
+            <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
                     <PersonIcon fontSize="small" />
                     <FormControl sx={{ flex: 1 }}>
                         <TextField
-                            label="Username"
-                            id="username"
-                            name="username"
+                            label="First Name"
+                            id="firstName"
+                            name="firstName"
                             type="text"
                             required
                             fullWidth
-                            placeholder="Username"
+                            placeholder="First Name"
                             size="small"
-                            value={username}
-                            error={usernameError}
-                            helperText={usernameErrorMessage}
-                            onBlur={(e) => handleUsernameValidation(e.target.value)}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                         />
                     </FormControl>
                 </Box>
 
-                <Box sx={{ display: "flex", gap: 1 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-                        <PersonIcon fontSize="small" />
-                        <FormControl sx={{ flex: 1 }}>
-                            <TextField
-                                label="First Name"
-                                id="firstName"
-                                name="firstName"
-                                type="text"
-                                required
-                                fullWidth
-                                placeholder="First Name"
-                                size="small"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </FormControl>
-                    </Box>
-
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-                        <FormControl sx={{ flex: 1 }}>
-                            <TextField
-                                label="Last Name"
-                                id="lastName"
-                                name="lastName"
-                                type="text"
-                                required
-                                fullWidth
-                                placeholder="Last Name"
-                                size="small"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                        </FormControl>
-                    </Box>
-                </Box>
-
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <WcIcon fontSize="small" />
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
                     <FormControl sx={{ flex: 1 }}>
                         <TextField
-                            label="Gender"
-                            id="gender"
-                            name="gender"
-                            select
+                            label="Last Name"
+                            id="lastName"
+                            name="lastName"
+                            type="text"
                             required
                             fullWidth
-                            placeholder="Gender"
+                            placeholder="Last Name"
                             size="small"
-                            value={gender}
-                            onChange={(e) => setGender(e.target.value)}
-                        >
-                            <MenuItem value="male">Male</MenuItem>
-                            <MenuItem value="female">Female</MenuItem>
-                        </TextField>
-                    </FormControl>
-                </Box>
-
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <LockIcon fontSize="small" />
-                    <FormControl sx={{ flex: 1 }}>
-                        <TextField
-                            label="Password"
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
-                            fullWidth
-                            placeholder="Password"
-                            size="small"
-                            value={password}
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                handlePasswordValidation(e.target.value);
-                            }}
-                        />
-                    </FormControl>
-                </Box>
-
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <LockIcon fontSize="small" />
-                    <FormControl sx={{ flex: 1 }}>
-                        <TextField
-                            label="Confirm Password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            required
-                            fullWidth
-                            placeholder="Confirm Password"
-                            size="small"
-                            value={confirmPassword}
-                            error={password !== confirmPassword}
-                            helperText={password !== confirmPassword ? "Passwords do not match" : ""}
-                            onChange={(e) => {
-                                setConfirmPassword(e.target.value);
-                            }}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                     </FormControl>
                 </Box>
             </Box>
-            <Button type="submit" variant="contained" color="primary" disabled={buttonDisabled} sx={{ marginTop: 2, width: "50%" }}>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <WcIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Gender"
+                        id="gender"
+                        name="gender"
+                        select
+                        required
+                        fullWidth
+                        placeholder="Gender"
+                        size="small"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                    >
+                        <MenuItem value="male">Male</MenuItem>
+                        <MenuItem value="female">Female</MenuItem>
+                    </TextField>
+                </FormControl>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LockIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Password"
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        fullWidth
+                        placeholder="Password"
+                        size="small"
+                        value={password}
+                        error={passwordError}
+                        helperText={passwordErrorMessage}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            handlePasswordValidation(e.target.value);
+                        }}
+                    />
+                </FormControl>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LockIcon fontSize="small" />
+                <FormControl sx={{ flex: 1 }}>
+                    <TextField
+                        label="Confirm Password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        required
+                        fullWidth
+                        placeholder="Confirm Password"
+                        size="small"
+                        value={confirmPassword}
+                        error={password !== confirmPassword}
+                        helperText={password !== confirmPassword ? "Passwords do not match" : ""}
+                        onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                        }}
+                    />
+                </FormControl>
+            </Box>
+
+            <Button type="submit" variant="contained" color="primary" disabled={buttonDisabled} sx={{ width: "60%", alignSelf: "center", mt: 1 }}>
                 Register
             </Button>
-        </>
+        </Box>
     );
 }
 
