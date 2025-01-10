@@ -15,6 +15,7 @@ import {
 import userInfoService from "../../../Services/userinfo.service";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
 import "./userinfo.css";
+import { Close } from "@mui/icons-material";
 
 const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -50,92 +51,133 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     }
   };
 
+  const handleCancel = () => {
+    setFirstName(userInfo.firstName || "");
+    setLastName(userInfo.lastName || "");
+    setGender(userInfo.gender || "");
+    setBiography(userInfo.biography || "");
+    setAvatarUrl(userInfo.avatarUrl || null);
+    setIsEditOpen(false);
+  };
+
+  const handleDeleteAvatar = () => {
+    setAvatarUrl(null);
+  };
+
+  useEffect(() => {
+    console.log("Avatar Url: ", avatarUrl);
+  }, [avatarUrl]);
+
   return (
-      <>
-        <StyledButton
-            sx={{ marginTop: "10px" }}
-            variant="outlined"
-            color="primary"
-            onClick={() => setIsEditOpen(true)}
-        >
-          Edit Profile
-        </StyledButton>
-        <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
-          <DialogTitle>Edit Profile</DialogTitle>
-          <DialogContent>
-            <input
-                type="file"
-                id="avatar-input"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => setAvatarUrl(e.target.result);
-                    reader.readAsDataURL(file);
-                  }
-                }}
-            />
+    <>
+      <StyledButton
+        sx={{ marginTop: "10px" }}
+        variant="outlined"
+        color="primary"
+        onClick={() => setIsEditOpen(true)}
+      >
+        Edit Profile
+      </StyledButton>
+      <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
+        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogContent>
+          <input
+            type="file"
+            id="avatar-input"
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => setAvatarUrl(e.target.result);
+                reader.readAsDataURL(file);
+              }
+            }}
+          />
+          <div
+            style={{
+              position: "relative",
+              width: "fit-content",
+              margin: "auto",
+            }}
+          >
             <Avatar
-                style={{ margin: "auto" }}
-                src={avatarUrl}
-                onClick={() => document.getElementById("avatar-input").click()}
-                id="edit-profile-avatar"
+              style={{ margin: "auto" }}
+              src={avatarUrl}
+              onClick={() => document.getElementById("avatar-input").click()}
+              id="edit-profile-avatar"
             >
               {userInfo.firstName?.charAt(0) || "#"}
             </Avatar>
-            <TextField
-                autoFocus
-                margin="dense"
-                label="First Name"
-                type="text"
-                fullWidth
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-            />
-            <TextField
-                margin="dense"
-                label="Last Name"
-                type="text"
-                fullWidth
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-            />
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Gender</InputLabel>
-              <Select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  label="Gender"
-              >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
-          <DialogContent>
-            <TextField
-                autoFocus
-                margin="dense"
-                label="Biography"
-                type="text"
-                fullWidth
-                multiline
-                value={biography}
-                onChange={(e) => setBiography(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsEditOpen(false)} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={handleSave} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
+
+            {avatarUrl && (
+              <Close
+                onClick={handleDeleteAvatar}
+                sx={{
+                  position: "absolute",
+                  top: "0rem",
+                  left: "1.7rem",
+                  backgroundColor: "white",
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                }}
+                className="delete-avatar-icon"
+              />
+            )}
+          </div>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="First Name"
+            type="text"
+            fullWidth
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Last Name"
+            type="text"
+            fullWidth
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Gender</InputLabel>
+            <Select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              label="Gender"
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Biography"
+            type="text"
+            fullWidth
+            multiline
+            value={biography}
+            onChange={(e) => setBiography(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
