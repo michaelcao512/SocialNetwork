@@ -2,7 +2,8 @@ package dev.michaelcao512.socialmedia.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +33,9 @@ public class UserInfoController {
      * @return the updated user information if the update is successful
      * @throws IllegalArgumentException if the user information is not found
      */
-    @PatchMapping("/{userInfoId}")
-    public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) {
+    @PutMapping("/{userInfoId}")
+    public ResponseEntity<UserInfo> updateUserInfo(@PathVariable Long userInfoId, @RequestBody UserInfo userInfo) {
+      
         UserInfo newUserInfo = userInfoService.updateUserInfo(userInfo);
         return ResponseEntity.ok(newUserInfo);
     }

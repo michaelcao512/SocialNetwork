@@ -5,6 +5,7 @@ import { StandardContainer } from "../../../StyledComponents/StyledComponents";
 
 const UserInfoComponent = (props) => {
   const { user, userInfo, profileId, username } = props;
+  const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
 
   return (
     <StandardContainer
@@ -15,8 +16,11 @@ const UserInfoComponent = (props) => {
       }}
     >
       {/* profile picture will replace the letter if there exists a url */}
-      <Avatar src={userInfo.avatarUrl || null}>
-        {userInfo.firstName?.charAt(0) || "#"}
+      <Avatar
+        src={`${s3BucketUrl}${userInfo.avatarUrl}` || null}
+        sx={{ width: 180, height: 180 }} 
+        >
+         {userInfo.firstName?.charAt(0) || "#"}
       </Avatar>
       <Typography variant="h5">
         {userInfo.firstName} {userInfo.lastName}

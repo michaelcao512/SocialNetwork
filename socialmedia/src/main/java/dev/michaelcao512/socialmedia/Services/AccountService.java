@@ -38,7 +38,7 @@ public class AccountService implements UserDetailsService {
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
     }
-
+   
     public Account registerAccount(RegistrationRequest registrationRequest) {
         Logger logger = LoggerFactory.getLogger(AccountService.class);
 
@@ -72,6 +72,7 @@ public class AccountService implements UserDetailsService {
             throw new EmailAlreadyExistsException();
         }
 
+       
         password = passwordEncoder.encode(password);
 
         Account newAccount = new Account();
@@ -102,7 +103,7 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(savedAccount);
         logger.info("Account registered: " + newAccount);
 
-        String verificationUrl = "http://localhost:5173/verify?token=" + token;
+        String verificationUrl = "http://tnproj2revfront.s3-website.us-east-2.amazonaws.com/verify?token=" + token;
         emailService.sendVerificationEmail(newAccount.getEmail(), verificationUrl);
 
         return newAccount;

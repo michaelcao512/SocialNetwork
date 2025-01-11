@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import imageService from "../../../Services/image.service";
+import SelectImage from "../../Image/SelectImage";
 import {
   Button,
   Dialog,
@@ -7,6 +9,7 @@ import {
   TextField,
   DialogActions,
   Avatar,
+  Typography,
 } from "@mui/material";
 import userInfoService from "../../../Services/userinfo.service";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
@@ -18,7 +21,9 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [biography, setBiography] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
 
   useEffect(() => {
     setFirstName(userInfo.firstName || "");
@@ -28,22 +33,44 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     setAvatarUrl(userInfo.avatarUrl || null);
   }, [userInfo]);
 
+  const handleImageSelect = (file) => {
+    setSelectedImages([file]); // Replace any previous image
+  };
+
+  const handleImageRemove = () => {
+    setSelectedImages([]); // Clear the selected image
+  };
+
   const handleSave = async () => {
     try {
+      if (selectedImages.length > 0) {
+        const image = selectedImages[0];
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("fileName", image.name);
+        formData.append("accountId", user.id);
+        formData.append("imageType", "PROFILE");
+
+        // Upload the image; backend handles associating the bucket key
+        await imageService.uploadFile(formData);
+      }
+
+      // Update user info without changing avatarUrl (backend already updated it)
       const updatedUserInfo = {
         ...userInfo,
         firstName,
         lastName,
         gender,
         biography,
-        avatarUrl,
       };
-      console.log(updatedUserInfo);
+
+      console.log("Updated User Info:", updatedUserInfo);
+
       await userInfoService.updateUserInfo(updatedUserInfo);
       onUserInfoUpdate();
       setIsEditOpen(false);
     } catch (error) {
-      console.log("error updating user info: ", error);
+      console.error("Error updating user info:", error);
     }
   };
 
@@ -60,6 +87,14 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
       <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
+          <Avatar
+            style={{ margin: "auto", cursor: "pointer" }}
+            src={avatarUrl ? `${s3BucketUrl}${avatarUrl}` : ""}
+            onClick={() => document.getElementById("avatar-input").click()}
+            id="edit-profile-avatar"
+          >
+            {userInfo.firstName?.charAt(0) || "#"}
+          </Avatar>
           <input
             type="file"
             id="avatar-input"
@@ -68,20 +103,10 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => setAvatarUrl(e.target.result);
-                reader.readAsDataURL(file);
+                handleImageSelect(file);
               }
             }}
           />
-          <Avatar
-            style={{ margin: "auto" }}
-            src={avatarUrl}
-            onClick={() => document.getElementById("avatar-input").click()}
-            id="edit-profile-avatar"
-          >
-            {userInfo.firstName?.charAt(0) || "#"}
-          </Avatar>
           <TextField
             autoFocus
             margin="dense"
@@ -107,10 +132,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           />
-        </DialogContent>
-        <DialogContent>
           <TextField
-            autoFocus
             margin="dense"
             label="Biography"
             type="text"
@@ -119,6 +141,21 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
             value={biography}
             onChange={(e) => setBiography(e.target.value)}
           />
+        </DialogContent>
+        <DialogContent>
+          {selectedImages.length > 0 && (
+            <div>
+              <Typography variant="body2">Selected Image:</Typography>
+              <img
+                src={URL.createObjectURL(selectedImages[0])}
+                alt="Selected"
+                style={{ maxWidth: "100%", marginTop: "10px" }}
+              />
+              <Button onClick={handleImageRemove} color="secondary">
+                Remove
+              </Button>
+            </div>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsEditOpen(false)} color="secondary">

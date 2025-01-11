@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Configuration
@@ -23,6 +24,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @CrossOrigin
 public class SecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
+    @Value("${cors.allowed.origins}")
+    private String[] allowedOrigins;
+
 
     public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
         this.unauthorizedHandler = unauthorizedHandler;
@@ -35,7 +39,7 @@ public class SecurityConfig {
             public void addCorsMappings(final CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "http://webappfrontendbucket.s3-website-us-east-1.amazonaws.com/") // for temp use, do not use in prod env
+                        .allowedOrigins(allowedOrigins) // for temp use, do not use in prod env
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);

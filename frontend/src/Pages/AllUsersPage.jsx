@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import userService from "../Services/user.service";
 
 function AllUsersPage() {
+    const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
@@ -41,7 +42,8 @@ function AllUsersPage() {
                                 }}
                                 onClick={() => navigate(`/profile/${user.accountId}`)}
                             >
-                                <Avatar src={user.avatar || "/default-avatar.png"} alt={user.username} sx={{ width: 56, height: 56, marginBottom: "0.5rem" }} />
+                                <Avatar src={user?.userInfo?.avatarUrl 
+                                    ?   `${s3BucketUrl}${user.userInfo.avatarUrl}` : "/default-avatar.png"} alt={user.username} sx={{ width: 80, height: 80, marginBottom: "0.5rem" }} />
                                 <CardContent sx={{ padding: "0" }}>
                                     <Typography variant="body1">{user.username}</Typography>
                                 </CardContent>

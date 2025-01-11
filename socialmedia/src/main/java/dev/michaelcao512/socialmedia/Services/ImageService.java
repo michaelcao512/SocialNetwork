@@ -2,9 +2,11 @@ package dev.michaelcao512.socialmedia.Services;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Image;
+import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
 import dev.michaelcao512.socialmedia.Repositories.ImageRepository;
+import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.UpdateImageRequest;
 import dev.michaelcao512.socialmedia.dto.Requests.UploadFileRequest;
@@ -41,12 +43,12 @@ public class ImageService {
     private final AccountRepository accountRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-
+    private final UserInfoRepository userInfoRepository;
     private String bucketName;
 
     public ImageService(S3Client s3Client, S3Presigner s3Presigner, ImageRepository imageRepository,
             AccountRepository accountRepository,
-            PostRepository postRepository, CommentRepository commentRepository,
+            PostRepository postRepository, CommentRepository commentRepository, UserInfoRepository userInfoRepository,
             @Value("${S3.bucket.name}") String bucketName) {
         this.s3Client = s3Client;
         this.s3Presigner = s3Presigner;
@@ -55,7 +57,7 @@ public class ImageService {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.bucketName = bucketName;
-
+        this.userInfoRepository = userInfoRepository;
     }
 
     Logger logger = LoggerFactory.getLogger(ImageService.class);
@@ -128,7 +130,14 @@ public class ImageService {
             default:
                 throw new RuntimeException("Invalid image type");
         }
-
+        if (uploadFileRequest.imageType() == Image.ImageType.PROFILE) {
+            UserInfo userInfo = userInfoRepository.findByAccountId(uploadFileRequest.accountId())
+                .orElseThrow(() -> new RuntimeException("UserInfo not found"));
+        
+            // Use bucketKey instead of generating presigned URL here
+            userInfo.setAvatarUrl(bucketKey); // Store the bucket key in UserInfo table
+            userInfoRepository.save(userInfo); // Save changes to UserInfo
+        }
         Image savedImage = imageRepository.save(image);
 
         return savedImage;

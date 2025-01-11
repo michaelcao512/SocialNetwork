@@ -13,7 +13,7 @@ class UserInfoService {
     }
 
     updateUserInfo(userInfo) {
-        return axios.patch(`${api_url}/${userInfo.userInfoId}`, userInfo).then(response => {
+        return axios.put(`${api_url}/${userInfo.userInfoId}`, userInfo).then(response => {
             return response.data;
         }).catch(error => {
             console.log("error: ", error);

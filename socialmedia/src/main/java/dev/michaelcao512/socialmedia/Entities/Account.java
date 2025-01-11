@@ -109,53 +109,7 @@ public String toString() {
 }
 
 
-    /*
-    @Override
-    public String toString() {
-        return "Account [accountId=" + accountId + ", username=" + username + ", email=" + email + ", dateCreated="
-                + dateCreated + ", dateUpdated=" + dateUpdated + ", authorities="
-                + authorities
-        // + ", following=" + following + ", followers=" + followers
-        // + ", posts=" + posts + "]"
-        ;
-    }
-
-    
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
-    
-    // ===== Implementing UserDetails Methods =====
-    */
-    
-
-    /*
-    //public void setVerificationToken(String verificationToken){
-       // logger.info("Generated token: " + token);
-
-      //  this.verificationToken = verificationToken;
-   // }
-   // public String getVerificationToken(){
-        return verificationToken;
-    }
-
-    public void setTokenExpiration(LocalDateTime newDate){
-        this.tokenExpiration = newDate;
-    }
-    
-    public void setEmailVerified(boolean emailVerified){
-        this.emailVerified = emailVerified;
-        }
-
-    public void markVerified(){
-    setEmailVerified(true);    
-    this.verificationToken = null;
-    this.tokenExpiration = null;
-} 
-    */
+   
 
     @Override
     public String getPassword() {

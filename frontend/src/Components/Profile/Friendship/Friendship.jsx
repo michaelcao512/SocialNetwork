@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import userService from "../../../Services/user.service";
 import friendshipService from "../../../Services/friendship.service";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
-import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle } from "@mui/material";
+import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle, Avatar } from "@mui/material";
 import { NavLink } from "react-router-dom";
 function Friendship(props) {
     const { user, profileId } = props;
@@ -14,18 +14,62 @@ function Friendship(props) {
 
     const [openDialog, setOpenDialog] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
+    const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
 
-    const fetchFollowing = useCallback(() => {
-        userService.getFollowing(profileId).then((response) => {
-            setFollowing(response);
-        });
+    const fetchFollowing = useCallback(async () => {
+        try {
+            const response = await userService.getFollowing(profileId);
+            const followingWithAvatars = await Promise.all(
+                response.map(async (follow) => {
+                    try {
+                        const userInfo = await userInfoService.getUserInfoByAccountId(follow.accountId);
+                        return {
+                            ...follow,
+                            avatarUrl: userInfo.avatarUrl || null,
+                        };
+                    } catch (error) {
+                        console.error("Error fetching avatar for user:", follow.accountId);
+                        return {
+                            ...follow,
+                            avatarUrl: null,
+                        };
+                    }
+                })
+            );
+            setFollowing(followingWithAvatars);
+        } catch (error) {
+            console.error("Error fetching following:", error);
+        }
     }, [profileId]);
+    
 
-    const fetchFollowers = useCallback(() => {
-        userService.getFollowers(profileId).then((response) => {
-            setFollowers(response);
-        });
+    const fetchFollowers = useCallback(async () => {
+        try {
+            const response = await userService.getFollowers(profileId);
+            const followersWithAvatars = await Promise.all(
+                response.map(async (follower) => {
+                    try {
+                        // Fetch avatar from userInfo service
+                        const userInfo = await userInfoService.getUserInfoByAccountId(follower.accountId);
+                        return {
+                            ...follower, // Keep existing follower data (username, accountId, etc.)
+                            avatarUrl: userInfo.avatarUrl || null, // Add avatarUrl
+                        };
+                    } catch (error) {
+                        console.error("Error fetching avatar for user:", follower.accountId);
+                        return {
+                            ...follower,
+                            avatarUrl: null, // Fallback to null if there's an error
+                        };
+                    }
+                })
+            );
+            setFollowers(followersWithAvatars);
+        } catch (error) {
+            console.error("Error fetching followers:", error);
+        }
     }, [profileId]);
+    
 
     const fetchFriendship = useCallback(() => {
         fetchFollowing();
@@ -104,25 +148,61 @@ function Friendship(props) {
                     <Tab label={`Following (${following.length})`} />
                 </Tabs>
                 <DialogContent>
-                    {tabIndex === 0 && (
-                        <List>
-                            {followers.map((follower) => (
-                                <ListItem key={follower.accountId} component={NavLink} to={`/profile/${follower.accountId}`} onClick={handleNavLinkClick}>
-                                    <ListItemText primary={follower.username} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    )}
-                    {tabIndex === 1 && (
-                        <List>
-                            {following.map((follow) => (
-                                <ListItem key={follow.accountId} component={NavLink} to={`/profile/${follow.accountId}`} onClick={handleNavLinkClick}>
-                                    <ListItemText primary={follow.username} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    )}
-                </DialogContent>
+    {tabIndex === 0 && (
+        <List>
+        {followers.map((follower) => (
+          <ListItem
+            key={follower.accountId}
+            component={NavLink}
+            to={`/profile/${follower.accountId}`}
+            onClick={handleNavLinkClick}
+          >
+            <Avatar
+              src={
+                follower.userInfo?.avatarUrl
+                  ? `${s3BucketUrl}${follower.userInfo.avatarUrl}`
+                  : "/default-avatar.png"
+              }
+              alt={follower.username || "User Avatar"}
+              sx={{ width: 40, height: 40, marginRight: "1rem" }}
+            >
+              {follower.userInfo?.firstName?.charAt(0) || "?"}
+            </Avatar>
+            <ListItemText primary={follower.username} />
+          </ListItem>
+        ))}
+      </List>
+      
+    )}
+    {tabIndex === 1 && (
+       <List>
+       {following.map((follow) => (
+         <ListItem
+           key={follow.accountId}
+           component={NavLink}
+           to={`/profile/${follow.accountId}`}
+           onClick={handleNavLinkClick}
+         >
+           <Avatar
+             src={
+               follow.userInfo?.avatarUrl
+                 ? `${s3BucketUrl}${follow.userInfo.avatarUrl}`
+                 : "/default-avatar.png"
+             }
+             alt={follow.username || "User Avatar"}
+             sx={{ width: 40, height: 40, marginRight: "1rem" }}
+           >
+             {follow.userInfo?.firstName?.charAt(0) || "?"}
+           </Avatar>
+           <ListItemText primary={follow.username} />
+         </ListItem>
+       ))}
+     </List>
+     
+    )}
+</DialogContent>
+
+
             </Dialog>
             <Box>
                 {canFollow && (

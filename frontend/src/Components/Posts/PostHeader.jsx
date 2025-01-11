@@ -8,9 +8,11 @@ import postService from "../../Services/post.service";
 import commentService from "../../Services/comment.service";
 import EditComment from "./Comments/EditComment";
 
+
 function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDelete, entityType }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -47,7 +49,14 @@ function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDe
         <>
             <Box style={{ display: "flex", flexDirection: "row" }} width={"100%"} justifyContent={"space-between"} marginBottom={"1rem"}>
                 <Box style={{ display: "flex", alignItems: "center" }}>
-                    <Avatar src={entityOwner?.userInfo?.avatarUrl || null} sx={{ marginRight: "0.5rem" }}>
+               <Avatar src={
+    entityOwner?.userInfo?.avatarUrl
+      ? `${s3BucketUrl}${entityOwner.userInfo.avatarUrl}`
+      : ''
+  }
+  sx={{ marginRight: "0.5rem" }}
+>
+
                         {entityOwner?.userInfo?.firstName?.charAt(0) || "#"}
                     </Avatar>
                     <Box style={{ display: "flex", flexDirection: "column" }}>
