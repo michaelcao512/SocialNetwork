@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = "kris206/socialmedia"
-        EC2_HOST = "172.31.18.27" //change to your own AWS EC2 backend server IP addr
+        EC2_HOST = "***.***.***.***" //change to your own AWS EC2 backend server IP addr
         EC2_USER = "ubuntu"
     }
     stages {
