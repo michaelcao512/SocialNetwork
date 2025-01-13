@@ -1,15 +1,39 @@
 import { useState, useEffect } from "react";
-import { Typography, Grid, Card, CardContent, Avatar, Box } from "@mui/material";
+import { Typography, Card, CardContent, Avatar, Box, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import userService from "../Services/user.service";
-
+import imageService from "../Services/image.service";
 function AllUsersPage() {
-    const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
     const [users, setUsers] = useState([]);
+    const [userAvatars, setUserAvatars] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
-        userService.getAllUsers().then(setUsers).catch(console.error);
+        const fetchUsers = async () => {
+            try {
+                const fetchedUsers = await userService.getAllUsers();
+                setUsers(fetchedUsers);
+
+                const avatarPromises = fetchedUsers.map(async (user) => {
+                    if (user.userInfo?.profileImage?.bucketKey) {
+                        const avatarUrl = await imageService.getPresignedUrl(user.userInfo.profileImage.bucketKey);
+                        return { [user.accountId]: avatarUrl };
+                    } else {
+                        return { [user.accountId]: null };
+                    }
+                });
+
+                const avatarResults = await Promise.all(avatarPromises);
+                const avatarMap = {};
+                avatarResults.forEach((result) => {
+                    Object.assign(avatarMap, result);
+                });
+                setUserAvatars(avatarMap);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+        fetchUsers();
     }, []);
 
     return (
@@ -22,9 +46,9 @@ function AllUsersPage() {
                     No users to display.
                 </Typography>
             ) : (
-                <Grid container spacing={2}>
+                <Grid2 container spacing={2}>
                     {users.map((user) => (
-                        <Grid item xs={6} sm={4} md={3} key={user.accountId}>
+                        <Grid2 size={{ xs: 6, sm: 4, md: 3 }} key={user.accountId}>
                             <Card
                                 sx={{
                                     display: "flex",
@@ -42,15 +66,16 @@ function AllUsersPage() {
                                 }}
                                 onClick={() => navigate(`/profile/${user.accountId}`)}
                             >
-                                <Avatar src={user?.userInfo?.avatarUrl 
-                                    ?   `${s3BucketUrl}${user.userInfo.avatarUrl}` : "/default-avatar.png"} alt={user.username} sx={{ width: 80, height: 80, marginBottom: "0.5rem" }} />
+                                <Avatar src={userAvatars[user.accountId]} alt={user.username} sx={{ width: 80, height: 80, marginBottom: "0.5rem" }}>
+                                    {user.username.charAt(0)}
+                                </Avatar>
                                 <CardContent sx={{ padding: "0" }}>
                                     <Typography variant="body1">{user.username}</Typography>
                                 </CardContent>
                             </Card>
-                        </Grid>
+                        </Grid2>
                     ))}
-                </Grid>
+                </Grid2>
             )}
         </Box>
     );

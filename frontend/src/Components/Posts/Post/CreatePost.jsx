@@ -23,7 +23,6 @@ function CreatePost(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("selectedImages: ", selectedImages);
         if (!content.trim()){
             setError("Post content cannot be empty.");
             return;
@@ -80,7 +79,7 @@ function CreatePost(props) {
                         }}
                         variant="outlined"
                         error={!!error}
-                        helperText={error}
+                        helperText={ error || `${content.length}/${MAX_CONTENT_LENGTH} characters` }
                     />
                 </FormControl>
                 <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove}/>

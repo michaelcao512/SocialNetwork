@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { StyledNavLink } from "../../StyledComponents/StyledComponents";
@@ -7,12 +7,29 @@ import { Edit, Delete } from "@mui/icons-material";
 import postService from "../../Services/post.service";
 import commentService from "../../Services/comment.service";
 import EditComment from "./Comments/EditComment";
-
+import imageService from "../../Services/image.service";
 
 function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDelete, entityType }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
-    const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
+
+    const [profileImageUrl, setProfileImageUrl] = useState("");
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            try {
+                if (!entityOwner?.userInfo?.profileImage) {
+                    setProfileImageUrl("");
+                    return;
+                }
+                const url = await imageService.getPresignedUrl(entityOwner.userInfo.profileImage.bucketKey);
+                console.log("url: ", url);
+                setProfileImageUrl(url);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            }
+        };
+        fetchProfileImage();
+    }, [entityOwner?.userInfo?.profileImage]);
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -33,12 +50,14 @@ function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDe
 
     const handleDeleteClick = () => {
         if (entityType === "post") {
-            postService.deletePost(entity.postId)
+            postService
+                .deletePost(entity.postId)
                 .then(() => onEntityDelete())
                 .catch((error) => console.log("Delete post error: ", error));
             handleMenuClose();
         } else if (entityType === "comment") {
-            commentService.deleteComment(entity.commentId)
+            commentService
+                .deleteComment(entity.commentId)
                 .then(() => onEntityDelete())
                 .catch((error) => console.log("Delete comment error: ", error));
         } else {
@@ -49,14 +68,7 @@ function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDe
         <>
             <Box style={{ display: "flex", flexDirection: "row" }} width={"100%"} justifyContent={"space-between"} marginBottom={"1rem"}>
                 <Box style={{ display: "flex", alignItems: "center" }}>
-               <Avatar src={
-    entityOwner?.userInfo?.avatarUrl
-      ? `${s3BucketUrl}${entityOwner.userInfo.avatarUrl}`
-      : ''
-  }
-  sx={{ marginRight: "0.5rem" }}
->
-
+                    <Avatar src={profileImageUrl || null} sx={{ marginRight: "0.5rem" }}>
                         {entityOwner?.userInfo?.firstName?.charAt(0) || "#"}
                     </Avatar>
                     <Box style={{ display: "flex", flexDirection: "column" }}>

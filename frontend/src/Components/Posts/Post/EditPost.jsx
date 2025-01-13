@@ -93,7 +93,18 @@ function EditPost({ post, onPostUpdate, onClose }) {
 
     return (
         <>
-            <Dialog open={true} onClose={handleClose} maxWidth="sm" fullWidth>
+            <Dialog
+                open={true}
+                onClose={handleClose}
+                maxWidth="md"
+                fullWidth
+                sx={{
+                    "& .MuiDialog-paper": {
+                        width: "80%",
+                        maxWidth: "800px",
+                    },
+                }}
+            >
                 <DialogTitle>Edit Post</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -125,9 +136,8 @@ function EditPost({ post, onPostUpdate, onClose }) {
                     {existingImages.length > 0 && (
                         <Box sx={{ mt: 2 }}>
                             <Typography variant="body2" color="textSecondary">
-                                Existing Images:
+                                Existing Images
                             </Typography>
-
                             <Image images={existingImages} deleteOption={true} handleImageRemove={handleExistingImageRemove} />
                         </Box>
                     )}

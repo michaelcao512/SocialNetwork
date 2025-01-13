@@ -1,173 +1,185 @@
 import React, { useState, useEffect } from "react";
 import imageService from "../../../Services/image.service";
-import SelectImage from "../../Image/SelectImage";
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Avatar,
-  Typography,
-} from "@mui/material";
 import userInfoService from "../../../Services/userinfo.service";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Typography, Box } from "@mui/material";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
 import "./userinfo.css";
+import { Close } from "@mui/icons-material";
 
 const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
-  const [biography, setBiography] = useState("");
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
+    const [biography, setBiography] = useState("");
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
-  useEffect(() => {
-    setFirstName(userInfo.firstName || "");
-    setLastName(userInfo.lastName || "");
-    setGender(userInfo.gender || "");
-    setBiography(userInfo.biography || "");
-    setAvatarUrl(userInfo.avatarUrl || null);
-  }, [userInfo]);
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                if (userInfo?.profileImage) {
+                    const url = await imageService.getPresignedUrl(userInfo.profileImage.bucketKey);
+                    setImagePreviewUrl(url);
+                }
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            }
+        };
+        fetchImages();
+        setFirstName(userInfo.firstName || "");
+        setLastName(userInfo.lastName || "");
+        setGender(userInfo.gender || "");
+        setBiography(userInfo.biography || "");
+        setSelectedImages([]);
+    }, [userInfo, userInfo.profileImage, isEditOpen]);
 
-  const handleImageSelect = (file) => {
-    setSelectedImages([file]); // Replace any previous image
-  };
+    // selecting profile image preview
+    const handleImageSelect = (file) => {
+        setImagePreviewUrl(URL.createObjectURL(file));
+        setSelectedImages([file]);
+    };
 
-  const handleImageRemove = () => {
-    setSelectedImages([]); // Clear the selected image
-  };
+    // remove profile image preview going back to default picture
+    const handleImageRemove = () => {
+        setImagePreviewUrl(null);
+        setSelectedImages([]);
+    };
 
-  const handleSave = async () => {
-    try {
-      if (selectedImages.length > 0) {
-        const image = selectedImages[0];
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("fileName", image.name);
-        formData.append("accountId", user.id);
-        formData.append("imageType", "PROFILE");
+    const handleSave = async () => {
+        try {
+            if (selectedImages.length == 1) {
+                // delete the old image
+                if (userInfo.profileImage) {
+                    await imageService.deleteImage(userInfo.profileImage.imageId);
+                }
 
-        // Upload the image; backend handles associating the bucket key
-        await imageService.uploadFile(formData);
-      }
+                const image = selectedImages[0];
+                const formData = new FormData();
+                formData.append("file", image);
+                formData.append("fileName", image.name);
+                formData.append("accountId", user.id);
+                formData.append("userInfoId", userInfo.userInfoId);
+                formData.append("imageType", "PROFILE");
 
-      // Update user info without changing avatarUrl (backend already updated it)
-      const updatedUserInfo = {
-        ...userInfo,
-        firstName,
-        lastName,
-        gender,
-        biography,
-      };
+                // Upload the image; backend handles associating the bucket key
+                await imageService.uploadFile(formData);
+            } else if (selectedImages.length == 0 && !imagePreviewUrl) {
+                // if the user didn't select a new image and image removes the image from preview
+                // delete the profile image and utilize the default image
+                if (userInfo.profileImage) {
+                    await imageService.deleteImage(userInfo.profileImage.imageId);
+                }
+            }
 
-      console.log("Updated User Info:", updatedUserInfo);
+            // Update user info
+            const updatedUserInfo = {
+                ...userInfo,
+                firstName,
+                lastName,
+                gender,
+                biography,
+            };
+            await userInfoService.updateUserInfo(updatedUserInfo);
+            await onUserInfoUpdate();
+            setIsEditOpen(false);
+        } catch (error) {
+            console.error("Error updating user info:", error);
+        }
+    };
 
-      await userInfoService.updateUserInfo(updatedUserInfo);
-      onUserInfoUpdate();
-      setIsEditOpen(false);
-    } catch (error) {
-      console.error("Error updating user info:", error);
-    }
-  };
+    const handleCancel = () => {
+        setIsEditOpen(false);
+    };
 
-  return (
-    <>
-      <StyledButton
-        sx={{ marginTop: "10px" }}
-        variant="outlined"
-        color="primary"
-        onClick={() => setIsEditOpen(true)}
-      >
-        Edit Profile
-      </StyledButton>
-      <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogContent>
-          <Avatar
-            style={{ margin: "auto", cursor: "pointer" }}
-            src={avatarUrl ? `${s3BucketUrl}${avatarUrl}` : ""}
-            onClick={() => document.getElementById("avatar-input").click()}
-            id="edit-profile-avatar"
-          >
-            {userInfo.firstName?.charAt(0) || "#"}
-          </Avatar>
-          <input
-            type="file"
-            id="avatar-input"
-            style={{ display: "none" }}
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                handleImageSelect(file);
-              }
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            label="First Name"
-            type="text"
-            fullWidth
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Last Name"
-            type="text"
-            fullWidth
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Gender"
-            type="text"
-            fullWidth
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Biography"
-            type="text"
-            fullWidth
-            multiline
-            value={biography}
-            onChange={(e) => setBiography(e.target.value)}
-          />
-        </DialogContent>
-        <DialogContent>
-          {selectedImages.length > 0 && (
-            <div>
-              <Typography variant="body2">Selected Image:</Typography>
-              <img
-                src={URL.createObjectURL(selectedImages[0])}
-                alt="Selected"
-                style={{ maxWidth: "100%", marginTop: "10px" }}
-              />
-              <Button onClick={handleImageRemove} color="secondary">
-                Remove
-              </Button>
-            </div>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsEditOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
+    return (
+        <>
+            <StyledButton sx={{ marginTop: "10px" }} variant="outlined" color="primary" onClick={() => setIsEditOpen(true)}>
+                Edit Profile
+            </StyledButton>
+            <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
+                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogContent>
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: "fit-content",
+                            margin: "auto",
+                        }}
+                    >
+                        <Avatar
+                            style={{ margin: "auto", cursor: "pointer" }}
+                            src={imagePreviewUrl ? imagePreviewUrl : ""}
+                            onClick={() => document.getElementById("avatar-input").click()}
+                            id="edit-profile-avatar"
+                        >
+                            {userInfo.firstName?.charAt(0) || "#"}
+                        </Avatar>
+
+                        {imagePreviewUrl && (
+                            <Close
+                                onClick={handleImageRemove}
+                                sx={{
+                                    position: "absolute",
+                                    top: "0rem",
+                                    left: "1.7rem",
+                                    backgroundColor: "white",
+                                    borderRadius: "50%",
+                                    cursor: "pointer",
+                                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                                    display: "hidden",
+                                }}
+                                className="delete-avatar-icon"
+                            />
+                        )}
+                    </Box>
+
+                    <input
+                        type="file"
+                        id="avatar-input"
+                        style={{ display: "none" }}
+                        accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                                handleImageSelect(file);
+                            }
+                        }}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label="First Name"
+                        type="text"
+                        fullWidth
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                    <TextField margin="dense" label="Last Name" type="text" fullWidth value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                    <TextField margin="dense" label="Gender" type="text" fullWidth value={gender} onChange={(e) => setGender(e.target.value)} />
+                </DialogContent>
+                <DialogContent>
+                    <TextField
+                        margin="dense"
+                        label="Biography"
+                        type="text"
+                        fullWidth
+                        multiline
+                        value={biography}
+                        onChange={(e) => setBiography(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancel} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSave} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
 };
 
 export default EditUserInfo;
