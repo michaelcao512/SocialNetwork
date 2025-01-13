@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import userService from "../../../Services/user.service";
 import friendshipService from "../../../Services/friendship.service";
-import { StyledButton, StyledNavLink } from "../../../StyledComponents/StyledComponents";
+import { StyledNavLink } from "../../../StyledComponents/StyledComponents";
 import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle, Avatar, Button } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import imageService from "../../../Services/image.service"; // Import imageService
 
 function Friendship(props) {
@@ -24,14 +23,16 @@ function Friendship(props) {
             const followingWithAvatars = await Promise.all(
                 response.map(async (follow) => {
                     try {
+                        if (!follow.userInfo.profileImage) {
+                            return { ...follow, avatarUrl: null };
+                        }
                         // Fetch avatar from image service
                         const avatarUrl = follow.userInfo?.profileImage?.bucketKey
                             ? await imageService.getPresignedUrl(follow.userInfo.profileImage.bucketKey)
                             : null;
                         return { ...follow, avatarUrl };
                     } catch (error) {
-                        console.error("Error fetching avatar for user:", follow.accountId);
-                        return { ...follow, avatarUrl: null };
+                        console.error("Error fetching following avatar:", error);
                     }
                 })
             );
@@ -49,13 +50,15 @@ function Friendship(props) {
                 response.map(async (follower) => {
                     try {
                         // Fetch avatar from image service
+                        if (!follower.userInfo.profileImage) {
+                            return { ...follower, avatarUrl: null };
+                        }
                         const avatarUrl = follower.userInfo?.profileImage?.bucketKey
                             ? await imageService.getPresignedUrl(follower.userInfo.profileImage.bucketKey)
                             : null;
                         return { ...follower, avatarUrl };
                     } catch (error) {
-                        console.error("Error fetching avatar for user:", follower.accountId);
-                        return { ...follower, avatarUrl: null };
+                        console.error("Error fetching follower avatar:", error);
                     }
                 })
             );

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Drawer, List, ListItem, ListItemText, Box, Typography, IconButton, ListItemIcon } from "@mui/material";
+import { Drawer, List, ListItem, ListItemText, Box, IconButton, ListItemIcon } from "@mui/material";
 import {
     Menu as MenuIcon,
     Home as HomeIcon,
@@ -8,24 +7,15 @@ import {
     People as PeopleIcon,
     Person as PersonIcon,
 } from "@mui/icons-material";
-import styled from "@emotion/styled";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import authService from "../../Services/auth.service";
 import PropTypes from "prop-types"; // For type checking
 import { StyledNavLink } from "../../StyledComponents/StyledComponents";
 import Logo from "../Logo";
+import { useState } from "react";
 
 const drawerWidth = 240;
-
-const NavBarContainer = styled(Box)(({ theme }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    "& .MuiDrawer-paper": {
-        width: drawerWidth,
-        boxSizing: "border-box",
-    },
-}));
 
 const NavItem = ({ to, icon: Icon, label, isActive, onClick }) => (
     <ListItem component={StyledNavLink} to={to} className={isActive ? "active" : ""} onClick={onClick} aria-current={isActive ? "page" : undefined}>

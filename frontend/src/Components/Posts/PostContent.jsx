@@ -1,9 +1,8 @@
-import React from "react";
 import { Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import Image from "../Image/Image";
 
-const StyledPostContent = styled(Typography)(({ theme }) => ({
+const StyledPostContent = styled(Typography)(() => ({
     textAlign: "left",
     marginBottom: "1rem",
     width: "100%",

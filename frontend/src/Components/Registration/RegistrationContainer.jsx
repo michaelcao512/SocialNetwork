@@ -1,6 +1,5 @@
-import React from "react";
 import { Box, Typography, Link } from "@mui/material";
-import { StyledCard, StyledLink, StyledStack } from "../../StyledComponents/StyledComponents";
+import { StyledCard, StyledStack } from "../../StyledComponents/StyledComponents";
 import RegistrationForm from "./RegistrationForm";
 import Logo from "../Logo";
 
@@ -14,8 +13,8 @@ function RegistrationContainer() {
 
                 <RegistrationForm />
                 <Box sx={{ marginTop: "1rem", textAlign: "center" }}>
-                    <Typography variant="body1" sx={{ display: "inline" }}>
-                        Already have an account?{" "}
+                    <Typography variant="body1" sx={{ display: "inline", marginRight: "0.5rem" }}>
+                        Already have an account?
                     </Typography>
                     <Link
                         href="/login"

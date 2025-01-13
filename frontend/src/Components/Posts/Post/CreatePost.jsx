@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { FormControl, TextField, Button, Box, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Fab } from "@mui/material";
+import { FormControl, TextField, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import postService from "../../../Services/post.service";
 import imageService from "../../../Services/image.service";
 import SelectImage from "../../Image/SelectImage";
+import { useState } from "react";
 
 function CreatePost({ user, onPostCreated }) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);

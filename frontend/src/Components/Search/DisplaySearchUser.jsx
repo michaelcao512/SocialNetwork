@@ -20,7 +20,6 @@ function DisplaySearchUser({ users, error }) {
         const fetchAvatars = async () => {
             const avatarPromises = users.map(async (user) => {
                 if (user?.userInfo?.profileImage) {
-                    console.log("user", user);
                     try {
                         const url = await imageService.getPresignedUrl(user.userInfo.profileImage.bucketKey);
                         return { accountId: user.accountId, avatarUrl: url };
@@ -36,7 +35,6 @@ function DisplaySearchUser({ users, error }) {
                 if (accountId) acc[accountId] = avatarUrl;
                 return acc;
             }, {});
-            console.log("avatarsMap: ", avatarsMap);
             setUserAvatars(avatarsMap);
         };
 

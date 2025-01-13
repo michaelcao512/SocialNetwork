@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PostReactions from "../PostReactions";
 import DisplayComments from "../Comments/DisplayComments";
 import CreateComment from "../Comments/CreateComment";

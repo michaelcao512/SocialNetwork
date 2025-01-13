@@ -21,7 +21,7 @@ function LoginForm() {
 
         authService
             .login(loginRequest)
-            .then((response) => {
+            .then(() => {
                 setErrorMessage("");
                 navigate(`/feed`);
             })

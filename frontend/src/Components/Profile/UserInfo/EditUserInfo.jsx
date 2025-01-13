@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import imageService from "../../../Services/image.service";
 import userInfoService from "../../../Services/userinfo.service";
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Box, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
@@ -20,8 +20,6 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                console.log("user", user);
-                console.log("userInfo", userInfo);
                 if (userInfo?.profileImage) {
                     const url = await imageService.getPresignedUrl(userInfo.profileImage.bucketKey);
                     setImagePreviewUrl(url);
@@ -38,7 +36,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         setGender(userInfo.gender || "");
         setBiography(userInfo.biography || "");
         setSelectedImages([]);
-    }, [userInfo.profileImage, isEditOpen]);
+    }, [userInfo, isEditOpen]);
 
     // selecting profile image preview
     const handleImageSelect = (file) => {

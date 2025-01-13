@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { StyledStack, StyledCard } from "../StyledComponents/StyledComponents";
 import { Typography, Divider } from "@mui/material";
 import userInfoService from "../Services/userinfo.service";
@@ -32,7 +32,6 @@ function ProfilePage() {
         try {
             const response = await userInfoService.getUserInfoByAccountId(parseInt(profileUserId));
             setUserInfo(response);
-            console.log("response: ", response);
         } catch (error) {
             console.log("error: ", error);
         }

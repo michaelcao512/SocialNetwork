@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Post from "./Post";
-import { StandardContainer } from "../../../StyledComponents/StyledComponents";
 import { Box, FormControl, Select, MenuItem, Typography } from "@mui/material";
 
 function DisplayPosts(props) {

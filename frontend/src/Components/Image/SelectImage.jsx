@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, IconButton, Button, Grid2, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -27,7 +26,7 @@ function SelectImage({ selectedImages, onImageSelect, handleImageRemove }) {
             )}
             <Grid2 container spacing={2}>
                 {selectedImages.map((image, index) => (
-                    <Grid2 item size={{ xs: 6, sm: 4, md: 3 }} key={index}>
+                    <Grid2 size={{ xs: 6, sm: 4, md: 3 }} key={index}>
                         <Box sx={{ position: "relative" }}>
                             <img src={URL.createObjectURL(image)} alt="Selected" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
                             <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>
