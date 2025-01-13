@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, Divider, Avatar } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";

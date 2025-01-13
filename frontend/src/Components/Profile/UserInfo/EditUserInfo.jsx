@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import imageService from "../../../Services/image.service";
 import userInfoService from "../../../Services/userinfo.service";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Typography, Box } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Box, Tooltip, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
 import "./userinfo.css";
 import { Close } from "@mui/icons-material";
@@ -113,9 +114,25 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     };
     return (
         <>
-            <StyledButton sx={{ marginTop: "10px" }} variant="outlined" color="primary" onClick={() => setIsEditOpen(true)}>
+            <Button
+                variant="outlined"
+                startIcon={<EditIcon />}
+                sx={{
+                    marginTop: "1rem",
+                    borderRadius: "20px",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    padding: "8px 16px",
+                    borderColor: "primary.main",
+                    ":hover": {
+                        backgroundColor: "primary.light",
+                        borderColor: "primary.dark",
+                    },
+                }}
+                onClick={() => setIsEditOpen(true)} // Opens the Edit Profile dialog
+            >
                 Edit Profile
-            </StyledButton>
+            </Button>
             <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogContent>
