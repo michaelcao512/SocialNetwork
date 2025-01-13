@@ -115,6 +115,12 @@ docker run -d -p 8080:8080 \
       -e S3_SECRET_KEY='${S3_SECRET_KEY}' \
       -e S3_REGION='${S3_REGION}' \
       -e S3_BUCKET_NAME='${S3_BUCKET_NAME}' \
+      -e MAIL_FROM='${MAIL_FROM}' \
+      -e MAIL_HOST='${MAIL_HOST}' \
+      -e MAIL_PORT='${MAIL_PORT}' \
+      -e MAIL_USERNAME='${MAIL_USERNAME}' \
+      -e MAIL_PASSWORDd='${MAIL_PASSWORD}' \
+      -e ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' \
       --name socialmedia
 ```
 Replace placeholders like <db_host>, your_jwt_secret, your_aws_access_key, etc., with the actual values.
