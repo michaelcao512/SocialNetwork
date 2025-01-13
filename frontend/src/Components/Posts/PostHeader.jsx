@@ -22,7 +22,6 @@ function PostHeader({ entityOwner, entity, canManage, onEntityUpdate, onEntityDe
                     return;
                 }
                 const url = await imageService.getPresignedUrl(entityOwner.userInfo.profileImage.bucketKey);
-                console.log("url: ", url);
                 setProfileImageUrl(url);
             } catch (error) {
                 console.error("Error fetching images:", error);
