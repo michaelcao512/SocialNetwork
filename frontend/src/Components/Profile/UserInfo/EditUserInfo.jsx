@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import imageService from "../../../Services/image.service";
 import userInfoService from "../../../Services/userinfo.service";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Typography, Box } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Box, Tooltip, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
 import "./userinfo.css";
 import { Close } from "@mui/icons-material";
@@ -14,6 +15,8 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     const [biography, setBiography] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -47,6 +50,9 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     };
 
     const handleSave = async () => {
+        if (!validateFields()) {
+            return;
+        }
         try {
             if (selectedImages.length == 1) {
                 // delete the old image
@@ -92,11 +98,41 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         setIsEditOpen(false);
     };
 
+    const validateFields = () => {
+        const fieldErrors = {};
+        if (!firstName.trim()) {
+            fieldErrors.firstName = "First name cannot be empty.";
+        }
+        if (!lastName.trim()) {
+            fieldErrors.lastName = "Last name cannot be empty.";
+        }
+        if (gender !== "Male" && gender !== "Female") {
+            fieldErrors.gender = "Gender must be 'Male' or 'Female'.";
+        }
+        setErrors(fieldErrors);
+        return Object.keys(fieldErrors).length === 0;
+    };
     return (
         <>
-            <StyledButton sx={{ marginTop: "10px" }} variant="outlined" color="primary" onClick={() => setIsEditOpen(true)}>
+            <Button
+                variant="outlined"
+                startIcon={<EditIcon />}
+                sx={{
+                    marginTop: "1rem",
+                    borderRadius: "20px",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    padding: "8px 16px",
+                    borderColor: "primary.main",
+                    ":hover": {
+                        backgroundColor: "primary.light",
+                        borderColor: "primary.dark",
+                    },
+                }}
+                onClick={() => setIsEditOpen(true)} // Opens the Edit Profile dialog
+            >
                 Edit Profile
-            </StyledButton>
+            </Button>
             <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogContent>
@@ -154,9 +190,29 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                         fullWidth
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        error={!!errors.firstName}
+                        helperText={errors.firstName}
                     />
-                    <TextField margin="dense" label="Last Name" type="text" fullWidth value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    <TextField margin="dense" label="Gender" type="text" fullWidth value={gender} onChange={(e) => setGender(e.target.value)} />
+                    <TextField
+                        margin="dense"
+                        label="Last Name"
+                        type="text"
+                        fullWidth
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        error={!!errors.lastName}
+                        helperText={errors.lastName}
+                    />
+                    <TextField
+                        margin="dense"
+                        label="Gender"
+                        type="text"
+                        fullWidth
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        error={!!errors.gender}
+                        helperText={errors.gender}
+                    />
                 </DialogContent>
                 <DialogContent>
                     <TextField

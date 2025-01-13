@@ -1,7 +1,8 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, Divider, Avatar } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
+import imageService from "../../Services/image.service";
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
@@ -20,7 +21,7 @@ function DisplaySearchUser({ users, error }) {
             const avatarPromises = users.map(async (user) => {
                 if (user?.userInfo?.avatarUrl) {
                     try {
-                        const url = await imageService.getPresignedUrl(user.userInfo.avatarUrl);
+                        const url = await imageService.getPresignedUrl(user.userInfo.profileImage.bucketKey);
                         return { accountId: user.accountId, avatarUrl: url };
                     } catch (err) {
                         console.error(`Error fetching avatar for user ${user.accountId}:`, err);
@@ -34,7 +35,7 @@ function DisplaySearchUser({ users, error }) {
                 if (accountId) acc[accountId] = avatarUrl;
                 return acc;
             }, {});
-
+            console.log("avatarsMap: ", avatarsMap);
             setUserAvatars(avatarsMap);
         };
 

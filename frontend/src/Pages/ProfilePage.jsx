@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { StyledStack, StyledCard } from "../StyledComponents/StyledComponents";
 import { Typography, Divider } from "@mui/material";
-
 import userInfoService from "../Services/userinfo.service";
 import authService from "../Services/auth.service";
 import postService from "../Services/post.service";
 import userService from "../Services/user.service";
-
 import UserInfoComponent from "../Components/Profile/UserInfo/UserInfoComponent";
 import CreatePost from "../Components/Posts/Post/CreatePost";
 import DisplayPosts from "../Components/Posts/Post/DisplayPosts";
@@ -75,15 +73,8 @@ function ProfilePage() {
                 }}
             >
                 <UserInfoComponent user={user} userInfo={userInfo} profileId={parseInt(profileUserId)} username={username} />
-                {isOwnProfile && (
-                    <>
-                        <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />
-                    </>
-                )}
+                {isOwnProfile && <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />}
                 <Divider sx={{ my: 2 }} />
-                <Typography variant="h5" gutterBottom>
-                    Posts
-                </Typography>
                 {isOwnProfile && <CreatePost user={user} onPostCreated={refreshPostsHandler} />}
                 <DisplayPosts user={user} userInfo={userInfo} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler} />
             </StyledCard>

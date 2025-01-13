@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Post from "./Post";
 import { StandardContainer } from "../../../StyledComponents/StyledComponents";
-import { Box, FormControl, Select, MenuItem } from "@mui/material";
+import { Box, FormControl, Select, MenuItem, Typography } from "@mui/material";
 
 function DisplayPosts(props) {
     const { posts, user, userInfo, onPostDelete, onPostUpdate } = props;
@@ -20,11 +20,11 @@ function DisplayPosts(props) {
     }, [posts, sortOrder]);
 
     if (!sortedPosts || sortedPosts.length === 0) {
-        return <p>No posts to display</p>;
+        return <Typography>No posts to display</Typography>;
     }
 
     return (
-        <StandardContainer>
+        <>
             <Box display="flex" alignItems="center" mb={2} style={{ width: "100%" }}>
                 <FormControl size="small" style={{ marginLeft: "auto" }}>
                     <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} displayEmpty>
@@ -36,7 +36,7 @@ function DisplayPosts(props) {
             {sortedPosts.map((post) => (
                 <Post key={post.postId} post={post} user={user} userInfo={userInfo} onPostDelete={onPostDelete} onPostUpdate={onPostUpdate} />
             ))}
-        </StandardContainer>
+        </>
     );
 }
 
