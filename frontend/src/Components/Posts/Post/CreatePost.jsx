@@ -80,7 +80,9 @@ function CreatePost({ user, onPostCreated }) {
             <Button
                 variant="contained"
                 color="primary"
+                startIcon={<AddIcon />}
                 fullWidth
+                size={"large"}
                 sx={{
                     marginBottom: 2,
                     borderRadius: "10px",
