@@ -15,6 +15,8 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
         const fetchImages = async () => {
             try {
@@ -47,6 +49,9 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     };
 
     const handleSave = async () => {
+        if (!validateFields()) {
+            return;
+        }
         try {
             if (selectedImages.length == 1) {
                 // delete the old image
@@ -92,6 +97,20 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         setIsEditOpen(false);
     };
 
+    const validateFields = () => {
+        const fieldErrors = {};
+        if (!firstName.trim()) {
+            fieldErrors.firstName = "First name cannot be empty.";
+        }
+        if (!lastName.trim()) {
+            fieldErrors.lastName = "Last name cannot be empty.";
+        }
+        if (gender !== "Male" && gender !== "Female") {
+            fieldErrors.gender = "Gender must be 'Male' or 'Female'.";
+        }
+        setErrors(fieldErrors);
+        return Object.keys(fieldErrors).length === 0;
+    };
     return (
         <>
             <StyledButton sx={{ marginTop: "10px" }} variant="outlined" color="primary" onClick={() => setIsEditOpen(true)}>
@@ -154,9 +173,29 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                         fullWidth
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        error={!!errors.firstName}
+                        helperText={errors.firstName}
                     />
-                    <TextField margin="dense" label="Last Name" type="text" fullWidth value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    <TextField margin="dense" label="Gender" type="text" fullWidth value={gender} onChange={(e) => setGender(e.target.value)} />
+                    <TextField
+                        margin="dense"
+                        label="Last Name"
+                        type="text"
+                        fullWidth
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        error={!!errors.lastName}
+                        helperText={errors.lastName}
+                    />
+                    <TextField
+                        margin="dense"
+                        label="Gender"
+                        type="text"
+                        fullWidth
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        error={!!errors.gender}
+                        helperText={errors.gender}
+                    />
                 </DialogContent>
                 <DialogContent>
                     <TextField
