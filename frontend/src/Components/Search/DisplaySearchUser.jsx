@@ -19,7 +19,8 @@ function DisplaySearchUser({ users, error }) {
     useEffect(() => {
         const fetchAvatars = async () => {
             const avatarPromises = users.map(async (user) => {
-                if (user?.userInfo?.avatarUrl) {
+                if (user?.userInfo?.profileImage) {
+                    console.log("user", user);
                     try {
                         const url = await imageService.getPresignedUrl(user.userInfo.profileImage.bucketKey);
                         return { accountId: user.accountId, avatarUrl: url };

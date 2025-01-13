@@ -32,6 +32,7 @@ function ProfilePage() {
         try {
             const response = await userInfoService.getUserInfoByAccountId(parseInt(profileUserId));
             setUserInfo(response);
+            console.log("response: ", response);
         } catch (error) {
             console.log("error: ", error);
         }

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import imageService from "../../../Services/image.service";
 import userInfoService from "../../../Services/userinfo.service";
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Box, Tooltip, IconButton } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Avatar, Box, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { StyledButton } from "../../../StyledComponents/StyledComponents";
 import "./userinfo.css";
 import { Close } from "@mui/icons-material";
 
@@ -21,9 +20,13 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
+                console.log("user", user);
+                console.log("userInfo", userInfo);
                 if (userInfo?.profileImage) {
                     const url = await imageService.getPresignedUrl(userInfo.profileImage.bucketKey);
                     setImagePreviewUrl(url);
+                } else {
+                    setImagePreviewUrl("");
                 }
             } catch (error) {
                 console.error("Error fetching images:", error);
@@ -35,7 +38,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         setGender(userInfo.gender || "");
         setBiography(userInfo.biography || "");
         setSelectedImages([]);
-    }, [userInfo, userInfo.profileImage, isEditOpen]);
+    }, [userInfo.profileImage, isEditOpen]);
 
     // selecting profile image preview
     const handleImageSelect = (file) => {
@@ -106,9 +109,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
         if (!lastName.trim()) {
             fieldErrors.lastName = "Last name cannot be empty.";
         }
-        if (gender !== "Male" && gender !== "Female") {
-            fieldErrors.gender = "Gender must be 'Male' or 'Female'.";
-        }
+
         setErrors(fieldErrors);
         return Object.keys(fieldErrors).length === 0;
     };
@@ -203,16 +204,13 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                         error={!!errors.lastName}
                         helperText={errors.lastName}
                     />
-                    <TextField
-                        margin="dense"
-                        label="Gender"
-                        type="text"
-                        fullWidth
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                        error={!!errors.gender}
-                        helperText={errors.gender}
-                    />
+                    <FormControl margin="dense" fullWidth>
+                        <InputLabel id="gender-label">Gender</InputLabel>
+                        <Select label="Gender" labelId="gender-label" value={gender} onChange={(e) => setGender(e.target.value)}>
+                            <MenuItem value="Male">Male</MenuItem>
+                            <MenuItem value="Female">Female</MenuItem>
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogContent>
                     <TextField
@@ -225,6 +223,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                         onChange={(e) => setBiography(e.target.value)}
                     />
                 </DialogContent>
+
                 <DialogActions>
                     <Button onClick={handleCancel} color="secondary">
                         Cancel

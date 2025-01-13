@@ -4,16 +4,6 @@ INSERT INTO post (account_id, date_created, content) VALUES (1, '2025-01-05 10:0
 INSERT INTO comment (account_id, date_created, post_id, content) VALUES (2, '2025-01-05 10:20:00', 1, 'Your dog looks so happy at the park!'),(3, '2025-01-05 10:35:00', 2, 'What a competitive game! Loved watching it.'),(4, '2025-01-05 10:50:00', 3, 'Cape Town is on my travel list now.'),(5, '2025-01-05 11:05:00', 4, 'Cross-country skiing looks so relaxing.'),(6, '2025-01-05 11:20:00', 5, 'Happy Hanukkah! The menorah is beautiful.'),(7, '2025-01-05 11:35:00', 6, 'New Mexico has such amazing views!'),(8, '2025-01-05 11:50:00', 7, 'Las Vegas has the best sunsets, I agree.'),(1, '2025-01-05 12:05:00', 8, 'Nepal’s mountains are truly breathtaking.'),(2, '2025-01-05 12:20:00', 9, 'Your family skiing trip looks amazing!'),(3, '2025-01-05 12:35:00', 10, 'South Africa is a gem! Great photo.');
 INSERT INTO reaction (account_id, post_id, reaction_type) VALUES (2, 1, 'LIKE'),(3, 2, 'LIKE'),(4, 3, 'LIKE'),(5, 4, 'LIKE'),(6, 5, 'LIKE'),(7, 6, 'LIKE'),(8, 7, 'LIKE'),(1, 8, 'LIKE'),(2, 9, 'LIKE'),(3, 10, 'LIKE');
 INSERT INTO image (account_id, comment_id, image_id, post_id, bucket_key, e_tag, file_name, image_type) VALUES (1, NULL, 1, 1, 'atdogpark.jpg', 'c35e2893280b30171d85bfce16379d8e', 'atdogpark.jpg', 'POST'),(2, NULL, 2, 2, 'basketballpark.jpg', 'd499319d09db0562e9f8bc48546f64e4', 'basketballpark.jpg', 'POST'),(3, NULL, 3, 3, 'capetown.jpg', '282ad7c01f6c9f4255460f3b214bc10b', 'capetown.jpg', 'POST'),(4, NULL, 4, 4, 'ccskiing.jpg', '4cd0d66f4a89014ab57a45370ddd4f22', 'ccskiing.jpg', 'POST'),(5, NULL, 5, 5, 'hanukhah.jpg', 'a63500b6b04975837ce564b4c8964959', 'hanukhah.jpg', 'POST'),(6, NULL, 6, 6, 'hikingnewmexico.jpg', '8aeb8296fc398d14dc9ab60067815843', 'hikingnewmexico.jpg', 'POST'),(7, NULL, 7, 7, 'lasvegassunset.jpg', '2d80efa19cf5649d57ed221b3aab9169', 'lasvegassunset.jpg', 'POST'),(8, NULL, 8, 8, 'nepal.jpg', 'ce1ce679cb8f441f8a14a5d5dcc4fd2b', 'nepal.jpg', 'POST'),(9, NULL, 9, 9, 'skiingfamily.jpg', 'a23ceda702688817a0a092128d72020d', 'skiingfamily.jpg', 'POST'),(10, NULL, 10, 10, 'southafrica.jpg', 'aab55ccbecf8bc615b0b054c4f03da2a', 'southafrica.jpg', 'POST');
-UPDATE user_info SET avatar_url = 'EthanParker.jpg' WHERE user_info_id = 1;
-UPDATE user_info SET avatar_url = 'OliviaMorgan.jpg' WHERE user_info_id = 2;
-UPDATE user_info SET avatar_url = 'MikeBrown.jpg' WHERE user_info_id = 3;
-UPDATE user_info SET avatar_url = 'AliceJohnson.jpg' WHERE user_info_id = 4;
-UPDATE user_info SET avatar_url = 'BobTaylor.jpg' WHERE user_info_id = 5;
-UPDATE user_info SET avatar_url = 'EmilyDavis.jpg' WHERE user_info_id = 6;
-UPDATE user_info SET avatar_url = 'CharlieWilson.jpg' WHERE user_info_id = 7;
-UPDATE user_info SET avatar_url = 'SophiaLee.jpg' WHERE user_info_id = 8;
-UPDATE user_info SET avatar_url = 'DavidKing.jpg' WHERE user_info_id = 9;
-UPDATE user_info SET avatar_url = 'LisaHall.jpg' WHERE user_info_id = 10;
 
 
 -- john_doe: Passw0rd! 

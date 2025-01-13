@@ -22,7 +22,7 @@ function LoginForm() {
         authService
             .login(loginRequest)
             .then((response) => {
-                setErrorMessage(""); 
+                setErrorMessage("");
                 navigate(`/feed`);
             })
             .catch((error) => {
@@ -64,7 +64,7 @@ function LoginForm() {
                 </FormControl>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <LockIcon />
+                <LockIcon fontSize="small" />
                 <FormControl sx={{ flex: 1 }}>
                     <TextField
                         label="Password"
