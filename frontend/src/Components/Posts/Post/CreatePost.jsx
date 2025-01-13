@@ -120,7 +120,7 @@ function CreatePost({ user, onPostCreated }) {
                     <Button onClick={handleDialogClose} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} color="primary" variant="contained">
+                    <Button onClick={handleSubmit} color="primary">
                         Post
                     </Button>
                 </DialogActions>

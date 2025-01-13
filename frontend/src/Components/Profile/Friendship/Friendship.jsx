@@ -11,8 +11,6 @@ function Friendship(props) {
     const [following, setFollowing] = useState([]);
     const [followers, setFollowers] = useState([]);
 
-    const [userAvatars, setUserAvatars] = useState({}); // State for storing avatars
-
     const [canFollow, setCanFollow] = useState(false);
     const [canUnfollow, setCanUnfollow] = useState(false);
 

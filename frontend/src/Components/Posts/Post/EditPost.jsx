@@ -144,8 +144,10 @@ function EditPost({ post, onPostUpdate, onClose }) {
                     <SelectImage onImageSelect={handleImageSelect} selectedImages={selectedImages} handleImageRemove={handleImageRemove} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSave} color="primary" variant="contained">
+                    <Button onClick={handleClose} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSave} color="primary">
                         Save
                     </Button>
                 </DialogActions>
