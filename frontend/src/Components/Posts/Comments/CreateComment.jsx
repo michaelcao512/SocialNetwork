@@ -20,7 +20,7 @@ const CreateCommentContainer = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
 }));
 
-const FullWidthTextField = styled(TextField)(({ theme }) => ({
+const FullWidthTextField = styled(TextField)(() => ({
     marginBottom: "1rem",
     width: "100%",
 }));

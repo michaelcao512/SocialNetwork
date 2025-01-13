@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Link, NavLink } from "react-router-dom";
 import { Stack, CardContent, Divider, Typography, Box, Button } from "@mui/material";
 
-export const StyledStack = styled(Stack)(({ theme }) => ({
+export const StyledStack = styled(Stack)(() => ({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
@@ -50,7 +50,7 @@ export const StandardContainer = styled(Box)(({ theme }) => ({
 
 export const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
-    color: "#1976d2",
+    // color: "#1976d2",
     fontFamily: "Poppins, sans-serif",
     fontWeight: "bold",
     fontSize: "1.2rem",
@@ -131,4 +131,3 @@ export const MainContent = styled.div`
         padding: 1rem;
     }
 `;
-

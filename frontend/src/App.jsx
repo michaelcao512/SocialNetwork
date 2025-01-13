@@ -10,8 +10,6 @@ import LoginPage from './Pages/LoginPage';
 import ProfilePage from './Pages/ProfilePage';
 import AllPostsPage from './Pages/AllPostsPage';
 import AllUsersPage from './Pages/AllUsersPage';
-import SearchPage from './Pages/SearchPostPage';
-import SearchUserPage from './Pages/SearchUserPage';
 import RegistrationConfirmation from './Pages/RegistrationConfirmation';
 import EmailVerification from './Pages/EmailVerification';
 import UnifiedSearchPage from './Pages/UnifiedSearchPage';

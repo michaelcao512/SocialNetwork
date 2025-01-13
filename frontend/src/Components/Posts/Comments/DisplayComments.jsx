@@ -1,9 +1,8 @@
-import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styled from "@emotion/styled";
 import Comment from "./Comment";
 
-const CommentsContainer = styled(Box)(({ theme }) => ({
+const CommentsContainer = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column",
     padding: "1rem",
@@ -26,12 +25,7 @@ function DisplayComments({ fetchComments = () => {}, user = {}, comments = [] })
         <CommentsContainer>
             <Divider textAlign="left">Replies</Divider>
             {comments.map((comment) => (
-                <Comment
-                    key={comment.commentId}
-                    user={user}
-                    comment={comment}
-                    fetchComments={fetchComments}
-                />
+                <Comment key={comment.commentId} user={user} comment={comment} fetchComments={fetchComments} />
             ))}
         </CommentsContainer>
     );

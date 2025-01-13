@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import styled from "@emotion/styled";
 import userService from "../../../Services/user.service";
-import commentService from "../../../Services/comment.service";
 import PostReactions from "../PostReactions";
 import CreateComment from "./CreateComment";
 import PostHeader from "../PostHeader";
@@ -22,7 +21,7 @@ const CommentContainer = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
 }));
 
-const RepliesContainer = styled(Box)(({ theme }) => ({
+const RepliesContainer = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -54,9 +53,9 @@ function Comment({ user, comment, fetchComments }) {
         setIsCommentInputVisible((prev) => !prev);
     };
 
-  const handleCancelComment = () => {
-    setIsCommentInputVisible(false);
-  };
+    const handleCancelComment = () => {
+        setIsCommentInputVisible(false);
+    };
 
     return (
         <CommentContainer style={{ backgroundColor: "#f4f9fd", boxShadow: "none" }}>

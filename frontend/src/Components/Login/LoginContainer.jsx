@@ -1,5 +1,5 @@
 import { Typography, Box, Link } from "@mui/material";
-import { StyledCard, StyledLink, StyledStack } from "../../StyledComponents/StyledComponents";
+import { StyledCard, StyledStack } from "../../StyledComponents/StyledComponents";
 import LoginForm from "./LoginForm";
 import Logo from "../Logo";
 function LoginContainer() {
@@ -11,8 +11,8 @@ function LoginContainer() {
                 <Typography variant="h5">Login</Typography>
                 <LoginForm />
                 <Box sx={{ marginTop: "1rem", textAlign: "center" }}>
-                    <Typography variant="body1" sx={{ display: "inline" }}>
-                        Don't have an account?{" "}
+                    <Typography variant="body1" sx={{ display: "inline", marginRight: "0.5rem" }}>
+                        Don&apos;t have an account?
                     </Typography>
                     <Link
                         href="/register"

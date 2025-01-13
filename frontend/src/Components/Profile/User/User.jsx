@@ -1,6 +1,8 @@
 import { Avatar, Typography } from "@mui/material";
 import { StyledLink } from "../../../StyledComponents/StyledComponents";
 import "./user.css";
+import { useEffect, useState } from "react";
+import imageService from "../../../Services/image.service";
 
 function User(props) {
     const { user } = props;
@@ -10,12 +12,12 @@ function User(props) {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                if (!userInfo.profileImage) {
+                if (!user.userInfo.profileImage) {
                     setProfileImageUrl("");
                     return;
                 }
                 await imageService
-                    .getPresignedUrl(userInfo.profileImage?.bucketKey)
+                    .getPresignedUrl(user.userInfo.profileImage?.bucketKey)
                     .then((response) => {
                         console.log("response", response);
                         setProfileImageUrl(response);

@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
-import {Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import { useState, useEffect, useCallback } from "react";
+import { Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import styled from "@emotion/styled";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import postService from "../Services/post.service";
 import DisplayPosts from "../Components/Posts/Post/DisplayPosts";
-import {StyledStack} from "../StyledComponents/StyledComponents";
+import { StyledStack } from "../StyledComponents/StyledComponents";
 
-const PostsContainer = styled(Box)(({theme}) => ({
+const PostsContainer = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -24,19 +24,19 @@ function FeedPage() {
 
     useEffect(() => {
         fetchHomePosts();
-    }, []);
+    }, [fetchHomePosts]);
 
-    async function fetchHomePosts() {
+    const fetchHomePosts = useCallback(async () => {
         try {
             const response = await postService.getHomePosts(user.id);
             setPosts(response);
-            if (response.length === 0){
+            if (response.length === 0) {
                 setOpenDialog(true);
             }
         } catch (error) {
             console.error("Error fetching feed posts: ", error);
         }
-    }
+    }, [user.id]);
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -70,7 +70,7 @@ function FeedPage() {
                 </Dialog>
             ) : (
                 <PostsContainer>
-                    <DisplayPosts posts={posts} user={user}/>
+                    <DisplayPosts posts={posts} user={user} />
                 </PostsContainer>
             )}
         </StyledStack>

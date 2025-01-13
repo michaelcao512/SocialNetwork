@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import reactionsService from "../../Services/reactions.service";
 import styled from "@emotion/styled";
 import { IconButton, Box, Typography } from "@mui/material";
 import { Favorite, FavoriteBorder, ThumbDown, ThumbDownOffAlt, AddComment } from "@mui/icons-material";
 import commentService from "../../Services/comment.service";
 
-const ReactionsContainer = styled(Box)(({ theme }) => ({
+const ReactionsContainer = styled(Box)(() => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -25,7 +25,7 @@ const ReactionIconButton = styled(IconButton)(({ theme }) => ({
     },
 }));
 
-const IndentedTypography = styled(Typography)(({ theme }) => ({
+const IndentedTypography = styled(Typography)(() => ({
     marginLeft: "0.5rem",
 }));
 
@@ -35,58 +35,57 @@ function PostReactions({ entityId, entityType, user, comments, onAddCommentClick
     const [numComments, setNumComments] = useState(0);
     const [reaction, setReaction] = useState(null);
 
-    const serviceMap = {
-        post: {
-            getLikeCount: () => reactionsService.getLikeCountByPostId(entityId),
-            getDislikeCount: () => reactionsService.getDislikeCountByPostId(entityId),
-            getReaction: () => reactionsService.getReactionByPostIdAndAccountId(entityId, user.id),
-            createReaction: (type) =>
-                reactionsService.createReaction({
-                    reactionType: type,
-                    postId: entityId,
-                    accountId: user.id,
-                }),
-            deleteReaction: (reactionId) => reactionsService.deleteReaction(reactionId),
-            getCommentCount: () => commentService.getCommentsCountByPostId(entityId),
-        },
-        comment: {
-            getLikeCount: () => reactionsService.getLikeCountByCommentId(entityId),
-            getDislikeCount: () => reactionsService.getDislikeCountByCommentId(entityId),
-            getReaction: () => reactionsService.getReactionByCommentIdAndAccountId(entityId, user.id),
-            createReaction: (type) =>
-                reactionsService.createCommentReaction({
-                    reactionType: type,
-                    commentId: entityId,
-                    accountId: user.id,
-                }),
-            deleteReaction: (reactionId) => reactionsService.deleteCommentReaction(reactionId),
-            getCommentCount: () => commentService.getCommentsCountByCommentId(entityId),
-        },
-    };
+    const serviceMap = useMemo(() => {
+        if (entityType === "post") {
+            return {
+                getLikeCount: () => reactionsService.getLikeCountByPostId(entityId),
+                getDislikeCount: () => reactionsService.getDislikeCountByPostId(entityId),
+                getReaction: () => reactionsService.getReactionByPostIdAndAccountId(entityId, user.id),
+                createReaction: (type) =>
+                    reactionsService.createReaction({
+                        reactionType: type,
+                        postId: entityId,
+                        accountId: user.id,
+                    }),
+                deleteReaction: (reactionId) => reactionsService.deleteReaction(reactionId),
+                getCommentCount: () => commentService.getCommentsCountByPostId(entityId),
+            };
+        } else if (entityType === "comment") {
+            return {
+                getLikeCount: () => reactionsService.getLikeCountByCommentId(entityId),
+                getDislikeCount: () => reactionsService.getDislikeCountByCommentId(entityId),
+                getReaction: () => reactionsService.getReactionByCommentIdAndAccountId(entityId, user.id),
+                createReaction: (type) =>
+                    reactionsService.createCommentReaction({
+                        reactionType: type,
+                        commentId: entityId,
+                        accountId: user.id,
+                    }),
+                deleteReaction: (reactionId) => reactionsService.deleteCommentReaction(reactionId),
+                getCommentCount: () => commentService.getCommentsCountByCommentId(entityId),
+            };
+        } else {
+            console.log("Invalid entityType:", entityType);
+            return {};
+        }
+    }, [entityType, entityId, user.id]);
 
     const fetchData = useCallback(() => {
-        if (!serviceMap[entityType]) {
-            console.error(`Invalid entityType: ${entityType}`);
-            return;
-        }
-
-        const service = serviceMap[entityType];
-        service.getLikeCount().then(setNumLikes);
-        service.getDislikeCount().then(setNumDislikes);
-        service.getReaction().then(setReaction);
-        service.getCommentCount().then(setNumComments);
-    }, [entityId, entityType, user.id]);
+        serviceMap.getLikeCount().then(setNumLikes);
+        serviceMap.getDislikeCount().then(setNumDislikes);
+        serviceMap.getReaction().then(setReaction);
+        serviceMap.getCommentCount().then(setNumComments);
+    }, [serviceMap]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData, comments]);
 
     const handleReactionClick = (type) => {
-        const service = serviceMap[entityType];
         if (reaction?.reactionType === type) {
-            service.deleteReaction(reaction.reactionId).then(fetchData);
+            serviceMap.deleteReaction(reaction.reactionId).then(fetchData);
         } else {
-            service.createReaction(type).then(fetchData);
+            serviceMap.createReaction(type).then(fetchData);
         }
     };
 

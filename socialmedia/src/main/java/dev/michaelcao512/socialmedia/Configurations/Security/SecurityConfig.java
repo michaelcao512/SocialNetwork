@@ -18,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 
-
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 @CrossOrigin
@@ -26,7 +25,6 @@ public class SecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
     @Value("${cors.allowed.origins}")
     private String[] allowedOrigins;
-
 
     public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
         this.unauthorizedHandler = unauthorizedHandler;
@@ -71,9 +69,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        // .anyRequest().authenticated()
-                        .anyRequest().permitAll())
-        ;
+                        .anyRequest().authenticated());
+        // .anyRequest().permitAll());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

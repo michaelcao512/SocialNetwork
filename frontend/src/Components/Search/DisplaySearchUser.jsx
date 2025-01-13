@@ -19,7 +19,7 @@ function DisplaySearchUser({ users, error }) {
     useEffect(() => {
         const fetchAvatars = async () => {
             const avatarPromises = users.map(async (user) => {
-                if (user?.userInfo?.avatarUrl) {
+                if (user?.userInfo?.profileImage) {
                     try {
                         const url = await imageService.getPresignedUrl(user.userInfo.profileImage.bucketKey);
                         return { accountId: user.accountId, avatarUrl: url };
@@ -35,7 +35,6 @@ function DisplaySearchUser({ users, error }) {
                 if (accountId) acc[accountId] = avatarUrl;
                 return acc;
             }, {});
-            console.log("avatarsMap: ", avatarsMap);
             setUserAvatars(avatarsMap);
         };
 
