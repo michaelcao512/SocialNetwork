@@ -21,11 +21,6 @@ function FeedPage() {
     const [openDialog, setOpenDialog] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetchHomePosts();
-    }, [fetchHomePosts]);
-
     const fetchHomePosts = useCallback(async () => {
         try {
             const response = await postService.getHomePosts(user.id);
@@ -37,6 +32,10 @@ function FeedPage() {
             console.error("Error fetching feed posts: ", error);
         }
     }, [user.id]);
+
+    useEffect(() => {
+        fetchHomePosts();
+    }, [fetchHomePosts]);
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
