@@ -14,6 +14,7 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
 }));
 
 function DisplaySearchUser({ users, error }) {
+  const s3BucketUrl = import.meta.env.VITE_BASE_S3_BUCKET_URL;
   return (
     <Box>
       {error && (
@@ -36,9 +37,15 @@ function DisplaySearchUser({ users, error }) {
                 boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
               }}
             >
-              <Avatar src={user?.avatarUrl || null}>
-                {user?.userInfo?.firstName?.charAt(0) || "#"}
-            </Avatar>
+              <Avatar
+              src={
+               user?.userInfo?.avatarUrl
+               ? `${s3BucketUrl}${user.userInfo.avatarUrl}`
+               : null
+               }
+>
+  {user?.userInfo?.firstName?.charAt(0) || "#"}
+</Avatar>
               <StyledNavLink to={`/profile/${user.accountId}`}>
                 <Typography variant="h6" style={{ fontWeight: "bold" }}>
                   {user.username}

@@ -1,6 +1,7 @@
 package dev.michaelcao512.socialmedia.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,5 +24,21 @@ public class UserInfo {
     private String gender;
     @Column(columnDefinition = "TEXT")
     private String avatarUrl;
+
+    @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value = "profileImage")
+    private Image profileImage;
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userInfoId=" + userInfoId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", biography='" + biography + '\'' +
+                ", gender='" + gender + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                '}';
+    }
 
 }

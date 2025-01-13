@@ -1,13 +1,16 @@
-import React from 'react'
+import React from "react";
+import "./RegistrationConfirmation.css";
 
 const RegistrationConfirmation = () => {
-
   return (
-    <div>
-      <h1>Registration Successful!</h1>
-      <p>Please check your email now to verify your account before logging in.</p>
-     
-      
+    <div className="container">
+      <div className="card">
+        <h1 className="logo">Connect.</h1>
+        <h2 className="title">Registration Successful!</h2>
+        <p className="message">
+          Thank you for registering with Connect. Please check your email to verify your account before signing in.
+        </p>
+      </div>
     </div>
   );
 };

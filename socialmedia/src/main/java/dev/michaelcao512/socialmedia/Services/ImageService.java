@@ -2,16 +2,16 @@ package dev.michaelcao512.socialmedia.Services;
 
 import dev.michaelcao512.socialmedia.Entities.Account;
 import dev.michaelcao512.socialmedia.Entities.Image;
+import dev.michaelcao512.socialmedia.Entities.UserInfo;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.CommentRepository;
 import dev.michaelcao512.socialmedia.Repositories.ImageRepository;
+import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.Repositories.PostRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.UpdateImageRequest;
 import dev.michaelcao512.socialmedia.dto.Requests.UploadFileRequest;
 import jakarta.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,12 +41,12 @@ public class ImageService {
     private final AccountRepository accountRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-
+    private final UserInfoRepository userInfoRepository;
     private String bucketName;
 
     public ImageService(S3Client s3Client, S3Presigner s3Presigner, ImageRepository imageRepository,
             AccountRepository accountRepository,
-            PostRepository postRepository, CommentRepository commentRepository,
+            PostRepository postRepository, CommentRepository commentRepository, UserInfoRepository userInfoRepository,
             @Value("${S3.bucket.name}") String bucketName) {
         this.s3Client = s3Client;
         this.s3Presigner = s3Presigner;
@@ -55,10 +55,8 @@ public class ImageService {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.bucketName = bucketName;
-
+        this.userInfoRepository = userInfoRepository;
     }
-
-    Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     public PutObjectResponse uploadFileToS3(MultipartFile file, String bucketKey) {
 
@@ -90,7 +88,6 @@ public class ImageService {
     }
 
     public Image uploadFile(UploadFileRequest uploadFileRequest) {
-        logger.info(uploadFileRequest.toString());
         String bucketKey = UUID.randomUUID().toString();
         PutObjectResponse response = uploadFileToS3(uploadFileRequest.file(), bucketKey);
 
@@ -108,8 +105,21 @@ public class ImageService {
 
         switch (uploadFileRequest.imageType()) {
             case PROFILE:
-                // to do
-
+                if (uploadFileRequest.userInfoId() != null) {
+                    userInfoRepository.findById(uploadFileRequest.userInfoId()).ifPresent(u -> {
+                        Image existingImage = imageRepository.findByUserInfoId(u.getUserInfoId());
+                        if (existingImage != null) {
+                            u.setProfileImage(null);
+                            userInfoRepository.save(u);
+                            deleteImageFromS3(existingImage);
+                            imageRepository.delete(existingImage);
+                        }
+                        u.setProfileImage(image);
+                        image.setUserInfo(u);
+                    });
+                } else {
+                    throw new RuntimeException("UserInfo ID is required for profile image");
+                }
                 break;
             case POST:
                 if (uploadFileRequest.postId() != null) {
@@ -129,9 +139,7 @@ public class ImageService {
                 throw new RuntimeException("Invalid image type");
         }
 
-        Image savedImage = imageRepository.save(image);
-
-        return savedImage;
+        return imageRepository.save(image);
     }
 
     @Transactional
@@ -139,6 +147,12 @@ public class ImageService {
         Optional<Image> imageOpt = imageRepository.findById(imageId);
         if (imageOpt.isPresent()) {
             Image image = imageOpt.get();
+            if (image.getImageType() == Image.ImageType.PROFILE) {
+                UserInfo userInfo = userInfoRepository.findByProfileImage(image)
+                        .orElseThrow(() -> new RuntimeException("Associated UserInfo not found"));
+                userInfo.setProfileImage(null); 
+                userInfoRepository.save(userInfo); 
+            }
             deleteImageFromS3(image);
             imageRepository.delete(image);
         } else {
@@ -172,8 +186,6 @@ public class ImageService {
                 .build();
 
         PresignedGetObjectRequest presignedRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
-        logger.info("Presigned URL: " + presignedRequest.url().toExternalForm());
-        logger.info("HTTP Method: " + presignedRequest.httpRequest().method());
         return presignedRequest.url().toExternalForm();
     }
 

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
@@ -38,6 +39,11 @@ public class Image {
     @JsonBackReference(value = "comment-images")
     private Comment comment;
 
+    @OneToOne
+    @JoinColumn(name = "userInfoId")
+    @JsonBackReference(value = "profileImage")
+    private UserInfo userInfo;
+
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
@@ -45,4 +51,14 @@ public class Image {
         PROFILE, POST, COMMENT
     }
 
+    @Override
+    public String toString() {
+        return "Image{" +
+                "imageId=" + imageId +
+                ", fileName='" + fileName + '\'' +
+                ", eTag='" + eTag + '\'' +
+                ", bucketKey='" + bucketKey + '\'' +
+                ", imageType=" + imageType +
+                '}';
+    }
 }

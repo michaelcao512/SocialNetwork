@@ -64,13 +64,7 @@ public class AccountController {
      * @return the updated account
      */
 
-    // @PatchMapping("/{accountId}")
-    // public ResponseEntity<Account> updateAccount(@PathVariable Long accountId,
-    // @RequestBody Account accountDetails) {
-    // Account updatedAccount = accountService.updateAccount(accountId,
-    // accountDetails);
-    // return ResponseEntity.ok(updatedAccount);
-    // }
+   
 
     @GetMapping("/getAccountOfComment/{commentId}")
     public ResponseEntity<Account> getAccountOfComment(@PathVariable Long commentId) {

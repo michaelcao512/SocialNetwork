@@ -15,7 +15,6 @@ import EditUserInfo from "../Components/Profile/UserInfo/EditUserInfo";
 
 function ProfilePage() {
     const { profileUserId } = useParams();
-    const [profileId, setProfileId] = useState(parseInt(profileUserId));
     const user = authService.getCurrentUser();
     const [userInfo, setUserInfo] = useState({});
     const [posts, setPosts] = useState([]);
@@ -24,34 +23,33 @@ function ProfilePage() {
 
     const fetchUsername = useCallback(async () => {
         try {
-            const response = await userService.getUsernameByAccountId(profileId);
+            const response = await userService.getUsernameByAccountId(parseInt(profileUserId));
             setUsername(response);
         } catch (error) {
             console.log("error: ", error);
         }
-    }, [profileId]);
+    }, [profileUserId]);
 
     const fetchUserInfo = useCallback(async () => {
         try {
-            const response = await userInfoService.getUserInfoByAccountId(profileId);
+            const response = await userInfoService.getUserInfoByAccountId(parseInt(profileUserId));
             setUserInfo(response);
         } catch (error) {
             console.log("error: ", error);
         }
-    }, [profileId]);
+    }, [profileUserId]);
 
     const fetchPosts = useCallback(async () => {
         try {
-            const response = await postService.getPostsByAccountId(profileId);
+            const response = await postService.getPostsByAccountId(parseInt(profileUserId));
             setPosts(response);
         } catch (error) {
             console.log("error: ", error);
         }
-    }, [profileId]);
+    }, [profileUserId]);
 
     useEffect(() => {
-        setProfileId(parseInt(profileUserId));
-        setIsOwnProfile(user?.id === profileId);
+        setIsOwnProfile(user?.id === parseInt(profileUserId));
         const fetchData = async () => {
             await fetchUserInfo();
             await fetchPosts();
@@ -76,7 +74,7 @@ function ProfilePage() {
                     boxShadow: "2px 4px 6px #CAE4F6",
                 }}
             >
-                <UserInfoComponent user={user} userInfo={userInfo} profileId={profileId} username={username} />
+                <UserInfoComponent user={user} userInfo={userInfo} profileId={parseInt(profileUserId)} username={username} />
                 {isOwnProfile && (
                     <>
                         <EditUserInfo user={user} userInfo={userInfo} onUserInfoUpdate={fetchUserInfo} />
@@ -87,7 +85,7 @@ function ProfilePage() {
                     Posts
                 </Typography>
                 {isOwnProfile && <CreatePost user={user} onPostCreated={refreshPostsHandler} />}
-                <DisplayPosts user={user} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler} />
+                <DisplayPosts user={user} userInfo={userInfo} posts={posts} onPostDelete={refreshPostsHandler} onPostUpdate={refreshPostsHandler} />
             </StyledCard>
         </StyledStack>
     );

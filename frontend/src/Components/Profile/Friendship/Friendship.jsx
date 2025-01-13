@@ -2,12 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 import userService from "../../../Services/user.service";
 import friendshipService from "../../../Services/friendship.service";
 import { StyledButton } from "../../../StyledComponents/StyledComponents";
-import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle } from "@mui/material";
+import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle, Avatar } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import imageService from "../../../Services/image.service"; // Import imageService
+
 function Friendship(props) {
     const { user, profileId } = props;
     const [following, setFollowing] = useState([]);
     const [followers, setFollowers] = useState([]);
+
+    const [userAvatars, setUserAvatars] = useState({}); // State for storing avatars
 
     const [canFollow, setCanFollow] = useState(false);
     const [canUnfollow, setCanUnfollow] = useState(false);
@@ -15,18 +19,55 @@ function Friendship(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
 
-    const fetchFollowing = useCallback(() => {
-        userService.getFollowing(profileId).then((response) => {
-            setFollowing(response);
-        });
+    // Fetch Following with Avatar URLs
+    const fetchFollowing = useCallback(async () => {
+        try {
+            const response = await userService.getFollowing(profileId);
+            const followingWithAvatars = await Promise.all(
+                response.map(async (follow) => {
+                    try {
+                        // Fetch avatar from image service
+                        const avatarUrl = follow.userInfo?.profileImage?.bucketKey
+                            ? await imageService.getPresignedUrl(follow.userInfo.profileImage.bucketKey)
+                            : null;
+                        return { ...follow, avatarUrl };
+                    } catch (error) {
+                        console.error("Error fetching avatar for user:", follow.accountId);
+                        return { ...follow, avatarUrl: null };
+                    }
+                })
+            );
+            setFollowing(followingWithAvatars);
+        } catch (error) {
+            console.error("Error fetching following:", error);
+        }
     }, [profileId]);
 
-    const fetchFollowers = useCallback(() => {
-        userService.getFollowers(profileId).then((response) => {
-            setFollowers(response);
-        });
+    // Fetch Followers with Avatar URLs
+    const fetchFollowers = useCallback(async () => {
+        try {
+            const response = await userService.getFollowers(profileId);
+            const followersWithAvatars = await Promise.all(
+                response.map(async (follower) => {
+                    try {
+                        // Fetch avatar from image service
+                        const avatarUrl = follower.userInfo?.profileImage?.bucketKey
+                            ? await imageService.getPresignedUrl(follower.userInfo.profileImage.bucketKey)
+                            : null;
+                        return { ...follower, avatarUrl };
+                    } catch (error) {
+                        console.error("Error fetching avatar for user:", follower.accountId);
+                        return { ...follower, avatarUrl: null };
+                    }
+                })
+            );
+            setFollowers(followersWithAvatars);
+        } catch (error) {
+            console.error("Error fetching followers:", error);
+        }
     }, [profileId]);
 
+    // Fetch Friendship Details
     const fetchFriendship = useCallback(() => {
         fetchFollowing();
         fetchFollowers();
@@ -45,13 +86,13 @@ function Friendship(props) {
     }, [profileId, fetchFriendship]);
 
     const followHandler = useCallback(() => {
-        friendshipService.follow(user.id, profileId).then((response) => {
+        friendshipService.follow(user.id, profileId).then(() => {
             fetchFriendship();
         });
     }, [user.id, profileId, fetchFriendship]);
 
     const unfollowHandler = useCallback(() => {
-        friendshipService.unfollow(user.id, profileId).then((response) => {
+        friendshipService.unfollow(user.id, profileId).then(() => {
             fetchFriendship();
         });
     }, [user.id, profileId, fetchFriendship]);
@@ -108,6 +149,13 @@ function Friendship(props) {
                         <List>
                             {followers.map((follower) => (
                                 <ListItem key={follower.accountId} component={NavLink} to={`/profile/${follower.accountId}`} onClick={handleNavLinkClick}>
+                                    <Avatar
+                                        src={follower.avatarUrl || "/default-avatar.png"}
+                                        alt={follower.username || "User Avatar"}
+                                        sx={{ width: 40, height: 40, marginRight: "1rem" }}
+                                    >
+                                        {follower.username?.charAt(0) || "?"}
+                                    </Avatar>
                                     <ListItemText primary={follower.username} />
                                 </ListItem>
                             ))}
@@ -117,6 +165,13 @@ function Friendship(props) {
                         <List>
                             {following.map((follow) => (
                                 <ListItem key={follow.accountId} component={NavLink} to={`/profile/${follow.accountId}`} onClick={handleNavLinkClick}>
+                                    <Avatar
+                                        src={follow.avatarUrl || "/default-avatar.png"}
+                                        alt={follow.username || "User Avatar"}
+                                        sx={{ width: 40, height: 40, marginRight: "1rem" }}
+                                    >
+                                        {follow.username?.charAt(0) || "?"}
+                                    </Avatar>
                                     <ListItemText primary={follow.username} />
                                 </ListItem>
                             ))}

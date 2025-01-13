@@ -10,6 +10,7 @@ public record UploadFileRequest(
                 Image.ImageType imageType, 
                 Long accountId,
                         
+                Long userInfoId,
                 Long postId,
                 Long commentId) {
 }

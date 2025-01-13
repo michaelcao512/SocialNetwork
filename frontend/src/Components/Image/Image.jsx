@@ -36,7 +36,7 @@ function Image({ images, deleteOption, handleImageRemove }) {
     return (
         <Grid2 container spacing={0} sx={{ height: "auto" }}>
             {imageUrls.map((url, index) => (
-                <Box sx={{ position: "relative" }}>
+                <Box key={index} sx={{ position: "relative" }}>
                     <img src={url} alt="Post" style={imageStyle} />
                     {deleteOption && (
                         <IconButton onClick={() => handleImageRemove(index)} color="secondary" sx={{ position: "absolute", top: 0, right: 0 }}>

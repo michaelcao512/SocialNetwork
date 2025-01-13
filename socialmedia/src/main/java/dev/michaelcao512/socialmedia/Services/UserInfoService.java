@@ -30,15 +30,11 @@ public class UserInfoService {
             existingUserInfo.setGender(userInfo.getGender());
         }
 
-        if (userInfo.getBiography() != null && !userInfo.getBiography().isEmpty()) {
+        if (userInfo.getBiography() != null) {
             existingUserInfo.setBiography(userInfo.getBiography());
         }
 
-        if (userInfo.getAvatarUrl() != null && !userInfo.getAvatarUrl().isEmpty()) {
-            existingUserInfo.setAvatarUrl(userInfo.getAvatarUrl());
-        }
-        userInfoRepository.save(existingUserInfo);
-        return existingUserInfo;
+        return userInfoRepository.save(existingUserInfo);
     }
 
     public UserInfo getUserInfo(Long userInfoId) {
