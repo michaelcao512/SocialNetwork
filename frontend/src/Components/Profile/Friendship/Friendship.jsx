@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import userService from "../../../Services/user.service";
 import friendshipService from "../../../Services/friendship.service";
-import { StyledButton } from "../../../StyledComponents/StyledComponents";
-import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle, Avatar } from "@mui/material";
+import { StyledButton, StyledNavLink } from "../../../StyledComponents/StyledComponents";
+import { Typography, Box, Dialog, Tab, List, ListItemText, ListItem, Tabs, DialogContent, DialogTitle, Avatar, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import imageService from "../../../Services/image.service"; // Import imageService
 
@@ -115,27 +115,64 @@ function Friendship(props) {
                     width: "100%",
                 }}
             >
-                <Typography
-                    variant="body1"
-                    style={{ margin: "10px", cursor: "pointer" }}
+                <Box
                     onClick={() => {
                         setOpenDialog(true);
                         setTabIndex(0);
                     }}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px 20px",
+                        borderRadius: "20px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                            backgroundColor: "white",
+                            boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)",
+                        },
+                    }}
                 >
-                    Followers {followers.length}
-                </Typography>
-                <Typography
-                    variant="body1"
-                    style={{ margin: "10px", cursor: "pointer" }}
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            fontWeight: "bold",
+                        }}
+                    >
+                        Followers {followers.length}
+                    </Typography>
+                </Box>
+                <Box
                     onClick={() => {
                         setOpenDialog(true);
                         setTabIndex(1);
                     }}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px 20px",
+                        borderRadius: "20px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                            backgroundColor: "white",
+                            boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)",
+                        },
+                    }}
                 >
-                    Following {following.length}
-                </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            fontWeight: "bold",
+                        }}
+                    >
+                        Following {following.length}
+                    </Typography>
+                </Box>
             </Box>
+
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
                 <DialogTitle>Followers and Following</DialogTitle>
                 <Tabs value={tabIndex} onChange={handleTabChange} centered>
@@ -146,7 +183,7 @@ function Friendship(props) {
                     {tabIndex === 0 && (
                         <List>
                             {followers.map((follower) => (
-                                <ListItem key={follower.accountId} component={NavLink} to={`/profile/${follower.accountId}`} onClick={handleNavLinkClick}>
+                                <ListItem key={follower.accountId} component={StyledNavLink} to={`/profile/${follower.accountId}`} onClick={handleNavLinkClick}>
                                     <Avatar
                                         src={follower.avatarUrl || "/default-avatar.png"}
                                         alt={follower.username || "User Avatar"}
@@ -162,7 +199,7 @@ function Friendship(props) {
                     {tabIndex === 1 && (
                         <List>
                             {following.map((follow) => (
-                                <ListItem key={follow.accountId} component={NavLink} to={`/profile/${follow.accountId}`} onClick={handleNavLinkClick}>
+                                <ListItem key={follow.accountId} component={StyledNavLink} to={`/profile/${follow.accountId}`} onClick={handleNavLinkClick}>
                                     <Avatar
                                         src={follow.avatarUrl || "/default-avatar.png"}
                                         alt={follow.username || "User Avatar"}
@@ -179,14 +216,45 @@ function Friendship(props) {
             </Dialog>
             <Box>
                 {canFollow && (
-                    <StyledButton variant="contained" color="primary" onClick={followHandler}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={followHandler}
+                        sx={{
+                            padding: "8px 16px",
+                            fontSize: "1rem",
+                            borderRadius: "20px",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                                backgroundColor: "green",
+                            },
+                        }}
+                    >
                         Follow
-                    </StyledButton>
+                    </Button>
                 )}
                 {canUnfollow && (
-                    <StyledButton variant="contained" color="secondary" onClick={unfollowHandler}>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={unfollowHandler}
+                        sx={{
+                            padding: "8px 16px",
+                            fontSize: "1rem",
+                            borderRadius: "20px",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            color: "red",
+                            borderColor: "red",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                                backgroundColor: "red",
+                                color: "white",
+                            },
+                        }}
+                    >
                         Unfollow
-                    </StyledButton>
+                    </Button>
                 )}
             </Box>
         </Box>
