@@ -120,6 +120,7 @@ docker run -d -p 8080:8080 \
       -e MAIL_PORT='${MAIL_PORT}' \
       -e MAIL_USERNAME='${MAIL_USERNAME}' \
       -e MAIL_PASSWORDd='${MAIL_PASSWORD}' \
+      -e VERIFICATION_URL='&{VERIFICATION_URL}' \
       -e ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' \
       --name socialmedia
 ```
