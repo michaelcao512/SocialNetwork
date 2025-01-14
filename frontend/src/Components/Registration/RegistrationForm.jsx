@@ -237,8 +237,8 @@ function RegistrationForm() {
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                     >
-                        <MenuItem value="male">Male</MenuItem>
-                        <MenuItem value="female">Female</MenuItem>
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value="Female">Female</MenuItem>
                     </TextField>
                 </FormControl>
             </Box>

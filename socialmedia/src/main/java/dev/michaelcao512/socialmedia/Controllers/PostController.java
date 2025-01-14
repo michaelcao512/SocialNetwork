@@ -40,7 +40,7 @@ public class PostController {
      * 
      * @return a list of all posts
      */
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Post>> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);

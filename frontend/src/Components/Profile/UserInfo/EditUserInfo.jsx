@@ -143,7 +143,7 @@ const EditUserInfo = ({ user, userInfo, onUserInfoUpdate }) => {
                         }}
                     >
                         <Avatar
-                            style={{ margin: "auto", cursor: "pointer" }}
+                            style={{ margin: "auto", cursor: "pointer", width: 110, height: 110, marginBottom: "50px" }}
                             src={imagePreviewUrl ? imagePreviewUrl : ""}
                             onClick={() => document.getElementById("avatar-input").click()}
                             id="edit-profile-avatar"
