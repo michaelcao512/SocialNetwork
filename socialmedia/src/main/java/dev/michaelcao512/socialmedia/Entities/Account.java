@@ -66,7 +66,7 @@ public class Account implements UserDetails {
     @JsonManagedReference(value = "following")
     private List<Friendship> following;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "followers")
     private List<Friendship> followers;
 
