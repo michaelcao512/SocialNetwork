@@ -46,6 +46,11 @@ pipeline {
                         string(credentialsId: 'S3.secret.key', variable: 'S3_SECRET_KEY'),
                         string(credentialsId: 'S3.region', variable: 'S3_REGION'),
                         string(credentialsId: 'S3.bucket.name', variable: 'S3_BUCKET_NAME')
+                        string(credentialsId: 'MAIL_HOST', variable: 'MAIL_HOST'),
+                        string(credentialsId: 'MAIL_USERNAME', variable: 'MAIL_USERNAME'),
+                        string(credentialsId: 'MAIL_PASSWORD', variable: 'MAIL_PASSWORD'),
+                        string(credentialsId: 'VERIFICATION_URL', variable: 'VERIFICATION_URL'),
+                        string(credentialsId: 'cors.allowed.origins', variable: 'ALLOWED_ORIGINS')
                     ]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} \
@@ -61,6 +66,11 @@ pipeline {
                               -e S3_SECRET_KEY='${S3_SECRET_KEY}' \
                               -e S3_REGION='${S3_REGION}' \
                               -e S3_BUCKET_NAME='${S3_BUCKET_NAME}' \
+                              -e MAIL_HOST='${MAIL_HOST}' \
+                              -e MAIL_USERNAME='${MAIL_USERNAME}' \
+                              -e MAIL_PASSWORD='${MAIL_PASSWORD}' \
+                              -e VERIFICATION_URL='${VERIFICATION_URL}' \
+                              -e ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' \
                               --name socialmedia \
                               ${DOCKER_IMAGE}:latest"
                         """
