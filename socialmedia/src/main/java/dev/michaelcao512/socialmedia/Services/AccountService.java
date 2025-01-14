@@ -21,9 +21,13 @@ import dev.michaelcao512.socialmedia.Exceptions.UsernameAlreadyExistsException;
 import dev.michaelcao512.socialmedia.Repositories.AccountRepository;
 import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Service
 public class AccountService implements UserDetailsService {
+    @Value("${verification.url.base}")
+    private String verificationBaseUrl;
     Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserInfoRepository userInfoRepository;

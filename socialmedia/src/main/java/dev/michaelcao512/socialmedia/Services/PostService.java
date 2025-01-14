@@ -18,6 +18,7 @@ import dev.michaelcao512.socialmedia.dto.Requests.CreatePostRequest;
 import dev.michaelcao512.socialmedia.dto.Requests.UpdatePostRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -171,9 +172,10 @@ public class PostService {
         List<Account> followingAccounts = accountService.getFollowing(accountId);
 
         List<Long> followingIds = followingAccounts.stream()
+                
                 .map(Account::getAccountId)
-                .toList();
-        
+                .collect(Collectors.toList());
+        followingIds.add(accountId);
         return postRepository.findPostsByFollowingAccounts(followingIds);
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 @CrossOrigin
 public class SecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
-    @Value("${cors.allowed.origins}")
+    @Value("#{'${cors.allowed.origins}'.split(',')}")
     private String[] allowedOrigins;
 
     public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
@@ -68,7 +68,10 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", 
+                        "/api/account/existsByEmail/**", 
+                        "/api/account/existsByUsername/**"
+                        ).permitAll()
                         .anyRequest().authenticated());
         // .anyRequest().permitAll());
 

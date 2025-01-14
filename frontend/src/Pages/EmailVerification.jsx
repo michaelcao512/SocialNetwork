@@ -31,7 +31,7 @@ const EmailVerification = () => {
                     console.log("Current status:", status);
                     setStatus(STATUS.SUCCESS);
                 } else {
-                    setStatus(STATUS.ERROR);
+                   
                 }
             } catch (err) {
                 console.error("Error verifying email:", err);
