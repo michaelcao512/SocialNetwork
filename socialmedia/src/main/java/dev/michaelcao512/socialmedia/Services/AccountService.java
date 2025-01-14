@@ -23,7 +23,6 @@ import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Value;
 
-
 @Service
 public class AccountService implements UserDetailsService {
     @Value("${verification.url.base}")
@@ -42,7 +41,7 @@ public class AccountService implements UserDetailsService {
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
     }
-   
+
     public Account registerAccount(RegistrationRequest registrationRequest) {
         Logger logger = LoggerFactory.getLogger(AccountService.class);
 
@@ -76,7 +75,6 @@ public class AccountService implements UserDetailsService {
             throw new EmailAlreadyExistsException();
         }
 
-       
         password = passwordEncoder.encode(password);
 
         Account newAccount = new Account();
@@ -107,7 +105,7 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(savedAccount);
         logger.info("Account registered: " + newAccount);
 
-        String verificationUrl = "http://tnproj2revfront.s3-website.us-east-2.amazonaws.com/verify?token=" + token;
+        String verificationUrl = verificationBaseUrl + "?token=" + token;
         emailService.sendVerificationEmail(newAccount.getEmail(), verificationUrl);
 
         return newAccount;
