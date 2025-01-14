@@ -61,6 +61,11 @@ pipeline {
                               -e S3_SECRET_KEY='${S3_SECRET_KEY}' \
                               -e S3_REGION='${S3_REGION}' \
                               -e S3_BUCKET_NAME='${S3_BUCKET_NAME}' \
+                              -e MAIL_HOST='${MAIL_HOST}' \
+                              -e MAIL_USERNAME='${MAIL_USERNAME}' \
+                              -e MAIL_PASSWORD='${MAIL_PASSWORD}' \
+                              -e VERIFICATION_URL='${VERIFICATION_URL}' \
+                              -e ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' \
                               --name socialmedia \
                               ${DOCKER_IMAGE}:latest"
                         """
