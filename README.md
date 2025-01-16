@@ -159,7 +159,7 @@ socialnetwork-0.0.1-SNAPSHOT.jar.
       -e MAIL_PASSWORD='${MAIL_PASSWORD}' \
       -e VERIFICATION_URL='&{VERIFICATION_URL}' \
       -e ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' \
-      --name socialmedia
+      --name socialmedia socialnetwork-backend
 ```
 
 Replace placeholders like <db_host>, your_jwt_secret, your_aws_access_key, etc., with the actual values.
