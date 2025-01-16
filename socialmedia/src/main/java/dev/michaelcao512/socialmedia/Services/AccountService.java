@@ -23,6 +23,7 @@ import dev.michaelcao512.socialmedia.Repositories.UserInfoRepository;
 import dev.michaelcao512.socialmedia.dto.Requests.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Value;
 
+
 @Service
 public class AccountService implements UserDetailsService {
     @Value("${verification.url.base}")

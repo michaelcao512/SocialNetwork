@@ -98,7 +98,7 @@ function CreatePost({ user, onPostCreated }) {
                 <DialogTitle>Create a New Post</DialogTitle>
                 <DialogContent>
                     <Box component="form" noValidate onSubmit={handleSubmit}>
-                        <FormControl fullWidth sx={{ mb: 2 }}>
+                        <FormControl fullWidth sx={{ mb: 2, pt: 1 }}>
                             <TextField
                                 label="Content"
                                 multiline
